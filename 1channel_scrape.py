@@ -14,7 +14,7 @@ imdb.get_top250(mov_obj)
 
 
 
-
+## prints out the mov_obj for debugging purposes using prettyprint.
 def pp():
     pprint.pprint((mov_obj))
 
