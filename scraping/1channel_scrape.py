@@ -1,16 +1,31 @@
-import ch1, imdb, json, inspect, pprint, time
+import ch1, imdb, json
+import inspect, pprint, time, pickle
 
 
-f = open('test.json', 'w')
+f = open('mov_obj.pickle', 'r')
 
 # make empty string if no proxy desired
 proxy = "127.0.0.1:9050"
 
 # this will be the final json obj
-mov_obj = {}
+mov_obj = pickle.load(f)
 
-# get the top 250 movies from the imdb list, add them to the movies object
-imdb.get_top250(mov_obj)
+# get the top 250 movies from the imdb list, add them to the movies object, uncomment line to build obj
+# imdb.get_top250(mov_obj)
+
+log = open('log.txt', 'w+')
+
+counter = 0
+for m in mov_obj:
+    # get 1channel info
+    print "Attempting movie", counter, ":", m, "........"
+    try:
+        ch1.get_1ch_details(m, proxy)
+        print "OK!"
+    except Exception, e:
+        print "Could not get movie ", m, ".\nProvided error: ", e
+        log.write(m)
+    time.sleep(10)
 
 
 
@@ -29,4 +44,4 @@ def pp():
 
 
 
-f.close()
+# f.close()
