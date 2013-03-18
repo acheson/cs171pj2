@@ -13,18 +13,18 @@ mov_obj = pickle.load(f)
 # get the top 250 movies from the imdb list, add them to the movies object, uncomment line to build obj
 # imdb.get_top250(mov_obj)
 
-log = open('log.txt', 'w+')
 
-counter = 0
+# get 1channel details
+log = open('log.txt', 'w+')
+counter = 1
 for m in mov_obj:
     # get 1channel info
-    print "Attempting movie", counter, ":", m, "........"
-    try:
-        ch1.get_1ch_details(m, proxy)
-        print "OK!"
-    except Exception, e:
-        print "Could not get movie ", m, ".\nProvided error: ", e
-        log.write(m)
+    print "Attempting movie", str(counter) + ":", str(m) + "........"
+    
+    ch1.get_1ch_details(m, mov_obj, proxy)
+    # print "OK!"
+    # log.write(m)
+    counter += 1
     time.sleep(10)
 
 
