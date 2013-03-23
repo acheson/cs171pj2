@@ -82,6 +82,11 @@ def get_top250(obj):
     for m in mov:
         for a in m.by_tag("a"):
             obj[unescape.unescape(a.content)]= { 'IMDB' : {}, '1channel': []}
+            # obj[unescape.unescape(a.content)]['IMDB']['Rank'] = 
             obj[unescape.unescape(a.content)]['IMDB']['url'] = abs_url(a.attributes.get('href',''), base=url.redirect or url.string)
+        obj[unescape.unescape(a.content)]['IMDB']['Rank'] = m.by_tag('b')[0].content[:-1]
+    # this gets the details for 
     for t in obj:
         get_imdb_details(obj[t]['IMDB']['url'], obj, t)
+
+    print "Movie: ", obj[unescape.unescape(a.content)]['IMDB']['url'] 
