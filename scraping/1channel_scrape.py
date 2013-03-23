@@ -4,9 +4,9 @@ import inspect, pprint, time, pickle, collections
 ## prints out the mov_obj for debugging purposes using prettyprint.
 def pp():
     pprint.pprint((mov_obj))
-f = open('mov_obj_plus6', 'r')
-begin = 6
-end = 11
+f = open('mov_obj.pickle', 'r')
+begin = 25
+end = 26
 # make empty string if no proxy desired
 proxy = "127.0.0.1:9050"
 
@@ -14,6 +14,11 @@ proxy = "127.0.0.1:9050"
 mov_obj = pickle.load(f)
 # mov_obj = {}
 
+def rw_pickle(f):
+    f.close()
+    f = open('mov_obj.pickle', 'w')
+    pickle.dump(mov_obj, f)
+    f.close()
 # get the top 250 movies from the imdb list, add them to the movies object, uncomment line to build obj
 # imdb.get_top250(mov_obj)
 

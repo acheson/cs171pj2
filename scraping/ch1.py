@@ -12,6 +12,8 @@ url = URL("http://1channel.ch")
 def get_search_string(search, proxy):
     if search == "Schindler's List":
         search = "Schindler"
+    if search == "One Flew Over the Cuckoo's Nest":
+        search = "one flew over"
     url = URL("http://1channel.ch")
     dom = DOM(url.download(cached=False, timeout=20, proxy=proxy))
     a = dom.by_id("searchform")
@@ -55,7 +57,16 @@ def get_mov_link(search_url, mov_title, mov_year, proxy):
                 mov_year = 1967
             if mov_title == 'The Dark Knight':
                 mov_title = 'Batman: The Dark Knight'
-            
+            if mov_title == "One Flew Over the Cuckoo's Nest":
+                mov_year = 1976
+            if mov_title == 'Star Wars':
+                mov_title ='Star Wars: Episode IV - A New Hope'
+            if mov_title == 'Seven Samurai':
+                mov_year = 1956
+            if mov_title == 'Once Upon a Time in the West':
+                mov_title = "Once Upon a Time in the West - (C'era una volta il West)"
+            if mov_title == 'Casablanca':
+                mov_year = 1943
             print res_t, res_y, mov_title.strip().replace(",",""), mov_year
             if res_t.strip() == mov_title.strip().replace(",","") and int(res_y) == int(mov_year):
                 return abs_url(r.by_tag("a")[0].attributes.get("href"),base=url.redirect or url.string)
@@ -94,6 +105,8 @@ def get_mov_details(murl, m, obj, proxy):
 
     # get link info by looping through all links on page
     for link in links:
+        if link.by_tag('td')[1].by_tag('a')[0].attributes.get('data-id','') == 'trailer':
+            continue
         re_host = link.by_tag('td')[2].by_tag('script')[0].content 
         host = re.search("document.writeln\(\'(.+)\'\);", re_host).group(1)
 
