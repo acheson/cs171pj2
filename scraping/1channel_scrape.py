@@ -49,13 +49,13 @@ counter = begin
 
 #ch1.get_search_string()
 
-for mov in mov_obj[(begin-1):end]:
-    print "Attempting movie", str(counter) + ":", str(mov['title'].encode('ascii','ignore')) + "........"
+# # for mov in mov_obj[(begin-1):end]:
+#     print "Attempting movie", str(counter) + ":", str(mov['title'].encode('ascii','ignore')) + "........"
     
-    ch1.get_1ch_details(mov['title'], mov, proxy)
-    counter += 1
-    time.sleep(10)
-    rw_pickle(f)
+#     ch1.get_1ch_details(mov['title'], mov, proxy)
+#     counter += 1
+#     time.sleep(10)
+#     rw_pickle(f)
 
 
 
