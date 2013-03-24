@@ -14,6 +14,32 @@ def get_search_string(search, proxy):
         search = "Schindler"
     if search == "One Flew Over the Cuckoo's Nest":
         search = "one flew over"
+    if search == "It's a Wonderful Life":
+        search = "wonderful life"
+    if search == u"L\xe9on: The Professional":
+        search = "the professional"
+    if search == "Terminator 2: Judgment Day":
+        search = "Terminator 2"
+    if search == u"Am\xe9lie":
+        search = "Amelie"
+    if search == "L.A. Confidential":
+        search = "Confidential"
+    if search == "Pan's Labyrinth":
+        search = "pan"
+    if search == "A Few Dollars More":
+        search = "dollars"
+    if search == "The Secret in Their Eyes":
+        search = "El secreto de sus ojos"
+    if search == "The King's Speech":
+        search = "the king"
+    if search == "Howl's Moving Castle":
+        search = "howl"
+    if search == "Harry Potter and the Deathly Hallows: Part 2":
+        search = "harry potter"
+    if search == "Who's Afraid of Virginia Woolf?":
+        search = "virginia woolf"
+    if search == "Rosemary's Baby":
+        search = "rosemary"
     url = URL("http://1channel.ch")
     dom = DOM(url.download(cached=False, timeout=20, proxy=proxy))
     a = dom.by_id("searchform")
@@ -30,6 +56,12 @@ def get_search_string(search, proxy):
 #  retrieve content page from 1channel.ch
 def get_mov_link(search_url, mov_title, mov_year, proxy):
     mov_url = URL(search_url)
+    if mov_title == 'M':
+        return "http://www.1channel.ch/watch-48002-M"
+    if mov_title == u"8\u00BD":
+        return "http://www.1channel.ch/watch-1188-8189"
+    if mov_title == u"Nausica\u00E4 of the Valley of the Wind":
+        return "http://www.1channel.ch/watch-998-Nausicaa-of-the-Valley-of-the-Winds"
     #try:
     mov_dom = DOM(mov_url.download(cached=False, timeout=25, proxy=proxy)) 
     #print mov_dom
@@ -67,8 +99,68 @@ def get_mov_link(search_url, mov_title, mov_year, proxy):
                 mov_title = "Once Upon a Time in the West - (C'era una volta il West)"
             if mov_title == 'Casablanca':
                 mov_year = 1943
-            print res_t, res_y, mov_title.strip().replace(",",""), mov_year
-            if res_t.strip() == mov_title.strip().replace(",","") and int(res_y) == int(mov_year):
+            if mov_title == 'Rear Window':
+                mov_year = 1955
+            if mov_title == "It's a Wonderful Life":
+                mov_year = 1947
+            if mov_title == "The Pianist":
+                mov_year = 2003
+            if mov_title == u'L\xe9on: The Professional':
+                mov_title = "Leon The Professional"
+            if mov_title == u"Am\xe9lie":
+                mov_title = "Amelie from Montmartre"
+            if mov_title == "Princess Mononoke":
+                mov_title = "Princess Mononoke (Mononoke-hime)"
+            if mov_title == "Witness for the Prosecution":
+                mov_year = 1958
+            if mov_title == 'Grave of the Fireflies':
+                mov_title = "Grave of the Fireflies (Hotaru no haka)"
+            if mov_title == 'Snatch.':
+                mov_title = "Snatch"
+                mov_year = 2001
+            if mov_title == 'The General':
+                mov_year = 1927
+            if mov_title == 'Gran Torino':
+                mov_year = 2009
+            if mov_title == 'Hotel Rwanda':
+                mov_year = 2005
+            if mov_title == 'V for Vendetta':
+                mov_year = 2006
+            # Foreign title
+            if mov_title == "The Secret in Their Eyes":
+                mov_title = "El secreto de sus ojos"
+            if mov_title == "There Will Be Blood":
+                mov_year = 2008
+            if mov_title == "Million Dollar Baby":
+                mov_year = 2005
+            if mov_title == "Amores Perros":
+                mov_title = "Amores perros"
+            if mov_title == "Life of Pi":
+                mov_title = "Life Of PI"
+            if mov_title == "The 400 Blows":
+                mov_title = "The 400 Blows (Les quatre cents coups)"
+            if mov_title == "Howl's Moving Castle":
+                mov_title = "Howl's Moving Castle (Hauru no ugoku shiro)"
+            if mov_title == "La strada":
+                mov_title = "La Strada"
+            if mov_title == "The Wild Bunch":
+                mov_title = "The Wild Bunch (1969)"
+            if mov_title == "A Fistful of Dollars":
+                mov_title = "A Fistful of Dollars - (Per un pugno di dollari)"
+            if mov_title == "Slumdog Millionaire":
+                mov_year = 2009
+            if mov_title == "Stalker":
+                mov_year = 1980
+            if mov_title == "Harry Potter and the Deathly Hallows: Part 2":
+                mov_title = "Harry Potter and the Deathly Hallows 2"
+            if mov_title == "The Wrestler":
+                mov_year = 2009
+            if mov_title == "Spring, Summer, Fall, Winter... and Spring":
+                mov_title = "Spring, Summer, Fall, Winter...and Spring (Bom yeoreum gaeul gyeoul geurigo bom)"
+            if mov_title == "Castle in the Sky":
+                mov_title = "Castle in The Sky"
+            print res_t, res_y, mov_title.strip(), mov_year
+            if res_t.strip() == mov_title.strip() and int(res_y) == int(mov_year):
                 return abs_url(r.by_tag("a")[0].attributes.get("href"),base=url.redirect or url.string)
 
 # gets host ip for 
@@ -76,8 +168,12 @@ def get_host_ip(hurl, proxy):
     if hurl.find("http") == -1:
         hurl = "http://" + str(hurl)
     print hurl
-    h__url =  urllib2.urlopen(hurl)
-    return socket.gethostbyname(urlparse.urlparse(h__url.geturl()).netloc) 
+    try:
+        h__url =  urllib2.urlopen(hurl)
+        ip = socket.gethostbyname(urlparse.urlparse(h__url.geturl()).netloc)
+    except: 
+        ip = "not found"
+    return ip
 
 # get the details from the content page, add them to the object
 def get_mov_details(murl, m, obj, proxy):

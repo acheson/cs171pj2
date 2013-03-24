@@ -5,8 +5,13 @@ import inspect, pprint, time, pickle, collections
 def pp():
     pprint.pprint((mov_obj))
 f = open('mov_obj.pickle', 'r')
-begin = 25
-end = 26
+
+### The intouchables is not on 1channel
+### Bicycle thieves not on 1channel
+### For a few dollars more not on 1channel
+
+begin = 247
+end = 250
 # make empty string if no proxy desired
 proxy = "127.0.0.1:9050"
 
@@ -45,11 +50,12 @@ counter = begin
 #ch1.get_search_string()
 
 for mov in mov_obj[(begin-1):end]:
-    print "Attempting movie", str(counter) + ":", str(mov['title']) + "........"
+    print "Attempting movie", str(counter) + ":", str(mov['title'].encode('ascii','ignore')) + "........"
     
     ch1.get_1ch_details(mov['title'], mov, proxy)
     counter += 1
     time.sleep(10)
+    rw_pickle(f)
 
 
 
