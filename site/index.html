@@ -1,4 +1,15 @@
+<!-- 
+
+To overcome crossdomain issue:
+
+Run "python -m SimpleHTTPServer 8888 &" from within the site directory
+Once this is running, go to "http://localhost:8888/"
+
+-->
+
+
 <!DOCTYPE html>
+<meta charset="utf-8">
 <html>
     <head>
         <title>Streaming the IMDB Top 250</title>
@@ -10,9 +21,25 @@
         <div id="scatter-chart"></div>
         <div id="bar-chart"></div>
     	<div id="map-chart"></div>
-    	<script src="js/d3.v3.min.js"></script>
+
+        <!-- Online versions of source libraries for final deployment -->
+        <!-- 
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+        <script src="http://d3js.org/topojson.v0.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+        -->
+
+        <!-- Offline versions of source libraries for testing -->
+        <script src="js/d3.v3.min.js"></script>
+        <script src="js/d3.geo.projection.v0.min.js"></script>
+        <script src="js/topojson.v0.min.js"></script>
     	<script src="js/jquery-1.9.1.min.js"></script>
-    	<script src="data/data.js"></script>
+    	<script src="js/jquery-ui.js"></script>
+        <!-- End offline files-->
+
+        <script src="data/data.js"></script>
     	<script src="js/main.js"></script>
     	<script src="js/list.js"></script>
     	<script src="js/map.js"></script>

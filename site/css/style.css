@@ -35,10 +35,14 @@ time, mark, audio, video {
 }
 /* end meyerweb.com reset code */
 
-/* GLOBAL CSS */
 
+/* GLOBAL CSS */
 body {
 	
+}
+
+div {
+	border: 1px solid #AAA;
 }
 
 
@@ -72,15 +76,34 @@ body {
 	background: #666;
 }
 
-/* MAP */
+/******************* MAP *********************/
 #map-chart {
 	width: 880px;
 	height: 460px;
 	position: absolute;
 	top: 20px;
 	left: 380px;
-	background: #CCC;
+	/*background: #CCC;*/
 }
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.land {
+  fill: #AAA;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+/*********************************************/
+
 
 /* BAR CHART */
 #bar-chart {
