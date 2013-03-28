@@ -86,22 +86,28 @@ div {
 	/*background: #CCC;*/
 }
 
-.graticule {
+/*.graticule {
   fill: none;
   stroke: #777;
   stroke-width: .5px;
   stroke-opacity: .5;
-}
+}*/
 
-.land {
+#land {
   fill: #AAA;
 }
 
-.boundary {
+#land .active {
+	fill: #666;
+} 
+
+#boundary {
   fill: none;
   stroke: #fff;
   stroke-width: .5px;
 }
+
+
 /*********************************************/
 
 
