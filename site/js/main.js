@@ -42,7 +42,7 @@ function updateViews() {
 	
 	console.log("updateViews");
 
-	initList();
+	// initList();
 	updateMap();
 	updateScatter();
 	updateBar();
