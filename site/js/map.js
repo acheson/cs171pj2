@@ -24,28 +24,26 @@ var projection = d3.geo.mercator()
 var path = d3.geo.path()
 	.projection(projection);
 
-
-
-var svg = d3.select("div#map-chart").append("svg")
+var map = d3.select("div#map-chart").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
 // This would append graticule marks to the map
 // var graticule = d3.geo.graticule();
-// svg.append("path")
+// map.append("path")
 	// .datum(graticule)
 	// .attr("class", "graticule")
 	// .attr("d", path);
 
 d3.json("../data/world-50m.json", function(error, world) {
-	svg.insert("path", ".mark")
-	// svg.append("path")
+	map.insert("path", ".map-mark")
+	// map.append("path")
 		.datum(topojson.object(world, world.objects.land))
 		.attr("id", "land")
 		.attr("d", path);
 
-	svg.insert("path", ".mark")
-	// svg.append("path")
+	map.insert("path", ".map-mark")
+	// map.append("path")
 		.datum(topojson.mesh(world, world.objects.countries, function(a , b) { return a !== b; }))
 		.attr("id", "boundary")
 		.attr("d", path);
@@ -54,42 +52,57 @@ d3.json("../data/world-50m.json", function(error, world) {
 
 function updateMap() {
 
+
 	console.log("updateMap");
 
-	// get the keys so D3 can use object as array
-	// var keys = Object.keys(sites);
- 	
-	// dumpObject(keys);
-	// TODO make this work, better :)
-	// TODO change "mark" to "map-mark"
+	// console.log(d3.min(function(sites, i) { return sites[i].views ;}));
+	var mapMax = d3.max(sites, function(d) { return d.views;});	
 
-	// var max = d3.min(sites.forEach.);
-	// console.log(max);
+	// linear scale  - input:domain as output:range
+	var area = d3.scale.linear()
+		.domain([1, mapMax])
+		.range([2, 100]);
 
-	svg.selectAll("circle")
-		.data(sites)
-			.enter().append("circle")
-			.attr("class", "mark")
+	var selection = map.selectAll("circle")
+		.data(sites);
+
+	selection.enter().append("circle")
+			.attr("class", "map-mark")
 			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-			.attr("r", function(d) {return d.views/100000;})
-			// .attr("r", 2)
-			.style("opacity", 0.2)
-			.style("fill", "red")
+			.attr("r", function(d) {return area(d.views);})
 			.on("mouseover", handleMouseOver);
+
+	selection.exit()
+		.transition()
+		.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+
 }
 
 
 // TODO - Implement a tooltop on hover
 
 
-// svg.selectAll("path")
+// map.selectAll("path")
 // 	.on("mouseover", handleMouseOver);
 
 function handleMouseOver(e) {
-	console.log("poop");
+	// dumpObject(e);
+	console.log(e.name + " " + e.views);
+
+	// var mapModal = map.select("div #map-modal");
+	// mapModal.append("div")
+	// 	.attr("id", "map-modal")
+
 	// e.attr("fill", "#A0A");
 }
 
 
 // selectAll the state elements, and then use .on("mouseover"),
 // .on("mouseout") and .on("mousemove") to bind event listeners:
+
+
+
+

@@ -33,13 +33,16 @@ function Site() {
 	this.views = 0;
 }
 
-/* dictionary of sites by name */
+/* dictionary of sites by name 
+	Becomes an array sorted alphabetically after parse
+*/
 var sites = {};
 
 function updateViews() {
 	
 	console.log("updateViews");
 
+	initList();
 	updateMap();
 	updateScatter();
 	updateBar();
