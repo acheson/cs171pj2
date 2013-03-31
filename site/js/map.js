@@ -72,6 +72,11 @@ function updateMap() {
 			.attr("r", function(d) {return area(d.views);})
 			.on("mouseover", handleMouseOver);
 
+	selection.transition()
+		.duration(500)
+		// .attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+		.attr("r", function(d) {return area(d.views);})
+
 	selection.exit()
 		.transition()
 		.duration(500)

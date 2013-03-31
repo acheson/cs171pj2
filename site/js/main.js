@@ -21,8 +21,7 @@ function Film() {
 	this.views = 0;
 	this.siteNames = {};
 }
-/* array of films by rank - 1 */
-var films = [];
+
 
 /* default site object */
 function Site() {
@@ -38,18 +37,20 @@ function Site() {
 */
 var sites = {};
 
+var totalViews = 0;
+var totalRatings = 0;
+
 function updateViews() {
 	
-	console.log("updateViews");
+	// console.log("updateViews");
 
-	// initList();
+	initList();
 	updateMap();
 	updateScatter();
 	updateBar();
 }
 
-var totalViews = 0;
-var totalRatings = 0;
+
 
 d3.json("../data/data.json", jsonComplete);
 
@@ -68,7 +69,14 @@ function jsonComplete(d) {
 	Pass a subset for filtering
  */
 function parse(data) {
-	console.log("parse start");
+	// console.log("parse start");
+	
+	totalViews = 0;
+	totalRatings = 0;
+
+	films = [];
+	sites = {};
+
 	for (var d in data) {
 		
 		// create a new film object
@@ -126,11 +134,11 @@ function parse(data) {
 	sites = temp;
 
 	// parsing complete, tell the world!
-	console.log("parse complete");
+	// console.log("parse complete");
 	updateViews();
 
 
-	/*
+	
 	// Keeping it real - Checks totals
 	var checkFilmViews = 0;
 	for (var f in films) {
@@ -148,7 +156,7 @@ function parse(data) {
 	}
 	console.log(totalViews + " " + checkSiteViews + " " + checkFilmViews);
 	console.log(totalRatings + " " + checkFilmRatings);
-	*/
+	
 
 }
 

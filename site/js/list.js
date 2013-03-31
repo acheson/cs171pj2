@@ -9,24 +9,28 @@
 
 function initList() {
 	var list = d3.select("div#list").append("ol")
-	.attr("id", "selectable");
+		.attr("id", "selectable");
 	var li = list.selectAll("li")
 		.data(films)
-		.enter()
-		.append("li")
-		.attr("class", "ui-widget-content")
-		.text( function(d) { return d.title} );
+			.enter()
+			.append("li")
+			.attr("class", "ui-widget-content")
+			.text( function(d) { return d.title} );
 
 	$(function() {
 		$( "#selectable" ).selectable({
      		stop: function() {
         		
+        		var temp = [];
+
         		var result = $( "#select-result" ).empty();
         		$( ".ui-selected", this ).each(function() {
           			var index = $( "#selectable li" ).index( this );
           			result.append( " #" + ( index + 1 ) );
+          			temp.append = dataSource[index];
         		});
-        		updateMap();
+
+        		parse(temp);
 			}
 		});
 	});
