@@ -27,7 +27,7 @@ function initList() {
         		$( ".ui-selected", this ).each(function() {
           			var index = $( "#selectable li" ).index( this );
           			result.append( " #" + ( index + 1 ) );
-          			temp.append = dataSource[index];
+          			temp.push(dataSource[index]);
         		});
 
         		parse(temp);

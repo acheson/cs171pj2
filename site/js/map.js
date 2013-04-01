@@ -70,11 +70,16 @@ function updateMap() {
 			.attr("class", "map-mark")
 			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
 			.attr("r", function(d) {return area(d.views);})
-			.on("mouseover", handleMouseOver);
-
+			.style("fill", "red")
+			.style("fill-opacity", 0.2)
+			.style("stroke", "red")
+			.style("stroke-opacity", 0.2)
+			.style("stroke-width", 0.5)
+			.on("mouseover", handleMouseOver)
+			.on("mouseout", handleMouseOut);
+	
 	selection.transition()
 		.duration(500)
-		// .attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
 		.attr("r", function(d) {return area(d.views);})
 
 	selection.exit()
@@ -93,9 +98,19 @@ function updateMap() {
 // map.selectAll("path")
 // 	.on("mouseover", handleMouseOver);
 
-function handleMouseOver(e) {
-	// dumpObject(e);
-	console.log(e.name + " " + e.views);
+function handleMouseOver(d,i) {
+	dumpObject(this);
+	console.log(d.name + " " + d.views);
+
+	var selection = map.selectAll("circle")
+		.transition()
+			.duration(250)
+			.style("fill", "red");
+	
+	d3.select(this)
+		.transition()
+			.duration(250)
+			.style("fill", "black");
 
 	// var mapModal = map.select("div #map-modal");
 	// mapModal.append("div")
@@ -104,9 +119,10 @@ function handleMouseOver(e) {
 	// e.attr("fill", "#A0A");
 }
 
+function handleMouseOut(d) {
+	// console.log(d.name + "out");
+}
 
-// selectAll the state elements, and then use .on("mouseover"),
-// .on("mouseout") and .on("mousemove") to bind event listeners:
 
 
 

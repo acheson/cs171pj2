@@ -37,12 +37,32 @@ time, mark, audio, video {
 
 
 /* GLOBAL CSS */
-body {
-	
+/*
+	Trying to mimic that of D3.
+	http://d3js.org/style.css    
+*/
+html {
+	min-width: 1280px;
 }
 
-div {
-	border: 1px solid #AAA;
+body {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	margin: 1em auto 4em auto;
+}
+
+h1 {
+  font-size: 52px;
+  font-weight: 300;
+  letter-spacing: -2px;
+  /*margin: .3em 0 .1em 0;*/
+}
+
+h2 {
+  /*margin-top: 2em;*/
+}
+
+h1, h2 {
+  text-rendering: optimizeLegibility;
 }
 
 
@@ -53,7 +73,7 @@ div {
 	position: absolute;
 	top: 20px;
 	left: 20px;
-	background: #000;
+	/*background: #000;*/
 }
 
 /* LIST */
@@ -63,7 +83,6 @@ div {
 	position: absolute;
 	top: 140px;
 	left: 20px;
-	/*background: #333;*/
 	overflow: scroll;
 }
 
@@ -84,16 +103,17 @@ div {
 	position: absolute;
 	top: 20px;
 	left: 380px;
+	border: 1px solid #AAA;
 	/*fill: "red";*/
 	/*background: #CCC;*/
 }
 
  .map-mark {
-	fill: #F00;	
+	/*fill: red;	
 	fill-opacity: 0.2;
-	stroke: #F00;
+	stroke: red;
 	stroke-width: 0.5px;
- 	stroke-opacity: 0.5;
+ 	stroke-opacity: 0.5;*/
 }
 
 /*.graticule {
@@ -104,7 +124,7 @@ div {
 }*/
 
 #land {
-  fill: #AAA;
+  	fill: #AAA;
 }
 
 #land .active {
@@ -112,9 +132,9 @@ div {
 } 
 
 #boundary {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 0.5px;
+  	fill: none;
+  	stroke: #fff;
+	stroke-width: 0.5px;
 }
 
 
@@ -128,12 +148,14 @@ div {
 	position: absolute;
 	top: 500px;
 	left: 380px;
-	/*background: #999;*/
 }
 
 .bar-chart rect {
-  stroke: white;
-  fill: steelblue;
+	stroke: red;
+  	stroke-width: 0.5px;
+  	stroke-opacity: 0.5;
+  	fill: red;
+  	fill-opacity: 0.5;
 }
 
 
