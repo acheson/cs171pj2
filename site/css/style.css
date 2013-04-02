@@ -93,9 +93,19 @@ h1, h2 {
 	position: absolute;
 	top: 500px;
 	left: 20px;
-	background: #666;
+	background: #fff;
 }
 
+.scatterAxis text {
+    font-size: 10px;
+}
+.scatterAxis path, .scatterAxis line {
+  fill: none;
+  stroke: gray;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+
+}
 /******************* MAP *********************/
 #map-chart {
 	width: 880px;

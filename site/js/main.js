@@ -73,6 +73,8 @@ function parse(data) {
 	
 	totalViews = 0;
 	totalRatings = 0;
+	maxViews = 0;
+	maxRatings = 0;
 
 	films = [];
 	sites = {};
@@ -86,6 +88,9 @@ function parse(data) {
 		film.title = data[d]["title"];
 		film.ratings = data[d]["IMDB"]["RatingCount"];
 		totalRatings += data[d]["IMDB"]["RatingCount"];
+
+		//get max number of ratings for a movie
+		maxRatings = data[d]["IMDB"]["RatingCount"] > maxRatings ? data[d]["IMDB"]["RatingCount"] : maxRatings;
 
 		// get 1channel object and iterate
 		var channels = data[d]["1channel"];
@@ -110,6 +115,9 @@ function parse(data) {
 			// update film views count
 			film.views += channels[ch]["Views"];
 
+			// maxViews is the maximum views for all movies
+			maxViews = film.views > maxViews ? film.views : maxViews;
+			
 			// add the site name key to the films dictionary with views value
 			film.siteNames[site.name] = channels[ch]["Views"];
 
