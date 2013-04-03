@@ -124,6 +124,11 @@ div.tooltip {
 	background: #fff;
 }
 
+circle#scatter-chart  {
+    -webkit-transition: fill-opacity 250ms linear;
+}
+
+
 .scatterAxis text {
     font-size: 10px;
 }
@@ -133,6 +138,27 @@ div.tooltip {
   stroke-width: 1px;
   shape-rendering: crispEdges;
 
+}
+.selecting circle {
+  fill-opacity: .2;
+}
+
+
+
+.selecting circle.selected {
+  stroke: #f00;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
 }
 /******************* MAP *********************/
 #map-chart {

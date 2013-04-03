@@ -1,7 +1,7 @@
 /*  
 	scatter.js
 	03/26/13
-	authors: Rob Acheson, Jeff Fontas
+	authors: Rob Acheson
 
 */
 
@@ -35,7 +35,7 @@ function updateScatter() {
                     .domain([0, maxRatings])
                     .range([ (height - bmargin), (0 + tmargin)]);
 
-    scatter.selectAll("circle")
+    var circle = scatter.selectAll("circle")
             .data(films)
             .enter()
             .append("circle")
@@ -61,6 +61,7 @@ function updateScatter() {
                         .tickSubdivide(4)
                         .tickSize(6, 3, 3);
 
+
     scatter.append("g")
         .attr("class", "x scatterAxis")
         .attr("transform", "translate(0.5," + (scatterY(0) + 0.5) + ")")
@@ -72,4 +73,31 @@ function updateScatter() {
         .call(scatterYAxis);
 
     //alert(ratingsMax);
+    scatter.append("g")
+        .attr("class", "brush")
+        .call(d3.svg.brush().x(scatterX).y(scatterY)
+        .on("brushstart", brushstart)
+        .on("brush", brushmove)
+        .on("brushend", brushend));
+
+    function brushstart() {
+      scatter.classed("selecting", true);
+    }
+
+    function brushmove() {
+      var e = d3.event.target.extent();
+      circle.classed("selected", function(d) {
+        return e[0][0] <= d.views && d.views <= e[1][0]
+            && e[0][1] <= d.ratings && d.ratings <= e[1][1];
+      });
+      // circle.selectAll(".selected")
+      //       .data(function(d) { return console.log(d.views.toString(), d.ratings.toString(), d.title)})
+     
+
+    }
+
+    function brushend() {
+      scatter.classed("selecting", !d3.event.target.empty());
+    }
+
 }
