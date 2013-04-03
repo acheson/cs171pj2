@@ -90,7 +90,7 @@ function handleMouseOutMap(d) {
 }
 
 function didMouseOverBar(e) {
-	console.log(e.name + " " + e.views);
+	// console.log(e.name + " " + e.views);
 	
 	var currentProjection = projection([e.lon,e.lat]);
 	var selection = map.selectAll("circle")
@@ -105,7 +105,7 @@ function didMouseOverBar(e) {
 	var mapCircle = d3.selectAll(".map-mark")
 		.filter( function(d,i) { 
 			if (e.name == d.name) {
-				console.log("match")
+				// console.log("match")
 				return this;
 			}
 		})

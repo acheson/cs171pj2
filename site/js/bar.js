@@ -59,25 +59,16 @@ function updateBar() {
 }
 
 function handleMouseOverBar(e) {
-	console.log(e.name + " " + e.views);
+	// console.log(e.name + " " + e.views);
 	didMouseOverBar(e);
-	// var mapCircle = d3.selectAll(".map-mark")
-	// 	.filter( function(d,i) { 
-	// 		if (e.name == d.name) {
-	// 			console.log("match")
-	// 			return this;
-	// 		}
-	// 	})
-		
-	// // 	.style("fill", "blue");
 
-	// 	handleMouseOverMap(mapCircle[0]);
-	
+	// TODO add bar highlighting here
 }
 
 function handleMouseOutBar(e) {
-	console.log(e.name + " " + e.views);
-	// didMouseOutBar(e);
+	// console.log(e.name + " " + e.views);
 	handleMouseOutMap(e);
+
+	// TODO remove bar highlighting here
 }
 
