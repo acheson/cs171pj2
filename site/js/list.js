@@ -7,9 +7,6 @@
 	http://jqueryui.com/selectable/#serialize
 */
 
-
-
-
 function initList() {
 	var list = d3.select("div#list").append("ol")
 		.attr("id", "selectable");

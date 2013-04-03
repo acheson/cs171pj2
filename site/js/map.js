@@ -13,20 +13,20 @@
 	http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
 */
 
-var width = 880;
-var height = 460;
+var mapWidth = 880;
+var mapHeight = 460;
 
 var projection = d3.geo.mercator()
 	.scale(140)
-	.translate([width / 2, 300])
+	.translate([mapWidth / 2, 300])
 	.precision(.1);
 
 var path = d3.geo.path()
 	.projection(projection);
 
 var map = d3.select("div#map-chart").append("svg")
-	.attr("width", width)
-	.attr("height", height);
+	.attr("width", mapWidth)
+	.attr("height", mapHeight);
 
 d3.json("../data/world-50m.json", function(error, world) {
 	map.insert("path", ".map-mark")
@@ -41,78 +41,96 @@ d3.json("../data/world-50m.json", function(error, world) {
 });
 
 function handleMouseOverMap(d) {
+	var currentProjection = projection([d.lon,d.lat]);
+
 	// in case the mouseOut missed
 	var selection = map.selectAll("circle")
 		.transition()
 			.duration(250)
+			.style("fill", "#888")	
 			.style("fill-opacity", 0.2)
-			.style("stroke", "red")
-			.style("stroke-opacity", 0.2);
+			.style("stroke", "#888")
+			.style("stroke-opacity", 0.3);
 	
 	var currentMapMark = d3.select(this)
 		.transition()
 			.duration(250)
+			.style("fill", "red")
 			.style("fill-opacity", 0.5)
-			.style("stroke", "black")
+			.style("stroke", "red")
 			.style("stroke-opacity", 1.0);
-
-	var div =d3.select("div#map-chart").append("div")   
+  
+	var div = d3.select("div#map-chart").append("div")   
     	.attr("class", "tooltip")               
     	.style("opacity", 0);
 
     div.transition()        
         .duration(250)      
-        .style("opacity", .9);      
-    div.html("<h3>" + d.name + "</h3><br/>" + d.views)  
-        .style("left", (d3.event.pageX ) + "px")     
-        .style("top", (d3.event.pageY - 28) + "px");    
+        .style("opacity", .9);
+
+    div.html("<h3>" + d.name + "</h3>" + d.views + " views</br>" + countryNameForCode(d.country))  
+        .style("left", (currentProjection[0] - 130) + "px")     
+        .style("top", function() {
+        	if ((currentProjection[1] - 40) > d3.event.pageY) {
+        		return (currentProjection[1]) - 40;	
+        	}
+        	else {
+        		return d3.event.pageY - 100 + "px";
+        	} 
+        });  	
 }
 
 
 function handleMouseOutMap(d) {
-	d3.select(this)
+	var selection = map.selectAll("circle")
 		.transition()
 			.duration(250)
+			.style("fill", "red")
 			.style("fill-opacity", 0.2)
 			.style("stroke", "red")
-			.style("stroke-opacity", 0.2);
+			.style("stroke-opacity", 0.3);
 
 	var div = d3.selectAll(".tooltip")   
 	div.transition()        
         .duration(250)      
         .style("opacity", 0)
         .remove();
-
-
 }
 
 function updateMap() {
-	console.log("updateMap");
-
-	// console.log(d3.min(function(sites, i) { return sites[i].views ;}));
-	var mapMax = d3.max(sites, function(d) { return d.views;});	
+	var mapMax = d3.max(sites, function(d) {return d.views;});	
 
 	// linear scale  - input:domain as output:range
 	var area = d3.scale.linear()
 		.domain([1, mapMax])
 		.range([2, 100]);
 
+	// Sort sites so that smaller ones always appear on top of larger
+	// create a copy of sites to sort
+	var sortedSites = sites.slice(0);
+	sortedSites.sort(function(a, b) {
+    	return d3.descending(a.views, b.views);
+    });
+
 	var selection = map.selectAll("circle")
-		.data(sites);
+		.data(sortedSites);
 
 	var div = d3.select("body").append("div")   
     	.attr("class", "tooltip")               
-   	 .style("opacity", 0);
+   		.style("opacity", 0);
 
 	selection.enter().append("circle")
 			.attr("class", "map-mark")
 			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+			.attr("display", function(d) { 
+				if (d.lon == undefined) { return "none"; }
+			})
 			.attr("r", function(d) {return area(d.views);})
 			.style("fill", "red")
 			.style("fill-opacity", 0.2)
 			.style("stroke", "red")
-			.style("stroke-opacity", 0.2)
-			.style("stroke-width", 0.5)
+			.style("stroke-opacity", 0.3)
+			.style("stroke-width", 1.0)
 			.on("mouseover", handleMouseOverMap)
 			.on("mouseout", handleMouseOutMap);
 	
@@ -125,8 +143,6 @@ function updateMap() {
 		.duration(500)
 			.style("opacity", 0)
 			.remove();
-
-
 }
 
 

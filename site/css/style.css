@@ -57,27 +57,23 @@ h1 {
   font-size: 52px;
   font-weight: 300;
   letter-spacing: -2px;
-  /*margin: .3em 0 .1em 0;*/
-}
-
-h2 {
-  /*margin-top: 2em;*/
 }
 
 h1, h2 {
   text-rendering: optimizeLegibility;
 }
 
+h3 {
+	font-size: 24px;
+}
+
 div.tooltip {   
   position: absolute;           
   text-align: center;           
-  width: 100px;                  
-  height: 40px;                 
-  /*padding: 2px;             */
-  border: 1px solid #AAA;
-  background: white;   
-  /*border-radius: 8px;           */
-  pointer-events: none;         
+  width: 260px;                  
+  height: 80px;                 
+  pointer-events: none;  
+  font-size: 12pt;       
 }
 
 /************* TITLE ****************/
