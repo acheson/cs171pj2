@@ -60,20 +60,24 @@ function updateBar() {
 
 function handleMouseOverBar(e) {
 	console.log(e.name + " " + e.views);
+	didMouseOverBar(e);
+	// var mapCircle = d3.selectAll(".map-mark")
+	// 	.filter( function(d,i) { 
+	// 		if (e.name == d.name) {
+	// 			console.log("match")
+	// 			return this;
+	// 		}
+	// 	})
+		
+	// // 	.style("fill", "blue");
 
-	// var mapCircle = d3.selectAll(".map-mark").filter( function(d,i) { 
-	// 	if (e.name == d.name) {
-	// 		console.log("match");
-	// 		return d;
-	// 	}
-	// });
-
-	// handleMouseOverMap(mapCircle);
+	// 	handleMouseOverMap(mapCircle[0]);
 	
 }
 
 function handleMouseOutBar(e) {
 	console.log(e.name + " " + e.views);
-	
+	// didMouseOutBar(e);
+	handleMouseOutMap(e);
 }
 
