@@ -22,7 +22,6 @@ function Film() {
 	this.siteNames = {};
 }
 
-
 /* default site object */
 function Site() {
 	this.name = "";
@@ -39,19 +38,33 @@ var sites = {};
 
 var totalViews = 0;
 var totalRatings = 0;
+var maxViews = 0;
+var	maxRatings = 0;
 
 function updateViews() {
-	
-	// console.log("updateViews");
-
-	initList();
 	updateMap();
 	updateScatter();
 	updateBar();
 }
 
+// load and parse country code lookup JSON
+// JSON data courtesy of https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes
+var countryList;
+d3.json("../data/slim-3.json", countryListComplete);
+function countryListComplete(d) {
+	countryList = d;
+}
 
+function countryNameForCode(code) {
+	for (var k in countryList) {
+		if  (countryList[k]["alpha-3"] == code) {
+			return countryList[k]["name"];
+		};
+	}
+	return "";
+}
 
+// load the actual data
 d3.json("../data/data.json", jsonComplete);
 
 /* Stores the JSON data */
@@ -60,8 +73,9 @@ var dataSource;
 function jsonComplete(d) {
 	dataSource = d;
 	parse(dataSource);
-}
 
+	initList();
+}
 
 /*  
 	Parses a data object and updates all views
@@ -100,6 +114,10 @@ function parse(data) {
 			var site;
 			if (sites[ch.toString()]) {
 				site = sites[ch.toString()];
+			}
+			// ignore sponsored content
+			else if (ch.toString() == "HD Sponsor") {
+				continue;
 			}
 			else {
 				site = new Site();
@@ -146,7 +164,7 @@ function parse(data) {
 	updateViews();
 
 
-	
+	/*
 	// Keeping it real - Checks totals
 	var checkFilmViews = 0;
 	for (var f in films) {
@@ -164,7 +182,7 @@ function parse(data) {
 	}
 	console.log(totalViews + " " + checkSiteViews + " " + checkFilmViews);
 	console.log(totalRatings + " " + checkFilmRatings);
-	
+	*/
 
 }
 
