@@ -41,10 +41,6 @@ var totalViews = 0;
 var totalRatings = 0;
 
 function updateViews() {
-	
-	// console.log("updateViews");
-
-	initList();
 	updateMap();
 	updateScatter();
 	updateBar();
@@ -60,6 +56,8 @@ var dataSource;
 function jsonComplete(d) {
 	dataSource = d;
 	parse(dataSource);
+
+	initList();
 }
 
 

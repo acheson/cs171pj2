@@ -33,11 +33,15 @@ function updateBar() {
 		.data(sites);
 
 	selection.enter().append("rect")
-		.attr("x", function(d,i) { return x(i) - 0.5; })
-		.attr("y", function(d) {return height - y(d.views) - 0.5;})
-		.attr("width", width/sites.length)
-		.attr("height", function(d) {return y(d.views);})
-		.on("mouseover", handleMouseOver)
+		.attr("x", width)
+		.attr("y", height)
+		.transition()
+			.duration(500)
+			.attr("x", function(d,i) { return x(i) - 0.5; })
+			.attr("y", function(d) {return height - y(d.views) - 0.5;})
+			.attr("width", width/sites.length)
+			.attr("height", function(d) {return y(d.views);});
+	selection.on("mouseover", handleMouseOverBar);
 
 	selection.transition()
 		.duration(500)
@@ -48,11 +52,14 @@ function updateBar() {
 
 	selection.exit()
 		.transition()
-		.duration(500)
-		.style("opacity", 0)
-		.remove();
+			.duration(500)
+			.attr("x", width)
+			.style("opacity", 0)
+			.remove();
 }
 
-function handleMouseOver(e) {
+function handleMouseOverBar(e) {
 	console.log(e.name + " " + e.views);
+	
 }
+

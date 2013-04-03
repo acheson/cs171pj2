@@ -2,6 +2,9 @@
 	list.js
 	03/26/13
 	author: Rob Acheson
+
+	Adapted from:
+	http://jqueryui.com/selectable/#serialize
 */
 
 
@@ -20,17 +23,14 @@ function initList() {
 	$(function() {
 		$( "#selectable" ).selectable({
      		stop: function() {
+        		var filteredList = [];
         		
-        		var temp = [];
-
-        		var result = $( "#select-result" ).empty();
         		$( ".ui-selected", this ).each(function() {
           			var index = $( "#selectable li" ).index( this );
-          			result.append( " #" + ( index + 1 ) );
-          			temp.push(dataSource[index]);
+          			
+          			filteredList.push(dataSource[index]);
         		});
-
-        		parse(temp);
+        		parse(filteredList);
 			}
 		});
 	});

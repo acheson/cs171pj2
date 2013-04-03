@@ -4,6 +4,9 @@
 	Jeff Fontas
 */
 
+/*http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html*/
+
+
 
 /* CSS Reset * /
 /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -65,8 +68,19 @@ h1, h2 {
   text-rendering: optimizeLegibility;
 }
 
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: 100px;                  
+  height: 40px;                 
+  /*padding: 2px;             */
+  border: 1px solid #AAA;
+  background: white;   
+  /*border-radius: 8px;           */
+  pointer-events: none;         
+}
 
-/* TITLE */
+/************* TITLE ****************/
 #title {
 	width: 340px;
 	height: 100px;
@@ -75,8 +89,9 @@ h1, h2 {
 	left: 20px;
 	/*background: #000;*/
 }
+/************************************/
 
-/* LIST */
+/*************** LIST ***************/
 #list {
 	width: 340px;
 	height: 340px;
@@ -85,6 +100,23 @@ h1, h2 {
 	left: 20px;
 	overflow: scroll;
 }
+
+#selectable .ui-selecting {
+	background: red; 
+}
+
+#selectable .ui-selected {
+	background: red;
+	color: white;
+}
+
+#selectable { 
+	list-style-type: none; 
+	margin: 0; 
+	padding: 0;
+}
+/**************************************/
+
 
 /* SCATTERPLOT */
 #scatter-chart {
@@ -136,6 +168,8 @@ h1, h2 {
   	stroke: #fff;
 	stroke-width: 0.5px;
 }
+
+
 
 
 /*********************************************/

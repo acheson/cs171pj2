@@ -10,7 +10,7 @@
 	http://bl.ocks.org/mbostock/3734333
 	http://www.schneidy.com/Tutorials/MapsTutorial.html
 	http://stackoverflow.com/questions/10261992/d3-js-add-a-circle-in-d3-geo-path
-
+	http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
 */
 
 var width = 880;
@@ -28,31 +28,65 @@ var map = d3.select("div#map-chart").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
-// This would append graticule marks to the map
-// var graticule = d3.geo.graticule();
-// map.append("path")
-	// .datum(graticule)
-	// .attr("class", "graticule")
-	// .attr("d", path);
-
 d3.json("../data/world-50m.json", function(error, world) {
 	map.insert("path", ".map-mark")
-	// map.append("path")
 		.datum(topojson.object(world, world.objects.land))
 		.attr("id", "land")
 		.attr("d", path);
 
 	map.insert("path", ".map-mark")
-	// map.append("path")
 		.datum(topojson.mesh(world, world.objects.countries, function(a , b) { return a !== b; }))
 		.attr("id", "boundary")
 		.attr("d", path);
 });
 
+function handleMouseOverMap(d) {
+	// in case the mouseOut missed
+	var selection = map.selectAll("circle")
+		.transition()
+			.duration(250)
+			.style("fill-opacity", 0.2)
+			.style("stroke", "red")
+			.style("stroke-opacity", 0.2);
+	
+	var currentMapMark = d3.select(this)
+		.transition()
+			.duration(250)
+			.style("fill-opacity", 0.5)
+			.style("stroke", "black")
+			.style("stroke-opacity", 1.0);
+
+	var div =d3.select("div#map-chart").append("div")   
+    	.attr("class", "tooltip")               
+    	.style("opacity", 0);
+
+    div.transition()        
+        .duration(250)      
+        .style("opacity", .9);      
+    div.html("<h3>" + d.name + "</h3><br/>" + d.views)  
+        .style("left", (d3.event.pageX ) + "px")     
+        .style("top", (d3.event.pageY - 28) + "px");    
+}
+
+
+function handleMouseOutMap(d) {
+	d3.select(this)
+		.transition()
+			.duration(250)
+			.style("fill-opacity", 0.2)
+			.style("stroke", "red")
+			.style("stroke-opacity", 0.2);
+
+	var div = d3.selectAll(".tooltip")   
+	div.transition()        
+        .duration(250)      
+        .style("opacity", 0)
+        .remove();
+
+
+}
 
 function updateMap() {
-
-
 	console.log("updateMap");
 
 	// console.log(d3.min(function(sites, i) { return sites[i].views ;}));
@@ -66,6 +100,10 @@ function updateMap() {
 	var selection = map.selectAll("circle")
 		.data(sites);
 
+	var div = d3.select("body").append("div")   
+    	.attr("class", "tooltip")               
+   	 .style("opacity", 0);
+
 	selection.enter().append("circle")
 			.attr("class", "map-mark")
 			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
@@ -75,8 +113,8 @@ function updateMap() {
 			.style("stroke", "red")
 			.style("stroke-opacity", 0.2)
 			.style("stroke-width", 0.5)
-			.on("mouseover", handleMouseOver)
-			.on("mouseout", handleMouseOut);
+			.on("mouseover", handleMouseOverMap)
+			.on("mouseout", handleMouseOutMap);
 	
 	selection.transition()
 		.duration(500)
@@ -91,37 +129,6 @@ function updateMap() {
 
 }
 
-
-// TODO - Implement a tooltop on hover
-
-
-// map.selectAll("path")
-// 	.on("mouseover", handleMouseOver);
-
-function handleMouseOver(d,i) {
-	dumpObject(this);
-	console.log(d.name + " " + d.views);
-
-	var selection = map.selectAll("circle")
-		.transition()
-			.duration(250)
-			.style("fill", "red");
-	
-	d3.select(this)
-		.transition()
-			.duration(250)
-			.style("fill", "black");
-
-	// var mapModal = map.select("div #map-modal");
-	// mapModal.append("div")
-	// 	.attr("id", "map-modal")
-
-	// e.attr("fill", "#A0A");
-}
-
-function handleMouseOut(d) {
-	// console.log(d.name + "out");
-}
 
 
 
