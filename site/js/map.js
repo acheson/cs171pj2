@@ -77,36 +77,6 @@ function highlightMap(d,obj) {
 function handleMouseOverMap(d) {
 	var currentMapMark = d3.select(this);
 	highlightMap(d, currentMapMark);
-	// var currentProjection = projection([d.lon,d.lat]);
-
-	// // in case the mouseOut missed
-	// var selection = map.selectAll("circle")
-	// 	.transition()
-	// 		.duration(250)
-	// 		.style("fill", "#888")	
-	// 		.style("fill-opacity", 0.2)
-	// 		.style("stroke", "#888")
-	// 		.style("stroke-opacity", 0.3);
-	
-	// var currentMapMark = d3.select(this)
-	// 	.transition()
-	// 		.duration(250)
-	// 		.style("fill", "red")
-	// 		.style("fill-opacity", 0.5)
-	// 		.style("stroke", "red")
-	// 		.style("stroke-opacity", 1.0);
-  
-	// var div = d3.select("div#map-chart").append("div")   
- //    	.attr("class", "tooltip")               
- //    	.style("opacity", 0);
-
- //    div.transition()        
- //        .duration(250)      
- //        .style("opacity", .9);
-
- //    div.html("<h3>" + d.name + "</h3>" + d.views + " views</br>" + countryNameForCode(d.country))  
- //        .style("left", (currentProjection[0] - 130) + "px")   
- //        .style("top", (currentProjection[1] - 80) + "px");     	
 }
 
 function handleMouseOutMap(d) {
@@ -123,57 +93,6 @@ function handleMouseOutMap(d) {
         .duration(250)      
         .style("opacity", 0)
         .remove();
-}
-
-function didMouseOverBar(e) {
-	
-	// var mapCircle = d3.selectAll(".map-mark")
-	// 	.filter( function(d,i) { 
-	// 		if (e.name == d.name) {
-	// 			// console.log("match")
-	// 			return this;
-	// 		}
-	// 	});
-
-	// mom(e, mapCircle);
-
-	// console.log(e.name + " " + e.views);
-	
-	// var currentProjection = projection([e.lon,e.lat]);
-	// var selection = map.selectAll("circle")
-	// 	.transition()
-	// 		.duration(250)
-	// 		.style("fill", "#888")	
-	// 		.style("fill-opacity", 0.2)
-	// 		.style("stroke", "#888")
-	// 		.style("stroke-opacity", 0.3);
-
-
-	// var mapCircle = d3.selectAll(".map-mark")
-	// 	.filter( function(d,i) { 
-	// 		if (e.name == d.name) {
-	// 			// console.log("match")
-	// 			return this;
-	// 		}
-	// 	})
-	// 	.transition()
-	// 		.duration(250)
-	// 		.style("fill", "red")
-	// 		.style("fill-opacity", 0.5)
-	// 		.style("stroke", "red")
-	// 		.style("stroke-opacity", 1.0);
-
-	// var div = d3.select("div#map-chart").append("div")   
- //    	.attr("class", "tooltip")               
- //    	.style("opacity", 0);
-
- //    div.transition()        
- //        .duration(250)      
- //        .style("opacity", .9);
-
- //    div.html("<h3>" + e.name + "</h3>" + e.views + " views</br>" + countryNameForCode(e.country))  
- //        .style("left", (currentProjection[0] - 130) + "px")   
- //        .style("top", (currentProjection[1] - 80) + "px") 	
 }
 
 function updateMap() {
