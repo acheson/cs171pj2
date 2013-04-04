@@ -2,6 +2,9 @@
 	scatter.js
 	03/26/13
 	authors: Rob Acheson
+             Jeff Fontas
+
+brush code was grabbed from 
 
 */
 
@@ -12,13 +15,13 @@ var lmargin = 40;
 var bmargin = 40;
 var rmargin = 20;
 var ptRadius = 3;
+var updateArray = 0;
 var scatter = d3.select("div#scatter-chart")
                 .append("svg")
                 .attr("width", width)
                 .attr("height", height);   
 
-
-
+var axesDrawn = 0; //becomes 1 after drawing axes the first time
 
 
 function updateScatter() {
@@ -34,6 +37,38 @@ function updateScatter() {
                     // .pow().exponent(.50)
                     .domain([0, maxRatings])
                     .range([ (height - bmargin), (0 + tmargin)]);
+    // this section draws the scatter axes at the first call 
+    if (axesDrawn == 0) {
+
+
+        var scatterYAxis = d3.svg.axis()
+                            .scale(scatterY)
+                            .orient("left")
+                            .tickFormat(d3.format("s"))
+                            .ticks(5)
+                            .tickSubdivide(4)
+                            .tickSize(6, 3, 3);
+
+        var scatterXAxis = d3.svg.axis()
+                            .scale(scatterX)
+                            .orient("bottom")
+                            .tickFormat(d3.format("s"))
+                            .ticks(6)
+                            .tickSubdivide(4)
+                            .tickSize(6, 3, 3);
+
+        scatter.append("g")
+            .attr("class", "x scatterAxis")
+            .attr("transform", "translate(0.5," + (scatterY(0) + 0.5) + ")")
+            .call(scatterXAxis);
+
+        scatter.append("g")
+            .attr("class", "y scatterAxis")
+            .attr("transform", "translate(" +  (scatterX(0)+ 0.5) + ", 0.5)")
+            .call(scatterYAxis);
+
+        axesDrawn = 1;
+    }
 
     var circle = scatter.selectAll("circle")
             .data(films)
@@ -43,34 +78,8 @@ function updateScatter() {
             .attr("cy", function(d) { return scatterY(d.ratings); })
             .attr("r", ptRadius);
 
-    //scatter,
+    
 
-    var scatterYAxis = d3.svg.axis()
-                        .scale(scatterY)
-                        .orient("left")
-                        .tickFormat(d3.format("s"))
-                        .ticks(5)
-                        .tickSubdivide(4)
-                        .tickSize(6, 3, 3);
-
-    var scatterXAxis = d3.svg.axis()
-                        .scale(scatterX)
-                        .orient("bottom")
-                        .tickFormat(d3.format("s"))
-                        .ticks(6)
-                        .tickSubdivide(4)
-                        .tickSize(6, 3, 3);
-
-
-    scatter.append("g")
-        .attr("class", "x scatterAxis")
-        .attr("transform", "translate(0.5," + (scatterY(0) + 0.5) + ")")
-        .call(scatterXAxis);
-
-    scatter.append("g")
-        .attr("class", "y scatterAxis")
-        .attr("transform", "translate(" +  (scatterX(0)+ 0.5) + ", 0.5)")
-        .call(scatterYAxis);
 
     //alert(ratingsMax);
     scatter.append("g")
@@ -81,23 +90,46 @@ function updateScatter() {
         .on("brushend", brushend));
 
     function brushstart() {
+      brush.clear()
       scatter.classed("selecting", true);
     }
 
     function brushmove() {
       var e = d3.event.target.extent();
       circle.classed("selected", function(d) {
+
+       //console.log(d.rank);
         return e[0][0] <= d.views && d.views <= e[1][0]
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
-      // circle.selectAll(".selected")
-      //       .data(function(d) { return console.log(d.views.toString(), d.ratings.toString(), d.title)})
-     
+
+      // TO DO message list to clear selections
+      // build array of indices
+      /* build array of dictionaries of films by
+       a variant of this code:
+
+            filteredList.push(dataSource[index]);
+            parse(filteredList);
+            
+
+        */
+    // circle.selectAll(".selected")
+    //       .data(function(d) { return console.log(d.views.toString(), d.ratings.toString(), d.title)})
+    //
 
     }
 
     function brushend() {
+      updateArray = []  
       scatter.classed("selecting", !d3.event.target.empty());
+      var tempArray = scatter.selectAll(".selected").data();
+      if (tempArray.length > 0) {
+
+        for (f in tempArray) {
+            updateArray.push(dataSource[(tempArray[f].rank-1)]);
+        }
+        parse(updateArray);
+       }
     }
 
 }

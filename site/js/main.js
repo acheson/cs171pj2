@@ -18,6 +18,7 @@ function dumpObject(o) {
 function Film() {
 	this.title = "";
 	this.ratings = 0;
+	this.rank = 0;
 	this.views = 0;
 	this.siteNames = {};
 }
@@ -82,13 +83,17 @@ function jsonComplete(d) {
 	
 	Pass a subset for filtering
  */
+
+var maxViews = 0;
+var maxRatings = 0;
+
 function parse(data) {
 	// console.log("parse start");
 	
 	totalViews = 0;
 	totalRatings = 0;
-	maxViews = 0;
-	maxRatings = 0;
+
+	
 
 	films = [];
 	sites = {};
@@ -100,6 +105,7 @@ function parse(data) {
 		
 		// set some properties
 		film.title = data[d]["title"];
+		film.rank = data[d]["Rank"];
 		film.ratings = data[d]["IMDB"]["RatingCount"];
 		totalRatings += data[d]["IMDB"]["RatingCount"];
 
