@@ -90,7 +90,7 @@ function updateScatter() {
         .on("brushend", brushend));
 
     function brushstart() {
-      brush.clear()
+      //brush.clear()
       scatter.classed("selecting", true);
     }
 
