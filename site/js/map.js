@@ -69,6 +69,10 @@ function highlightMap(d,obj) {
         .duration(250)      
         .style("opacity", .9);
 
+    /*    formats views in the thousands/millions with commas 
+    	-- change d.views to viewsFormat(d.views)     */
+    // var viewsFormat = d3.format(",");
+
     div.html("<h3>" + d.name + "</h3>" + d.views + " views</br>" + countryNameForCode(d.country))  
         .style("left", (currentProjection[0] - 130) + "px")   
         .style("top", (currentProjection[1] - 80) + "px");  
