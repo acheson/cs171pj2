@@ -58,16 +58,30 @@ function updateBar() {
 			.remove();
 }
 
-function handleMouseOverBar(e) {
+function handleMouseOverBar(d) {
 	// console.log(e.name + " " + e.views);
-	didMouseOverBar(e);
-
+	
 	// TODO add bar highlighting here
+
+
+
+	// make selection and highlight the map
+	var mapCircle = d3.selectAll(".map-mark")
+		.filter( function(e,i) { 
+			if (d.name == e.name) {
+				// console.log("match")
+				return this;
+			}
+		});
+	highlightMap(d, mapCircle);
+
+
+	
 }
 
-function handleMouseOutBar(e) {
+function handleMouseOutBar(d) {
 	// console.log(e.name + " " + e.views);
-	handleMouseOutMap(e);
+	handleMouseOutMap(d);
 
 	// TODO remove bar highlighting here
 }
