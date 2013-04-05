@@ -83,8 +83,7 @@ function updateMap() {
 	selection.transition()
 		.duration(500)
 			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-			.attr("r", function(d) {return area(d.views);})
-			.ease();
+			.attr("r", function(d) {return area(d.views);});
 
 	selection.exit()
 		.transition()

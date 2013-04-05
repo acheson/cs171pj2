@@ -27,13 +27,17 @@ function updateBar() {
 	
 	var barMax = d3.max(sites, function(d) { return d.views;});	
 
-	var x = d3.scale.linear()
-		.domain([0, 1])
-		.range([0, barWidth/sites.length]);
+	// var x = d3.scale.linear()
+	// 	.domain([0, 1])
+	// 	.range([0, barWidth/sites.length]);
+	var x = d3.scale.ordinal()
+		.domain(d3.range(sites.length))
+		.rangeBands([0,barWidth]);
 
-	var y = d3.scale.sqrt()
+
+	var y = d3.scale.linear()
 		.domain([1, barMax])
-		.rangeRound([0, barHeight]);
+		.rangeRound([1, barHeight]);
 
 	var xAxis = d3.svg.axis()
 		.scale(x)
@@ -80,20 +84,64 @@ function updateBar() {
 			.style("opacity", 0)
 			.remove();
 
-	var barLabels =  barChart.append("g")
-        .attr("class", "x_axis")
-        .attr("transform", "translate(0," + barHeight + ")")
-        .call(xAxis)
-        .selectAll("text")  
-           .data(sites);
+    var textSelection = barChart.selectAll("text")
+    	.data(sites, function(d) {return d.name;});
+    	// .data(sites);
 
-           barLabels.text(function(d, i) {return d.name;})
-            .style("text-anchor", "end")
-            .style("font-size", "13px")
-            .attr("y", function(d,i) {return x(i);})
-            .attr("transform", function(d) {
-                return "rotate(-90)" 
-                });
+    textSelection.enter().append("text")
+        .attr("x", function(d,i) { return x(i) - 0.5; })
+        .attr("y", barHeight + 10)
+        // .attr("dx", -3)
+        // .attr("dy", ".35em")
+        .attr("text-anchor", "end")
+		.text(function(d, i) {return d.name;})
+		.attr("transform", function(d, i) {
+        	return "translate(" + (x(i) - barHeight) + "," + barHeight + ") rotate(-90," + x(i) + "," + 0 + ") ";
+        })
+       
+
+    textSelection.transition()
+    	.duration(500)
+    	.attr("x", function(d,i) { return x(i) - 0.5; })
+    	.attr("y", barHeight + 10)
+		.attr("transform", function(d, i) {
+        	return "translate(" + (x(i) - barHeight)/sites.length + "," + barHeight + ") rotate(-90," + x(i) + "," + 0 + ") ";
+        });
+
+	// textSelection.on("mouseover", handleMouseOverBar);
+	// textSelection.on("mouseout", handleMouseOut);  // this function is in map.js
+
+ // http://bl.ocks.org/nachocab/raw/3028447/ 
+
+    textSelection.exit()
+    	.transition()
+    		.duration(500)
+    		.style("opacity", 0)
+			.remove();
+
+       
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // .style("text-anchor", "end")
+            // .style("font-size", "13px")
+            // .attr("y", function(d,i) {return x(i);})
+            // .attr("transform", function(d) {
+            //     return "rotate(-90)" 
+            //     });
 
     
 	// text = barChart.selectAll("text")
