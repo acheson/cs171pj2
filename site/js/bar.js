@@ -24,7 +24,7 @@ var barChart = d3.select("div#bar-chart")
 		.attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
 
 function updateBar() {
-
+	
 	var barMax = d3.max(sites, function(d) { return d.views;});	
 
 	var x = d3.scale.linear()
@@ -44,20 +44,27 @@ function updateBar() {
 		.orient("left").ticks(5);
 
 	var selection = barChart.selectAll("rect")
-		.data(sites);
+		.data(sites, function(d) {return d.name;});
+		// .data(sites);
 
 	selection.enter().append("rect")
+		.attr("class", "bar-mark")
 		.attr("x", barWidth)
 		.attr("y", barHeight)
+		.style("fill", "red")
+		.style("fill-opacity", 0.2)
+		.style("stroke", "red")			
+		.style("stroke-opacity", 0.3)
+		.style("stroke-width", 1.0)
 		.transition()
 			.duration(500)
 			.attr("x", function(d,i) { return x(i) - 0.5; })
 			.attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
-			.attr("width", barWidth/sites.length)  // .attr("width", barWidth/50)
-			.attr("height", function(d) {return y(d.views);});
-	
-	selection.on("mouseover", handleMouseOverBar);
-	selection.on("mouseout", handleMouseOutBar);
+			.attr("width", barWidth/sites.length)
+			.attr("height", function(d) {return y(d.views);})
+			
+  	selection.on("mouseover", handleMouseOverBar);
+	selection.on("mouseout", handleMouseOutMap);
 
 	selection.transition()
 		.duration(500)
@@ -80,10 +87,10 @@ function updateBar() {
         .selectAll("text")  
            .data(sites);
 
-           barLabels.text(function(d, i) {console.log(d.name + i); return d.name;})
+           barLabels.text(function(d, i) {return d.name;})
             .style("text-anchor", "end")
             .style("font-size", "13px")
-            .attr("y", function(d,i) { console.log(x(i)); return x(i); })
+            .attr("y", function(d,i) {return x(i);})
             .attr("transform", function(d) {
                 return "rotate(-90)" 
                 });
@@ -101,11 +108,8 @@ function updateBar() {
 }
 
 function handleMouseOverBar(e) {
-	// console.log(e.name + " " + e.views);
-	
-	// TODO add bar highlighting here
-
-
+	var currentBarMark = d3.select(this);
+	highlightBar(e, currentBarMark);
 
 	// make selection and highlight the map
 	var mapCircle = d3.selectAll(".map-mark")
@@ -116,15 +120,41 @@ function handleMouseOverBar(e) {
 			}
 		});
 	highlightMap(e, mapCircle);
+}
 
+// function handleMouseOutBar(e) {
+// 	var selection = barChart.selectAll("rect")
+// 		.transition()
+// 			.duration(250)
+// 			.style("fill", "red")
+// 			.style("fill-opacity", 0.2)
+// 			.style("stroke", "red")	
+//   			.style("stroke-opacity", 0.3);
 
+// 	handleMouseOutMap(e);
+// }
+
+function highlightBar(e, obj) {
+	// dim others
+	var selection = barChart.selectAll("rect")
+		.transition()
+			.duration(250)
+			.style("fill", "#888")
+			.style("fill-opacity", 0.2)
+			.style("stroke", "#888")	
+  			.style("stroke-opacity", 0.3);
+  	// highlight current	
+  	obj.transition()
+  		.duration(250)
+		.style("fill", "red")
+		.style("fill-opacity", 0.5)
+		.style("stroke", "red")
+		.style("stroke-opacity", 1.0);
+		
 	
 }
 
-function handleMouseOutBar(e) {
-	// console.log(e.name + " " + e.views);
-	handleMouseOutMap(e);
 
-	// TODO remove bar highlighting here
-}
+
+
 

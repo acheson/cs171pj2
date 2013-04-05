@@ -175,21 +175,6 @@ circle#scatter-chart  {
 	/*background: #CCC;*/
 }
 
- .map-mark {
-	/*fill: red;	
-	fill-opacity: 0.2;
-	stroke: red;
-	stroke-width: 0.5px;
- 	stroke-opacity: 0.5;*/
-}
-
-/*.graticule {
-  fill: none;
-  stroke: #777;
-  stroke-width: .5px;
-  stroke-opacity: .5;
-}*/
-
 #land {
   	fill: #ccc;
 }
@@ -203,10 +188,6 @@ circle#scatter-chart  {
   	stroke: #fff;
 	stroke-width: 0.5px;
 }
-
-
-
-
 /*********************************************/
 
 
@@ -219,13 +200,13 @@ circle#scatter-chart  {
 	left: 380px;
 }
 
-.bar-chart rect {
+/*.bar-chart rect {
 	stroke: red;
   	stroke-width: 0.5px;
   	stroke-opacity: 0.5;
   	fill: red;
   	fill-opacity: 0.5;
-}
+}*/
 
 
 

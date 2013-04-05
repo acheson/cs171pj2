@@ -32,9 +32,7 @@ function Site() {
 	this.views = 0;
 }
 
-/* dictionary of sites by name 
-	Becomes an array sorted alphabetically after parse
-*/
+/* dictionary of sites by name - Becomes an array sorted alphabetically after parse */
 var sites = {};
 
 var totalViews = 0;
@@ -78,22 +76,10 @@ function jsonComplete(d) {
 	initList();
 }
 
-/*  
-	Parses a data object and updates all views
-	
-	Pass a subset for filtering
- */
-
-var maxViews = 0;
-var maxRatings = 0;
-
+/* Parses a data object and updates all views - Pass a subset for filtering */
 function parse(data) {
-	// console.log("parse start");
-	
 	totalViews = 0;
 	totalRatings = 0;
-
-	
 
 	films = [];
 	sites = {};
