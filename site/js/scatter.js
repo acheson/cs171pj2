@@ -24,8 +24,9 @@ var scatter = d3.select("div#scatter-chart")
 var axesDrawn = 0; //becomes 1 after drawing axes the first time
 
 
-function updateScatter() {
 
+function updateScatter() {
+    
     var scatterX = d3.scale
                     .linear()
                     // .pow().exponent(.50)
@@ -67,10 +68,7 @@ function updateScatter() {
             .attr("transform", "translate(" +  (scatterX(0)+ 0.5) + ", 0.5)")
             .call(scatterYAxis);
 
-        axesDrawn = 1;
-    }
-
-    var circle = scatter.selectAll("circle")
+        var circle = scatter.selectAll("circle")
             .data(films)
             .enter()
             .append("circle")
@@ -78,27 +76,42 @@ function updateScatter() {
             .attr("cy", function(d) { return scatterY(d.ratings); })
             .attr("r", ptRadius);
 
+        var brushFn = d3.svg.brush()
+            .x(scatterX)
+            .y(scatterY)
+            .on("brushstart", brushstart)
+            .on("brush", brushmove)
+            .on("brushend", brushend);
+
+        scatter.append("g")
+            .attr("class", "brush")
+            .call(brushFn);
+
+
+        axesDrawn = 1;
+    }
+
     
 
+    
+    
 
+    // clear the brush extent and formatting if there's anything going on
+    brushFn.clear();
+    scatter.selectAll(".selected").classed("none",true);
     //alert(ratingsMax);
-    scatter.append("g")
-        .attr("class", "brush")
-        .call(d3.svg.brush().x(scatterX).y(scatterY)
-        .on("brushstart", brushstart)
-        .on("brush", brushmove)
-        .on("brushend", brushend));
-
+    
     function brushstart() {
-      //brush.clear()
-      scatter.classed("selecting", true);
+        
+        scatter.call(brushFn.clear());
+        scatter.classed("selecting", true);
     }
 
     function brushmove() {
       var e = d3.event.target.extent();
       circle.classed("selected", function(d) {
 
-       //console.log(d.rank);
+       //console.log(e.e[0][0]);
         return e[0][0] <= d.views && d.views <= e[1][0]
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
