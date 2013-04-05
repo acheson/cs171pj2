@@ -64,7 +64,7 @@ function updateBar() {
 			.attr("height", function(d) {return y(d.views);})
 			
   	selection.on("mouseover", handleMouseOverBar);
-	selection.on("mouseout", handleMouseOutMap);
+	selection.on("mouseout", handleMouseOut);  // this function is in map.js
 
 	selection.transition()
 		.duration(500)

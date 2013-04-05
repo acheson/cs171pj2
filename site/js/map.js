@@ -78,7 +78,7 @@ function updateMap() {
 			.style("stroke-opacity", 0.3)
 			.style("stroke-width", 1.0)
 			.on("mouseover", handleMouseOverMap)
-			.on("mouseout", handleMouseOutMap);
+			.on("mouseout", handleMouseOut);
 	
 	selection.transition()
 		.duration(500)
@@ -107,7 +107,7 @@ function handleMouseOverMap(e) {
 	highlightBar(e, barBar);
 }
 
-function handleMouseOutMap(e) {
+function handleMouseOut(e) {
 	var selection = map.selectAll("circle")
 		.transition()
 			.duration(250)
