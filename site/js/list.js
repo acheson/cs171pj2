@@ -15,7 +15,7 @@ function initList() {
 			.enter()
 			.append("li")
 			.attr("class", "ui-widget-content")
-			.text( function(d) { return d.title} );
+			.text( function(d) { return d.rank.toString() + ". " + d.title} );
 
 	$(function() {
 		$( "#selectable" ).selectable({

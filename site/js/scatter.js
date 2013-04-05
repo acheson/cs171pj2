@@ -11,7 +11,7 @@ brush code was grabbed from
 var width = 340;
 var height = 220;
 var tmargin = 20;
-var lmargin = 40;
+var lmargin = 60;
 var bmargin = 40;
 var rmargin = 20;
 var ptRadius = 3;
@@ -41,7 +41,7 @@ function updateScatter() {
     // this section draws the scatter axes at the first call 
     if (axesDrawn == 0) {
 
-
+        //define axes
         var scatterYAxis = d3.svg.axis()
                             .scale(scatterY)
                             .orient("left")
@@ -58,6 +58,7 @@ function updateScatter() {
                             .tickSubdivide(4)
                             .tickSize(6, 3, 3);
 
+        //draw axes
         scatter.append("g")
             .attr("class", "x scatterAxis")
             .attr("transform", "translate(0.5," + (scatterY(0) + 0.5) + ")")
@@ -68,6 +69,23 @@ function updateScatter() {
             .attr("transform", "translate(" +  (scatterX(0)+ 0.5) + ", 0.5)")
             .call(scatterYAxis);
 
+        //add labels
+        scatter.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "middle")
+            .attr("x", width/2 + rmargin)
+            .attr("y", height - 2)
+            .text("Total views on 1channel.ch");
+
+        scatter.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "middle")
+            .attr("transform", "rotate(-90)")
+            .attr("x", 10)
+            .attr("y", (height-bmargin)/2)
+            .text("Total ratings on IMDB");
+
+        //add scatterplot points
         var circle = scatter.selectAll("circle")
             .data(films)
             .enter()
@@ -76,12 +94,14 @@ function updateScatter() {
             .attr("cy", function(d) { return scatterY(d.ratings); })
             .attr("r", ptRadius);
 
+        //define brushing function, call it
         var brushFn = d3.svg.brush()
             .x(scatterX)
             .y(scatterY)
             .on("brushstart", brushstart)
             .on("brush", brushmove)
             .on("brushend", brushend);
+
 
         scatter.append("g")
             .attr("class", "brush")
@@ -97,9 +117,8 @@ function updateScatter() {
     
 
     // clear the brush extent and formatting if there's anything going on
-    brushFn.clear();
     scatter.selectAll(".selected").classed("none",true);
-    //alert(ratingsMax);
+    
     
     function brushstart() {
         

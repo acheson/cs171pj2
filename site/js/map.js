@@ -71,9 +71,9 @@ function highlightMap(d,obj) {
 
     /*    formats views in the thousands/millions with commas 
     	-- change d.views to viewsFormat(d.views)     */
-    //var viewsFormat = d3.format(",");
+    var viewsFormat = d3.format(",");
 
-    div.html("<h3>" + d.name + "</h3>" + d.views + " views</br>" + countryNameForCode(d.country))  
+    div.html("<h3>" + d.name + "</h3>" + viewsFormat(d.views) + " views</br>" + countryNameForCode(d.country))  
         .style("left", (currentProjection[0] - 130) + "px")   
         .style("top", (currentProjection[1] - 80) + "px");  
 }
@@ -103,7 +103,9 @@ function updateMap() {
 	var mapMax = d3.max(sites, function(d) {return d.views;});	
 
 	// linear scale  - input:domain as output:range
-	var area = d3.scale.linear()
+	var area = d3.scale
+		//.pow().exponent(.750)
+		.linear()
 		.domain([1, mapMax])
 		.range([2, 100]);
 
