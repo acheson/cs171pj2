@@ -95,6 +95,7 @@ div.tooltip {
 	top: 140px;
 	left: 20px;
 	overflow: scroll;
+    font-size: 12px;
 }
 
 #selectable .ui-selecting {
@@ -143,7 +144,9 @@ circle#scatter-chart  {
   fill-opacity: .2;
 }
 
-
+#scatter-chart .label {
+    font-size: 12px;
+}
 
 .selecting circle.selected {
   stroke: #f00;
@@ -188,7 +191,7 @@ circle#scatter-chart  {
 }*/
 
 #land {
-  	fill: #AAA;
+  	fill: #ccc;
 }
 
 #land .active {

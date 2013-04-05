@@ -53,7 +53,7 @@ function updateBar() {
 			.duration(500)
 			.attr("x", function(d,i) { return x(i) - 0.5; })
 			.attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
-			.attr("width", barWidth/sites.length)
+			.attr("width", barWidth/sites.length)  // .attr("width", barWidth/50)
 			.attr("height", function(d) {return y(d.views);});
 	
 	selection.on("mouseover", handleMouseOverBar);
