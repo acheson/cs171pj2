@@ -90,14 +90,17 @@ function updateScatter() {
         return e[0][0] <= d.views && d.views <= e[1][0]
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
-      // circle.selectAll(".selected")
-      //       .data(function(d) { return console.log(d.views.toString(), d.ratings.toString(), d.title)})
+      circle.selectAll(".selected")
+            .data(function(d,i) { return console.log(d.title + " " + i)})
      
 
     }
 
     function brushend() {
-      scatter.classed("selecting", !d3.event.target.empty());
+        console.log("end");
+        scatter.classed("selecting", !d3.event.target.empty());
+
+
     }
 
 }

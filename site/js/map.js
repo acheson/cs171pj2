@@ -40,66 +40,9 @@ d3.json("../data/world-50m.json", function(error, world) {
 		.attr("d", path);
 });
 
-function highlightMap(d,obj) {
-	
-	var currentProjection = projection([d.lon,d.lat]);
-
-	// in case the mouseOut missed
-	var selection = map.selectAll("circle")
-		.transition()
-			.duration(250)
-			.style("fill", "#888")	
-			.style("fill-opacity", 0.2)
-			.style("stroke", "#888")
-			.style("stroke-opacity", 0.3);
-	
-	// var currentMapMark = d3.select(obj)
-		obj.transition()
-			.duration(250)
-			.style("fill", "red")
-			.style("fill-opacity", 0.5)
-			.style("stroke", "red")
-			.style("stroke-opacity", 1.0);
-  
-	var div = d3.select("div#map-chart").append("div")   
-    	.attr("class", "tooltip")               
-    	.style("opacity", 0);
-
-    div.transition()        
-        .duration(250)      
-        .style("opacity", .9);
-
-    /*    formats views in the thousands/millions with commas 
-    	-- change d.views to viewsFormat(d.views)     */
-    // var viewsFormat = d3.format(",");
-
-    div.html("<h3>" + d.name + "</h3>" + d.views + " views</br>" + countryNameForCode(d.country))  
-        .style("left", (currentProjection[0] - 130) + "px")   
-        .style("top", (currentProjection[1] - 80) + "px");  
-}
-
-function handleMouseOverMap(d) {
-	var currentMapMark = d3.select(this);
-	highlightMap(d, currentMapMark);
-}
-
-function handleMouseOutMap(d) {
-	var selection = map.selectAll("circle")
-		.transition()
-			.duration(250)
-			.style("fill", "red")
-			.style("fill-opacity", 0.2)
-			.style("stroke", "red")
-			.style("stroke-opacity", 0.3);
-
-	var div = d3.selectAll(".tooltip")   
-	div.transition()        
-        .duration(250)      
-        .style("opacity", 0)
-        .remove();
-}
-
 function updateMap() {
+	
+	console.log("update map");
 	var mapMax = d3.max(sites, function(d) {return d.views;});	
 
 	// linear scale  - input:domain as output:range
@@ -146,6 +89,69 @@ function updateMap() {
 			.style("opacity", 0)
 			.remove();
 }
+
+function handleMouseOverMap(d,i) {
+	var currentMapMark = d3.select(this);
+	highlightMap(d, currentMapMark);
+}
+
+function handleMouseOutMap(d) {
+	var selection = map.selectAll("circle")
+		.transition()
+			.duration(250)
+			.style("fill", "red")
+			.style("fill-opacity", 0.2)
+			.style("stroke", "red")
+			.style("stroke-opacity", 0.3);
+
+	var div = d3.selectAll(".tooltip")   
+	div.transition()        
+        .duration(250)      
+        .style("opacity", 0)
+        .remove();
+}
+
+function highlightMap(e,obj) {
+	
+	console.log(e);
+
+	var currentProjection = projection([e.lon,e.lat]);
+
+	// in case the mouseOut missed
+	var selection = map.selectAll("circle")
+		.transition()
+			.duration(250)
+			.style("fill", "#888")	
+			.style("fill-opacity", 0.2)
+			.style("stroke", "#888")
+			.style("stroke-opacity", 0.3);
+
+	// var currentMapMark = d3.select(obj)
+		obj.transition()
+			.duration(250)
+			.style("fill", "red")
+			.style("fill-opacity", 0.5)
+			.style("stroke", "red")
+			.style("stroke-opacity", 1.0);
+  
+	var div = d3.select("div#map-chart").append("div")   
+    	.attr("class", "tooltip")               
+    	.style("opacity", 0);
+
+    div.transition()        
+        .duration(250)      
+        .style("opacity", .9);
+
+    /*    formats views in the thousands/millions with commas 
+    	-- change d.views to viewsFormat(d.views)     */
+    // var viewsFormat = d3.format(",");
+
+    div.html("<h3>" + e.name + "</h3>" + e.views + " views</br>" + countryNameForCode(e.country))  
+        .style("left", (currentProjection[0] - 130) + "px")   
+        .style("top", (currentProjection[1] - 80) + "px");  
+}
+
+
 
 
 
