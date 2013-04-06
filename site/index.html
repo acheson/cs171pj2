@@ -14,33 +14,29 @@ Once this is running, go to "http://localhost:8888/"
         <meta charset="utf-8">
         <title>Streaming the IMDB Top 250</title>
         <link rel="stylesheet" type="text/css" href="css/style.css"/>
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
     </head>
     <body>
         <div id="title"><h2>Streaming the</h2><br/><h1>IMDB TOP 250</h1></div>
-        <div id="list"></div>
+        <div id="list">
+            <header id="list-header">
+                <h2>TITLES</h2>
+                <div id="list-input">
+                    <input type="checkbox" id="select-all"/>
+                    <label>Select All</label>
+                </div>
+            </header>
+            <nav id="list-nav"></nav>
+        </div>
         <div id="scatter-chart"></div>
         <div id="bar-chart"></div>
     	<div id="map-chart"></div>
 
-        <!-- Online versions of source libraries for final deployment -->
-        <!-- 
-        <script src="http://d3js.org/d3.v3.min.js"></script>
-        <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
-        <script src="http://d3js.org/topojson.v0.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-        -->
-
-        <!-- Offline versions of source libraries for testing -->
         <script type="text/javascript" src="js/d3.v3.min.js"></script>
         <script type="text/javascript" src="js/d3.geo.projection.v0.min.js"></script>
         <script type="text/javascript" src="js/topojson.v0.min.js"></script>
     	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     	<script type="text/javascript" src="js/jquery-ui.js"></script>
-        <!-- End offline files-->
 
-        <!--<script src="data/data.js"></script>-->
     	<script src="js/main.js"></script>
     	<script src="js/list.js"></script>
     	<script src="js/map.js"></script>

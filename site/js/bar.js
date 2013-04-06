@@ -27,15 +27,12 @@ function updateBar() {
 	
 	var barMax = d3.max(sites, function(d) { return d.views;});	
 
-	// var x = d3.scale.linear()
-	// 	.domain([0, 1])
-	// 	.range([0, barWidth/sites.length]);
 	var x = d3.scale.ordinal()
 		.domain(d3.range(sites.length))
 		.rangeBands([0,barWidth]);
 
-
-	var y = d3.scale.linear()
+	var y = d3.scale//.sqrt()
+		.pow().exponent(.750)
 		.domain([1, barMax])
 		.rangeRound([1, barHeight]);
 
@@ -60,19 +57,15 @@ function updateBar() {
 		.style("stroke", "red")			
 		.style("stroke-opacity", 0.3)
 		.style("stroke-width", 1.0)
-		.transition()
-			.duration(500)
-			.attr("x", function(d,i) { return x(i) - 0.5; })
-			.attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
-			.attr("width", barWidth/sites.length)
-			.attr("height", function(d) {return y(d.views);})
+		// .style("opacity", 0)
 			
   	selection.on("mouseover", handleMouseOverBar);
 	selection.on("mouseout", handleMouseOut);  // this function is in map.js
 
 	selection.transition()
 		.duration(500)
-		.attr("x", function(d,i) { return x(i) - 0.5; })
+		// .style("opacity", 1)
+		.attr("x", function(d,i) { console.log(x(i)); return x(i) - 0.5; })
 		.attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
 		.attr("width", barWidth/sites.length)
 		.attr("height", function(d) {return y(d.views);});
@@ -89,70 +82,26 @@ function updateBar() {
     	// .data(sites);
 
     textSelection.enter().append("text")
-        .attr("x", function(d,i) { return x(i) - 0.5; })
-        .attr("y", barHeight + 10)
-        // .attr("dx", -3)
-        // .attr("dy", ".35em")
+        .attr("dy", ".35em")
         .attr("text-anchor", "end")
-		.text(function(d, i) {return d.name;})
-		.attr("transform", function(d, i) {
-        	return "translate(" + (x(i) - barHeight) + "," + barHeight + ") rotate(-90," + x(i) + "," + 0 + ") ";
-        })
-       
+		.attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 10) + ") rotate(-45)";})
+		.text(function(d, i) { console.log(x(i)); return d.name;})   
+		.style("opacity", 0);
 
     textSelection.transition()
     	.duration(500)
-    	.attr("x", function(d,i) { return x(i) - 0.5; })
-    	.attr("y", barHeight + 10)
-		.attr("transform", function(d, i) {
-        	return "translate(" + (x(i) - barHeight)/sites.length + "," + barHeight + ") rotate(-90," + x(i) + "," + 0 + ") ";
-        });
+    	.attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 2) + ") rotate(-45)";})
+    	.style("opacity", 1);
 
+    	// TODO - PeRhApZ?
 	// textSelection.on("mouseover", handleMouseOverBar);
 	// textSelection.on("mouseout", handleMouseOut);  // this function is in map.js
-
- // http://bl.ocks.org/nachocab/raw/3028447/ 
 
     textSelection.exit()
     	.transition()
     		.duration(500)
     		.style("opacity", 0)
 			.remove();
-
-       
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // .style("text-anchor", "end")
-            // .style("font-size", "13px")
-            // .attr("y", function(d,i) {return x(i);})
-            // .attr("transform", function(d) {
-            //     return "rotate(-90)" 
-            //     });
-
-    
-	// text = barChart.selectAll("text")
-	// 	.data(sites);
-	// text.enter()
-	// 	.append("text")
-	// 	.text(function(d) {return d.name;})
-	// 	.style("text-anchor", "end")
-	// 	.attr("transform", "rotate(-90)")
-	// 	.attr("x", function(d,i) { return x(i) - 0.5; })
-	// 	.attr("y", function(d) {return barHeight;})
 }
 
 function handleMouseOverBar(e) {
@@ -191,6 +140,7 @@ function highlightBar(e, obj) {
 			.style("fill-opacity", 0.2)
 			.style("stroke", "#888")	
   			.style("stroke-opacity", 0.3);
+  	
   	// highlight current	
   	obj.transition()
   		.duration(250)

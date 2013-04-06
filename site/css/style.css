@@ -5,7 +5,7 @@
 */
 
 /*http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html*/
-
+/*http://stackoverflow.com/questions/2212542/how-can-i-prevent-selecting-text-in-google-chrome*/
 
 
 /* CSS Reset * /
@@ -46,21 +46,29 @@ time, mark, audio, video {
 */
 html {
 	min-width: 1280px;
+	
+	user-select: none;
+   	-o-user-select:none;
+   	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	-webkit-user-select: none;
 }
 
 body {
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	margin: 1em auto 4em auto;
+	text-rendering: optimizeLegibility;
 }
 
 h1 {
   font-size: 52px;
   font-weight: 300;
   letter-spacing: -2px;
+  margin-top: -20px;
 }
 
-h1, h2 {
-  text-rendering: optimizeLegibility;
+h2 {
+	font-size: 24px;
 }
 
 h3 {
@@ -94,12 +102,36 @@ div.tooltip {
 	position: absolute;
 	top: 140px;
 	left: 20px;
-	overflow: scroll;
+	/*overflow: scroll;*/
     font-size: 12px;
 }
 
+#list-header {
+	color: #AAA;
+}
+
+#list-header h2 {
+	color: #AAA;
+	display: inline;
+}
+
+#list-input {
+	vertical-align: text-bottom;
+	display: inline;
+	float: right;
+	margin-top: 6px;
+}
+
+#list-nav {
+	width: 340px;
+	height: 300px;
+	position: absolute;
+	top: 40px;
+	overflow: scroll;
+}
+
 #selectable .ui-selecting {
-	background: red; 
+	background: green; 
 }
 
 #selectable .ui-selected {
@@ -163,6 +195,8 @@ circle#scatter-chart  {
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
+
+
 /******************* MAP *********************/
 #map-chart {
 	width: 880px;
