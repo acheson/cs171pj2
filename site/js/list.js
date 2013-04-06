@@ -35,7 +35,7 @@ function initList() {
     		parse(filteredList);
 		}
 	});
-	highlightList("all");
+	highlightList(["all"]);
 
 	// set initial checkbox to checked and hidden
 	// $("#list-input").hide();

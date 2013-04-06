@@ -121,8 +121,10 @@ div.tooltip {
 	height: 300px;
 	position: absolute;
 	top: 40px;
-	/*left: 20px;
 	overflow: scroll;
+
+	/*left: 20px;
+	
     /*font-size: 12px;*/
 }
 

@@ -135,8 +135,8 @@ function updateScatter() {
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
 
-      circle.selectAll(".selected")
-            .data(function(d,i) { return console.log(d.title + " " + i)})
+      // circle.selectAll(".selected")
+      //       .data(function(d,i) { return console.log(d.title + " " + i)})
      
 
 
@@ -164,15 +164,18 @@ function updateScatter() {
 
 
 
-      updateArray = []  
+      updateArray = [];  
+      indicesArray = [];
       scatter.classed("selecting", !d3.event.target.empty());
       var tempArray = scatter.selectAll(".selected").data();
       if (tempArray.length > 0) {
 
         for (f in tempArray) {
             updateArray.push(dataSource[(tempArray[f].rank-1)]);
+            indicesArray.push(tempArray[f].rank-1);
         }
         parse(updateArray);
+        highlightList(indicesArray);
        }
 
     }
