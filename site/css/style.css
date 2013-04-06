@@ -51,16 +51,18 @@ html {
 body {
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	margin: 1em auto 4em auto;
+	text-rendering: optimizeLegibility;
 }
 
 h1 {
   font-size: 52px;
   font-weight: 300;
   letter-spacing: -2px;
+  margin-top: -20px;
 }
 
-h1, h2 {
-  text-rendering: optimizeLegibility;
+h2 {
+	font-size: 24px;
 }
 
 h3 {
@@ -94,12 +96,38 @@ div.tooltip {
 	position: absolute;
 	top: 140px;
 	left: 20px;
-	overflow: scroll;
+	/*overflow: scroll;*/
     font-size: 12px;
 }
 
+#list-header {
+	color: #AAA;
+}
+
+#list-header h2 {
+	color: #AAA;
+	display: inline;
+}
+
+#list-input {
+	vertical-align: text-bottom;
+	display: inline;
+	float: right;
+	margin-top: 6px;
+}
+
+#list-nav {
+	width: 340px;
+	height: 300px;
+	position: absolute;
+	top: 40px;
+	/*left: 20px;
+	overflow: scroll;
+    /*font-size: 12px;*/
+}
+
 #selectable .ui-selecting {
-	background: red; 
+	background: green; 
 }
 
 #selectable .ui-selected {
