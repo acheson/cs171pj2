@@ -5,7 +5,7 @@
 */
 
 /*http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html*/
-
+/*http://stackoverflow.com/questions/2212542/how-can-i-prevent-selecting-text-in-google-chrome*/
 
 
 /* CSS Reset * /
@@ -46,6 +46,7 @@ time, mark, audio, video {
 */
 html {
 	min-width: 1280px;
+	
 	user-select: none;
    	-o-user-select:none;
    	-moz-user-select: none;
@@ -194,6 +195,8 @@ circle#scatter-chart  {
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
+
+
 /******************* MAP *********************/
 #map-chart {
 	width: 880px;

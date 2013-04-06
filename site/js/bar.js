@@ -58,12 +58,6 @@ function updateBar() {
 		.style("stroke-opacity", 0.3)
 		.style("stroke-width", 1.0)
 		// .style("opacity", 0)
-		// .transition()
-		// 	.duration(500)
-		// 	.attr("x", function(d,i) { console.log(x(i)); return x(i) - 0.5; })
-		// 	.attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
-		// 	.attr("width", barWidth/sites.length)
-		// 	.attr("height", function(d) {return y(d.views);})
 			
   	selection.on("mouseover", handleMouseOverBar);
 	selection.on("mouseout", handleMouseOut);  // this function is in map.js
@@ -146,6 +140,7 @@ function highlightBar(e, obj) {
 			.style("fill-opacity", 0.2)
 			.style("stroke", "#888")	
   			.style("stroke-opacity", 0.3);
+  	
   	// highlight current	
   	obj.transition()
   		.duration(250)
