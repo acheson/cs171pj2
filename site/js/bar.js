@@ -35,7 +35,8 @@ function updateBar() {
 		.rangeBands([0,barWidth]);
 
 
-	var y = d3.scale.linear()
+	var y = d3.scale//.sqrt()
+		.pow().exponent(.750)
 		.domain([1, barMax])
 		.rangeRound([1, barHeight]);
 
@@ -89,21 +90,20 @@ function updateBar() {
     	// .data(sites);
 
     textSelection.enter().append("text")
-        .attr("x", function(d,i) { return x(i) - 0.5; })
-        .attr("y", barHeight + 10)
+        // .attr("x", function(d,i) { return x(i) - 0.5; })
+        // .attr("y", barHeight + 10)
         // .attr("dx", -3)
         // .attr("dy", ".35em")
         .attr("text-anchor", "end")
 		.text(function(d, i) {return d.name;})
-		.attr("transform", function(d, i) {
-        	return "translate(" + (x(i) - barHeight) + "," + barHeight + ") rotate(-90," + x(i) + "," + 0 + ") ";
+		.attr("transform", function(d, i) {        	return "translate(" + (x(i) - barHeight) + "," + barHeight + ") rotate(-90," + x(i) + "," + 0 + ") ";
         })
        
 
     textSelection.transition()
     	.duration(500)
-    	.attr("x", function(d,i) { return x(i) - 0.5; })
-    	.attr("y", barHeight + 10)
+    	// .attr("x", function(d,i) { return x(i) - 0.5; })
+    	// .attr("y", barHeight + 10)
 		.attr("transform", function(d, i) {
         	return "translate(" + (x(i) - barHeight)/sites.length + "," + barHeight + ") rotate(-90," + x(i) + "," + 0 + ") ";
         });

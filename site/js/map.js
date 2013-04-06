@@ -45,8 +45,8 @@ function updateMap() {
 	var mapMax = d3.max(sites, function(d) {return d.views;});	
 	
 	// linear scale  - input:domain as output:range
-	var area = d3.scale.linear()
-		//.pow().exponent(.750)
+	var area = d3.scale//.sqrt()
+		.pow().exponent(.750)
 		.domain([1, mapMax])
 		.range([2,100]);
 
