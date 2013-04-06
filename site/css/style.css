@@ -234,6 +234,21 @@ circle#scatter-chart  {
 	left: 380px;
 }
 
+
+#bar-chart .barAxis {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    fill: none;
+    stroke: gray;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+#bar-chart .barAxisLine {
+    stroke: #eee;
+}
+
 /*.bar-chart rect {
 	stroke: red;
   	stroke-width: 0.5px;
