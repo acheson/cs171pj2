@@ -37,7 +37,8 @@ function updateBar() {
     sites.sort(byViews);
 
     var barMax = d3.max(sites, function(d) { return d.views;});    
-
+    
+    
     var x = d3.scale.ordinal()
         .domain(d3.range(sites.length))
         .rangeBands([40,barWidth]);
@@ -50,7 +51,10 @@ function updateBar() {
     var yInverse = d3.scale.linear()
         //.pow().exponent(.750)
         .domain([1, barMax])
-        .rangeRound([barHeight, 1]);
+        .range([barHeight, 1]);
+
+
+    console.log(barMax);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -93,13 +97,13 @@ function updateBar() {
         .style("stroke-width", 1.0)
         // .style("opacity", 0)
             
-      selection.on("mouseover", handleMouseOverBar);
+    selection.on("mouseover", handleMouseOverBar);
     selection.on("mouseout", handleMouseOut);  // this function is in map.js
 
     selection.transition()
         .duration(500)
         // .style("opacity", 1)
-        .attr("x", function(d,i) { console.log(x(i)); return x(i) - 0.5; })
+        .attr("x", function(d,i) {  return x(i) - 0.5; })
         .attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
         .attr("width", barWidth/sites.length - 5)
         .attr("height", function(d) {return y(d.views);});
@@ -119,7 +123,7 @@ function updateBar() {
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
         .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 10) + ") rotate(-45)";})
-        .text(function(d, i) { console.log(x(i)); return d.name;})   
+        .text(function(d, i) { return d.name;})   
         .style("opacity", 0);
 
     textSelection.transition()
@@ -148,13 +152,15 @@ function updateBar() {
 
         
         axisDrawn = 1;
+    } else {
+        //transitions for axis
+        barChart.select(".barAxis")
+            .transition()
+            .duration(0)
+            .call(yAxis); 
     }
 
-    //transitions for axis
-    barChart.select(".barAxis")
-        .transition()
-        .duration(0)
-        .call(yAxis);
+   
 
     // can't get this to work, 
       // barChart.select(".barAxisLine")
