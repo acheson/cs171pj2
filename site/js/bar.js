@@ -38,8 +38,8 @@ function updateBar() {
 
 	var xAxis = d3.svg.axis()
 		.scale(x)
-		.orient("bottom")
-		.ticks(sites.length);
+		.orient("top")
+		.ticks(5);
 
 	var yAxis = d3.svg.axis().scale(y)
 		.orient("left").ticks(5);
@@ -48,6 +48,10 @@ function updateBar() {
 		.data(sites, function(d) {return d.name;});
 		// .data(sites);
 
+	// selection.append("g")
+ //    	.attr("class", "axis")
+ //    	.call(yAxis);
+	
 	selection.enter().append("rect")
 		.attr("class", "bar-mark")
 		.attr("x", barWidth)
@@ -65,7 +69,7 @@ function updateBar() {
 	selection.transition()
 		.duration(500)
 		// .style("opacity", 1)
-		.attr("x", function(d,i) { console.log(x(i)); return x(i) - 0.5; })
+		.attr("x", function(d,i) {return x(i) - 0.5; })
 		.attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
 		.attr("width", barWidth/sites.length)
 		.attr("height", function(d) {return y(d.views);});
@@ -85,7 +89,7 @@ function updateBar() {
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
 		.attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 10) + ") rotate(-45)";})
-		.text(function(d, i) { console.log(x(i)); return d.name;})   
+		.text(function(d, i) {return d.name;})   
 		.style("opacity", 0);
 
     textSelection.transition()
@@ -112,7 +116,6 @@ function handleMouseOverBar(e) {
 	var mapCircle = d3.selectAll(".map-mark")
 		.filter( function(d) { 
 			if (d.name == e.name) {
-				// console.log("match")
 				return this;
 			}
 		});
