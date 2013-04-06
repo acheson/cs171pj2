@@ -23,8 +23,19 @@ var barChart = d3.select("div#bar-chart")
 	.append("g")
 		.attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
 
+// compare function for sorting by views
+function byViews(a,b) {
+ if (a.views < b.views)
+     return 1;
+  if (a.views > b.views)
+    return -1;
+  return 0;
+}
+
 function updateBar() {
-	
+	sitesOrig = sites;
+	sites.sort(byViews);
+
 	var barMax = d3.max(sites, function(d) { return d.views;});	
 
 	var x = d3.scale.ordinal()
@@ -48,6 +59,7 @@ function updateBar() {
 		.data(sites, function(d) {return d.name;});
 		// .data(sites);
 
+	
 	selection.enter().append("rect")
 		.attr("class", "bar-mark")
 		.attr("x", barWidth)
@@ -102,6 +114,8 @@ function updateBar() {
     		.duration(500)
     		.style("opacity", 0)
 			.remove();
+
+	sites = sitesOrig;
 }
 
 function handleMouseOverBar(e) {
