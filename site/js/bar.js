@@ -23,6 +23,7 @@ var barChart = d3.select("div#bar-chart")
         .attr("transform", "translate(" + barMargin.left + "," + barMargin.top + ")");
 
 var axisDrawn = 0;
+
 // compare function for sorting by views
 function byViews(a,b) {
  if (a.views < b.views)
@@ -67,11 +68,11 @@ function updateBar() {
         .ticks(5)
         .tickFormat(d3.format("s"))
         .tickSubdivide(2)
-        .tickSize(6, 4, 3);
+        .tickSize(6, 4, 2);
 
     var selection = barChart.selectAll("rect")
         .data(sites, function(d) {return d.name;});
-        // .data(sites);
+       
 
     // if (axisDrawn == 0) {
     //     //draw axis lines
@@ -102,7 +103,6 @@ function updateBar() {
 
     selection.transition()
         .duration(500)
-        // .style("opacity", 1)
         .attr("x", function(d,i) {  return x(i) - 0.5; })
         .attr("y", function(d) {return barHeight - y(d.views) - 0.5;})
         .attr("width", barWidth/sites.length - 5)
@@ -117,7 +117,6 @@ function updateBar() {
 
     var textSelection = barChart.selectAll("text")
         .data(sites, function(d) {return d.name;});
-        // .data(sites);
 
     textSelection.enter().append("text")
         .attr("dy", ".35em")
@@ -130,10 +129,6 @@ function updateBar() {
         .duration(500)
         .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 2) + ") rotate(-45)";})
         .style("opacity", 1);
-
-        // TODO - PeRhApZ?
-    // textSelection.on("mouseover", handleMouseOverBar);
-    // textSelection.on("mouseout", handleMouseOut);  // this function is in map.js
 
     textSelection.exit()
         .transition()
@@ -184,18 +179,6 @@ function handleMouseOverBar(e) {
         });
     highlightMap(e, mapCircle);
 }
-
-// function handleMouseOutBar(e) {
-//     var selection = barChart.selectAll("rect")
-//         .transition()
-//             .duration(250)
-//             .style("fill", "red")
-//             .style("fill-opacity", 0.2)
-//             .style("stroke", "red")    
-//               .style("stroke-opacity", 0.3);
-
-//     handleMouseOutMap(e);
-// }
 
 function highlightBar(e, obj) {
     // dim others

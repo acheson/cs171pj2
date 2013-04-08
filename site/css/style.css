@@ -91,7 +91,6 @@ div.tooltip {
 	position: absolute;
 	top: 20px;
 	left: 20px;
-	/*background: #000;*/
 }
 /************************************/
 
@@ -131,12 +130,15 @@ div.tooltip {
 }
 
 #selectable .ui-selecting {
-	background: green; 
+	background: #EEE;
+	color: red;
+	opacity: 1.0;
 }
 
 #selectable .ui-selected {
-	background: red;
-	color: white;
+	background: #EEE;
+	color: red;
+	opacity: 0.8;
 }
 
 #selectable { 
@@ -205,8 +207,6 @@ circle#scatter-chart  {
 	top: 20px;
 	left: 380px;
 	border: 1px solid #AAA;
-	/*fill: "red";*/
-	/*background: #CCC;*/
 }
 
 #land {
@@ -236,9 +236,9 @@ circle#scatter-chart  {
 
 
 #bar-chart .barAxis {
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    /*font-family: "Helvetica Neue", Helvetica, sans-serif;*/
     font-size: 10px;
-    font-style: normal;
+    /*font-style: normal;*/
     fill: none;
     stroke: gray;
     stroke-width: 1px;
@@ -249,14 +249,30 @@ circle#scatter-chart  {
     stroke: #eee;
 }
 
-/*.bar-chart rect {
-	stroke: red;
-  	stroke-width: 0.5px;
-  	stroke-opacity: 0.5;
-  	fill: red;
-  	fill-opacity: 0.5;
-}*/
 
 
+/* FOOTER */
 
+footer {
+	border-top: 1px solid #CCC;
+}
+
+#footer-left{
+	
+	border-top: 1px solid #CCC;
+	width: 340px;
+	height: 220px;
+	position: absolute;
+	top: 740px;
+	left: 20px;
+}
+
+#footer-right{
+	border-top: 1px solid #CCC;
+	width: 880px;
+	height: 220px;
+	position: absolute;
+	top: 740px;
+	left: 380px;
+}
 
