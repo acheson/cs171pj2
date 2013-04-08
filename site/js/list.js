@@ -32,6 +32,7 @@ function initList() {
       			var index = $( "#selectable li" ).index( this );
       			filteredList.push(dataSource[index]);
     		});
+                console.log("parse in initlist");
     		parse(filteredList);
 		}
 	});
