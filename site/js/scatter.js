@@ -135,36 +135,9 @@ function updateScatter() {
         return e[0][0] <= d.views && d.views <= e[1][0]
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
-
-      // circle.selectAll(".selected")
-      //       .data(function(d,i) { return console.log(d.title + " " + i)})
-     
-
-
-      // TO DO message list to clear selections
-      // build array of indices
-      /* build array of dictionaries of films by
-       a variant of this code:
-
-            filteredList.push(dataSource[index]);
-            parse(filteredList);
-            
-
-        */
-    // circle.selectAll(".selected")
-    //       .data(function(d) { return console.log(d.views.toString(), d.ratings.toString(), d.title)})
-    //
-
-
     }
 
     function brushend() {
-
-        // console.log("end");
-        // scatter.classed("selecting", !d3.event.target.empty());
-
-
-
         updateArray = [];  
         indicesArray = [];
         scatter.classed("selecting", !d3.event.target.empty());
@@ -175,8 +148,11 @@ function updateScatter() {
                 updateArray.push(dataSource[(tempArray[f].rank-1)]);
                 indicesArray.push(tempArray[f].rank-1);
             }
-
+     
             parse(updateArray);
+
+            // set flag so that highlight list does not parse the data again
+            shouldParse = false;
             highlightList(indicesArray);
            
         }
