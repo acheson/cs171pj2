@@ -79,11 +79,10 @@ function updateScatter() {
 
         scatter.append("text")
             .attr("class", "y label")
-            .attr("text-anchor", "middle") 
-            .attr("transform", "rotate(-90, " + (lmargin/2 - 10 )+ ", " + height/2 + ")")           
-            .attr("x", lmargin/2)
-            .attr("y", height/2)
-            
+            .attr("text-anchor", "middle")
+            .attr("transform", "rotate(-90)")
+            .attr("x", 10)
+            .attr("y", (height-bmargin)/2)
             .text("Total ratings on IMDB");
 
         //add scatterplot points
