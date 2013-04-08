@@ -24,6 +24,8 @@ proxy = "127.0.0.1:9050"
 mov_obj = pickle.load(f)
 # mov_obj = {}
 
+
+# writes current state of object to mov_obj.pickle
 def rw_pickle(f):
     f.close()
     f = open('mov_obj.pickle', 'w')
@@ -35,7 +37,7 @@ def rw_pickle(f):
 
 
 
-# get 1channel details
+# get 1channel details, uncomment everything below to run this section of script
 # counter = begin
 # # for mov in mov_obj[(begin-1):end]:
 #     print "Attempting movie", str(counter) + ":", str(mov['title'].encode('ascii','ignore')) + "........"

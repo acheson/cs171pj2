@@ -123,7 +123,7 @@ function updateScatter() {
     
     function brushstart() {
         
-        scatter.call(brushFn.clear());
+        // scatter.call(brushFn.clear());
         scatter.classed("selecting", true);
     }
 
@@ -160,24 +160,26 @@ function updateScatter() {
 
     function brushend() {
 
-        console.log("end");
+        // console.log("end");
+        // scatter.classed("selecting", !d3.event.target.empty());
+
+
+
+        updateArray = [];  
+        indicesArray = [];
         scatter.classed("selecting", !d3.event.target.empty());
+        var tempArray = scatter.selectAll(".selected").data();
+        if (tempArray.length > 0) {
 
-
-
-      updateArray = [];  
-      indicesArray = [];
-      scatter.classed("selecting", !d3.event.target.empty());
-      var tempArray = scatter.selectAll(".selected").data();
-      if (tempArray.length > 0) {
-
-        for (f in tempArray) {
-            updateArray.push(dataSource[(tempArray[f].rank-1)]);
-            indicesArray.push(tempArray[f].rank-1);
+            for (f in tempArray) {
+                updateArray.push(dataSource[(tempArray[f].rank-1)]);
+                indicesArray.push(tempArray[f].rank-1);
+            }
+           
+            parse(updateArray);
+            highlightList(indicesArray);
+           
         }
-        parse(updateArray);
-        highlightList(indicesArray);
-       }
 
     }
 

@@ -32,25 +32,33 @@ function byViews(a,b) {
   return 0;
 }
 
+// var barMax = 0;
+
 function updateBar() {
     sitesOrig = sites;
     sites.sort(byViews);
 
-    var barMax = d3.max(sites, function(d) { return d.views;});    
+        
     
     
+    var barMax = d3.max(sites, function(d) { return d.views;});
+
+    
+
     var x = d3.scale.ordinal()
         .domain(d3.range(sites.length))
         .rangeBands([40,barWidth]);
 
     var y = d3.scale.linear()
         //.pow().exponent(.750)
-        .domain([1, barMax])
+        //.domain([1, barMax])
+        .domain([1, ((barMax*3)/2)])
         .range([1, barHeight]);
 
     var yInverse = d3.scale.linear()
         //.pow().exponent(.750)
-        .domain([1, barMax])
+        // .domain([1, barMax])
+        .domain([1, ((barMax*3)/2)])
         .range([barHeight, 1]);
 
 

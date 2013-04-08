@@ -39,6 +39,7 @@ var totalViews = 0;
 var totalRatings = 0;
 var maxViews = 0;
 var	maxRatings = 0;
+// var vizInit = 0;  //switches to one once initlist is called
 
 function updateViews() {
 	updateMap();
@@ -74,6 +75,7 @@ function jsonComplete(d) {
 	parse(dataSource);
 
 	initList();
+	//vizInit = 1;
 }
 
 /* Parses a data object and updates all views - Pass a subset for filtering */
@@ -153,10 +155,10 @@ function parse(data) {
 
 	// parsing complete, tell the world!
 	// console.log("parse complete");
+
+	
 	updateViews();
-
-
-	/*
+		/*
 	// Keeping it real - Checks totals
 	var checkFilmViews = 0;
 	for (var f in films) {
