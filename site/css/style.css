@@ -129,6 +129,10 @@ div.tooltip {
 	overflow: scroll;
 }
 
+#select-all {	
+	/*	color: red;*/
+}
+
 #selectable .ui-selecting {
 	background: #EEE;
 	color: red;
@@ -145,6 +149,7 @@ div.tooltip {
 	list-style-type: none; 
 	margin: 0; 
 	padding: 0;
+	color: #999;
 }
 /**************************************/
 

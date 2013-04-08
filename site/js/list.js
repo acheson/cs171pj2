@@ -80,6 +80,10 @@ $("#select-all").click(function() {
 	if (!$(this).prop("checked")) {
 		$(this).prop("checked", true);
 	}
+	else {
+		// TODO
+		alert("Please use the list to select individual titles.");
+	}
 });
 
 
