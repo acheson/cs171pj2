@@ -38,6 +38,7 @@ function updateScatter() {
                     // .pow().exponent(.50)
                     .domain([0, maxRatings])
                     .range([ (height - bmargin), (0 + tmargin)]);
+   
     // this section draws the scatter axes at the first call 
     if (axesDrawn == 0) {
 
@@ -103,35 +104,23 @@ function updateScatter() {
             .on("brush", brushmove)
             .on("brushend", brushend);
 
-
         scatter.append("g")
             .attr("class", "brush")
             .call(brushFn);
 
-
         axesDrawn = 1;
     }
-
-    
-
-    
-    
 
     // clear the brush extent and formatting if there's anything going on
     scatter.selectAll(".selected").classed("none",true);
     
-    
     function brushstart() {
-        
-        // scatter.call(brushFn.clear());
         scatter.classed("selecting", true);
     }
 
     function brushmove() {
       var e = d3.event.target.extent();
-      circle.classed("selected", function(d) {
-
-       //console.log(e.e[0][0]);
+      circle.classed("selected", function(d) { 
         return e[0][0] <= d.views && d.views <= e[1][0]
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
@@ -148,7 +137,7 @@ function updateScatter() {
                 updateArray.push(dataSource[(tempArray[f].rank-1)]);
                 indicesArray.push(tempArray[f].rank-1);
             }
-     
+
             parse(updateArray);
 
             // set flag so that highlight list does not parse the data again
@@ -156,7 +145,5 @@ function updateScatter() {
             highlightList(indicesArray);
            
         }
-
     }
-
 }

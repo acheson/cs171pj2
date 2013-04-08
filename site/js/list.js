@@ -33,24 +33,18 @@ function initList() {
       			var index = $( "#selectable li" ).index( this );
       			filteredList.push(dataSource[index]);
     		});
-            
-            console.log("list stop");   
-            // brushClear();   
+         
     		if (shouldParse == true) {
     			parse(filteredList);	
     		}
     		shoudlParse = true;
-    		
 		}
 	});
 	highlightList(["all"]);
 
 	// set initial checkbox to checked
-	$("#select-all").prop("checked", true);
-	
+	$("#select-all").prop("checked", true);	
 }
-
-
 
 /* Accepts an array of indices, "all" or "none" */
 function highlightList(indices) {
@@ -63,7 +57,6 @@ function highlightList(indices) {
 		});
 		
 		performHighlightList($("#selectable"), elements);	
-	
 	}
 }
 function performHighlightList(container, elements) {
@@ -75,8 +68,6 @@ function performHighlightList(container, elements) {
 
     // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
 	container.data("ui-selectable")._mouseStop(null);	
-	
-	
 }
 
 $("#select-all").change(function() {
@@ -88,7 +79,6 @@ $("#select-all").click(function() {
 	if (!$(this).prop("checked")) {
 		$(this).prop("checked", true);
 	}
-	
 });
 
 

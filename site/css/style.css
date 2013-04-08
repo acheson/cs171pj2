@@ -260,6 +260,15 @@ circle#scatter-chart  {
 
 footer {
 	border-top: 1px solid #CCC;
+	font-size: 14px;
+}
+
+footer h2 {
+	font-size: 24px;
+}
+
+footer h3 {
+	font-size: 18px;
 }
 
 #footer-left{

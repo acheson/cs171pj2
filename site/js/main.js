@@ -150,31 +150,7 @@ function parse(data) {
 		temp[i] = sites[keys[i]]
 	};
 	sites = temp;
-
-	// parsing complete, tell the world!
-	// console.log("parse complete");
-
 	
 	updateViews();
-		/*
-	// Keeping it real - Checks totals
-	var checkFilmViews = 0;
-	for (var f in films) {
-		checkFilmViews += films[f].views;
-	}
-
-	var checkFilmRatings = 0;
-	for (var f in films) {
-		checkFilmRatings += films[f].ratings;
-	}
-
-	var checkSiteViews = 0;
-	for (var s in sites) {
-		checkSiteViews += sites[s].views;
-	}
-	console.log(totalViews + " " + checkSiteViews + " " + checkFilmViews);
-	console.log(totalRatings + " " + checkFilmRatings);
-	*/
-
 }
 

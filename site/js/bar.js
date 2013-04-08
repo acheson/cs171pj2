@@ -33,18 +33,11 @@ function byViews(a,b) {
   return 0;
 }
 
-// var barMax = 0;
-
 function updateBar() {
     sitesOrig = sites;
     sites.sort(byViews);
 
-        
-    
-    
     var barMax = d3.max(sites, function(d) { return d.views;});
-
-    
 
     var x = d3.scale.ordinal()
         .domain(d3.range(sites.length))
@@ -52,18 +45,15 @@ function updateBar() {
 
     var y = d3.scale.linear()
         //.pow().exponent(.750)
-        //.domain([1, barMax])
-        .domain([1, ((barMax*3)/2)])
+        .domain([1, barMax])
+        .domain([1, ((barMax*10)/9)])
         .range([1, barHeight]);
 
     var yInverse = d3.scale.linear()
         //.pow().exponent(.750)
-        // .domain([1, barMax])
-        .domain([1, ((barMax*3)/2)])
+        .domain([1, barMax])
+        .domain([1, ((barMax*10)/9)])
         .range([barHeight, 1]);
-
-
-    console.log(barMax);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -80,20 +70,6 @@ function updateBar() {
 
     var selection = barChart.selectAll("rect")
         .data(sites, function(d) {return d.name;});
-       
-
-    // if (axisDrawn == 0) {
-    //     //draw axis lines
-    //     // barChart.selectAll("line.barAxisLine")
-    //     //         .data(y.ticks(5))
-    //     //         .enter().append("line")
-    //     //         .attr("class", "barAxisLine")
-    //     //         .attr("x1", x(0))
-    //     //         .attr("x2", x(barWidth))
-    //     //         .attr("y1", y)
-    //     //         .attr("y2", y)
-    //     //         .style("stroke", "#ccc"); 
-    // }
 
     selection.enter().append("rect")
         .attr("class", "bar-mark")
@@ -104,7 +80,6 @@ function updateBar() {
         .style("stroke", "red")            
         .style("stroke-opacity", 0.3)
         .style("stroke-width", 1.0)
-        // .style("opacity", 0)
             
     selection.on("mouseover", handleMouseOverBar);
     selection.on("mouseout", handleMouseOut);  // this function is in map.js
@@ -162,14 +137,6 @@ function updateBar() {
             .duration(0)
             .call(yAxis); 
     }
-
-   
-
-    // can't get this to work, 
-      // barChart.select(".barAxisLine")
-      //   .transition()
-      //   .duration(1);
-        
     sites = sitesOrig;
 }
 
@@ -205,8 +172,6 @@ function highlightBar(e, obj) {
         .style("fill-opacity", 0.5)
         .style("stroke", "red")
         .style("stroke-opacity", 1.0);
-        
-    
 }
 
 
