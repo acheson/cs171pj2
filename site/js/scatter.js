@@ -1,7 +1,7 @@
 /*  
-	scatter.js
-	03/26/13
-	authors: Rob Acheson
+    scatter.js
+    03/26/13
+    authors: Rob Acheson
              Jeff Fontas
 
 brush code was grabbed from 
@@ -79,10 +79,11 @@ function updateScatter() {
 
         scatter.append("text")
             .attr("class", "y label")
-            .attr("text-anchor", "middle")
-            .attr("transform", "rotate(-90)")
-            .attr("x", 10)
-            .attr("y", (height-bmargin)/2)
+            .attr("text-anchor", "middle") 
+            .attr("transform", "rotate(-90, " + (lmargin/2 - 10 )+ ", " + height/2 + ")")           
+            .attr("x", lmargin/2)
+            .attr("y", height/2)
+            
             .text("Total ratings on IMDB");
 
         //add scatterplot points
@@ -170,11 +171,11 @@ function updateScatter() {
         var tempArray = scatter.selectAll(".selected").data();
         if (tempArray.length > 0) {
 
-            for (f in tempArray) {
+            for (f in tempArray) {  
                 updateArray.push(dataSource[(tempArray[f].rank-1)]);
                 indicesArray.push(tempArray[f].rank-1);
             }
-           
+
             parse(updateArray);
             highlightList(indicesArray);
            
