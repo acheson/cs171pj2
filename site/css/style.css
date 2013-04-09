@@ -257,21 +257,21 @@ circle#scatter-chart  {
 
 
 /* FOOTER */
-
-footer {
+.description {
 	border-top: 1px solid #CCC;
 	font-size: 14px;
+	padding-bottom: 20px;
 }
 
-footer h2 {
+.description h2 {
 	font-size: 24px;
 }
 
-footer h3 {
+.description h3 {
 	font-size: 18px;
 }
 
-#footer-left{
+#description-left {
 	
 	border-top: 1px solid #CCC;
 	width: 340px;
@@ -281,12 +281,20 @@ footer h3 {
 	left: 20px;
 }
 
-#footer-right{
+#description-center {
 	border-top: 1px solid #CCC;
-	width: 880px;
+	width: 620px;
 	height: 220px;
 	position: absolute;
 	top: 740px;
 	left: 380px;
 }
 
+#description-right {
+	border-top: 1px solid #CCC;
+	width: 240px;
+	height: 220px;
+	position: absolute;
+	top: 740px;
+	left: 1020px;
+}

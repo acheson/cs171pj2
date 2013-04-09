@@ -63,6 +63,7 @@ All libraries are included in the "js" folder.  They include:
 ******************
 ** Data Sources **
 ******************		
+All data sources are included in the "data" folder.  They include:		
 
 data.json
 *********	

@@ -104,6 +104,15 @@ function handleMouseOverMap(e) {
 			}
 		});
 	highlightBar(e, barBar);
+
+	var currentTextMark = barChart.selectAll("text")
+        .filter( function(d) { 
+            if (d.name == e.name) {
+                // console.log("match")
+                return this;
+            }
+        });
+    highlightText(e, currentTextMark);
 }
 
 function handleMouseOut(e) {
@@ -128,6 +137,11 @@ function handleMouseOut(e) {
 			.style("fill-opacity", 0.2)
 			.style("stroke", "red")	
   			.style("stroke-opacity", 0.3);
+
+  	var selection = barChart.selectAll("text")
+		.transition()
+			.duration(250)
+			.style("fill", "black");
 }
 
 function highlightMap(e,obj) {

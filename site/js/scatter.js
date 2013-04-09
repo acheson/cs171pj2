@@ -127,6 +127,7 @@ function updateScatter() {
     }
 
     function brushend() {
+        highlightList("all");
         updateArray = [];  
         indicesArray = [];
         scatter.classed("selecting", !d3.event.target.empty());
@@ -142,7 +143,9 @@ function updateScatter() {
 
             // set flag so that highlight list does not parse the data again
             shouldParse = false;
-            highlightList(indicesArray);
+            highlightList(indicesArray);    
+            
+            
            
         }
     }

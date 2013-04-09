@@ -37,7 +37,7 @@ function initList() {
     		if (shouldParse == true) {
     			parse(filteredList);	
     		}
-    		shoudlParse = true;
+    		shouldParse = true;
 		}
 	});
 	highlightList(["all"]);

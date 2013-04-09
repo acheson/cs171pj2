@@ -10,7 +10,7 @@
 */
 var barChartWidth = 880;
 var barChartHeight = 220;
-var barMargin = {top:10, left:50, bottom: 100, right:0};
+var barMargin = {top:10, left:0, bottom: 100, right:0};
 var barWidth = barChartWidth - (barMargin.left + barMargin.right);
 var barHeight = barChartHeight - (barMargin.top + barMargin.bottom);
 
@@ -104,13 +104,16 @@ function updateBar() {
     textSelection.enter().append("text")
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
-        .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 10) + ") rotate(-45)";})
+        .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 10) + ") rotate(-65)";})
         .text(function(d, i) { return d.name;})   
+        .style("font-size", "13px")
         .style("opacity", 0);
+    textSelection.on("mouseover", handleMouseOverText);
+    textSelection.on("mouseout", handleMouseOut);  // this function is in map.js
 
     textSelection.transition()
         .duration(500)
-        .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 2) + ") rotate(-45)";})
+        .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sites.length)/2)  + "," + (barHeight + 2) + ") rotate(-65)";})
         .style("opacity", 1);
 
     textSelection.exit()
@@ -118,7 +121,6 @@ function updateBar() {
             .duration(500)
             .style("opacity", 0)
             .remove();
-
 
     //draw y axis -- draws first then transitions afterwards
     if (axisDrawn == 0) {
@@ -128,8 +130,8 @@ function updateBar() {
             .attr("transform", "translate(" + (x(0)-0.5) + "," + (y(0)- 1.5) + ")")
             .call(yAxis);
 
-        
         axisDrawn = 1;
+
     } else {
         //transitions for axis
         barChart.select(".barAxis")
@@ -148,7 +150,36 @@ function handleMouseOverBar(e) {
     var mapCircle = d3.selectAll(".map-mark")
         .filter( function(d) { 
             if (d.name == e.name) {
-                // console.log("match")
+                return this;
+            }
+        });
+    highlightMap(e, mapCircle);
+
+    var currentTextMark = barChart.selectAll("text")
+        .filter( function(d) { 
+            if (d.name == e.name) {
+                return this;
+            }
+        });
+    highlightText(e, currentTextMark);
+}
+
+function handleMouseOverText(e) {
+    var currentTextMark = d3.select(this);
+    highlightText(e, currentTextMark);
+
+    var currentBarMark = d3.selectAll(".bar-mark")
+        .filter( function(d) { 
+            if (d.name == e.name) {
+                return this;
+            }
+        });
+    highlightBar(e, currentBarMark);
+
+    // make selection and highlight the map
+    var mapCircle = d3.selectAll(".map-mark")
+        .filter( function(d) { 
+            if (d.name == e.name) {
                 return this;
             }
         });
@@ -172,6 +203,19 @@ function highlightBar(e, obj) {
         .style("fill-opacity", 0.5)
         .style("stroke", "red")
         .style("stroke-opacity", 1.0);
+}
+
+function highlightText(e, obj) {
+    // dim others
+    var selection = barChart.selectAll("text")
+        .transition()
+            .duration(250)
+            .style("fill", "#888");
+      
+      // highlight current    
+      obj.transition()
+        .duration(250)
+        .style("fill", "black");
 }
 
 
