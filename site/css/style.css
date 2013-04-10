@@ -256,7 +256,7 @@ circle#scatter-chart  {
 
 
 
-/* FOOTER */
+/* Description */
 .description {
 	border-top: 1px solid #CCC;
 	font-size: 14px;
@@ -297,4 +297,15 @@ circle#scatter-chart  {
 	position: absolute;
 	top: 740px;
 	left: 1020px;
+}
+
+/* FOOTER */
+
+footer {
+	position: absolute;
+	top: 980px;
+	left: 550px;
+	width: 500px;
+	height: 50px;
+
 }
