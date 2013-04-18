@@ -11,6 +11,11 @@
 	http://www.schneidy.com/Tutorials/MapsTutorial.html
 	http://stackoverflow.com/questions/10261992/d3-js-add-a-circle-in-d3-geo-path
 	http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
+
+	// map zoom adapted from example
+	http://bl.ocks.org/d3noob/raw/5193723/
+	
+
 */
 
 var mapWidth = 880;
@@ -27,19 +32,63 @@ var path = d3.geo.path()
 var map = d3.select("div#map-chart")
 	.append("svg")
 		.attr("width", mapWidth)
-		.attr("height", mapHeight);
+		.attr("height", mapHeight)
+	
+// create a container to zoom	 
+var g = map.append("g");
+
+
+
+
+
+// original map
+// d3.json("../data/world-50m.json", function(error, world) {
+// 	map.insert("path", ".map-mark")
+// 		.datum(topojson.object(world, world.objects.land))
+// 		.attr("id", "land")
+// 		.attr("d", path);
+
+// 	map.insert("path", ".map-mark")
+// 		.datum(topojson.mesh(world, world.objects.countries, function(a , b) { return a !== b; }))
+// 		.attr("id", "boundary")
+// 		.attr("d", path);
+// });
+
 
 d3.json("../data/world-50m.json", function(error, world) {
-	map.insert("path", ".map-mark")
+	g.insert("path", ".map-mark")
 		.datum(topojson.object(world, world.objects.land))
 		.attr("id", "land")
 		.attr("d", path);
 
-	map.insert("path", ".map-mark")
+	g.insert("path", ".map-mark")
 		.datum(topojson.mesh(world, world.objects.countries, function(a , b) { return a !== b; }))
 		.attr("id", "boundary")
 		.attr("d", path);
 });
+
+
+var zoom = d3.behavior.zoom()
+	.scaleExtent([1, 10])
+	.on("zoom", function() {
+		g.attr("transform", "translate(" + d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
+		// console.log(d3.event.scale);
+		// console.log(d3.event.translate[0]);
+
+		// TODO Keep this centering
+		// var centerX = d3.event.translate[0] + 0.5*mapWidth*d3.event.scale;
+		// var centerY = d3.event.translate[1] + 0.5*mapHeight*d3.event.scale;
+
+		// console.log(centerX + "," + centerY);
+		// TODO Add and update a zoom bar
+
+		// TODO Add a mini - map with rectangle?
+	});
+
+map.call(zoom);
+
+
+
 
 function updateMap() {
 	var mapMax = d3.max(sites, function(d) {return d.views;});	
@@ -48,6 +97,7 @@ function updateMap() {
 	var area = d3.scale//.sqrt()
 		.pow().exponent(.750)
 		.domain([1, mapMax])
+		// .domain([1, maxViews])
 		.range([2,100]);
 
 	// Sort sites so that smaller ones always appear on top of larger
@@ -57,7 +107,8 @@ function updateMap() {
     	return d3.descending(a.views, b.views);
     });
 
-	var selection = map.selectAll("circle")
+	// var selection = map.selectAll("circle")
+	var selection = g.selectAll("circle")
 		// .data(sortedSites, function(d) {return d.name;});
 		.data(sortedSites);
 
@@ -91,6 +142,28 @@ function updateMap() {
 			.style("opacity", 0)
 			.remove();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function handleMouseOverMap(e) {
 	var currentMapMark = d3.select(this);
