@@ -11,20 +11,26 @@
 */
 
 function initTitleControls() {
+	// create the inital radio button style
 	$("#chart-toggle-radio").buttonset();
+
+	// check and select "list" by default
 	$("#chart-radio1").attr("checked", "checked").button("refresh");
 	$("#scatter-chart").fadeOut(0);
 
+	// add button listeners
 	$("#chart-radio1").click(handleListClick);
 	$("#chart-radio2").click(handleScatterClick);
 }
 
 function handleListClick() {
+	// toggle visibility
 	$("#list").fadeIn();
 	$("#scatter-chart").fadeOut();
 }
 
 function handleScatterClick() {
+	// toggle visibility
 	$("#list").fadeOut();
 	$("#scatter-chart").fadeIn();
 }
