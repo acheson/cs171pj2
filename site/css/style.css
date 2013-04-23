@@ -84,7 +84,7 @@ div.tooltip {
   font-size: 12pt;       
 }
 
-/************* TITLE ****************/
+/************ PAGE TITLE *************/
 #title {
 	width: 340px;
 	height: 100px;
@@ -94,14 +94,46 @@ div.tooltip {
 }
 /************************************/
 
+
+/********** TITLE SELECTION *********/
+#title-selection {
+	width: 340px;
+	height: 20px;
+	position: absolute;
+	top: 440px;
+	left: 20px;
+	color: #AAA;
+}
+
+#title-selection h2 {
+	/*display: inline;*/
+}
+
+#title-selection-input {
+	/*vertical-align: text-bottom;*/
+	/*display: inline;*/
+	/*float: right;*/
+	/*margin-top: 6px;*/
+}
+
+#chart-toggle-radio {
+	font-size: 12px;
+	float:right;
+	position: absolute;
+	top: 0px;
+	left: 180px;
+}
+
+/************************************/
+
 /*************** LIST ***************/
 #list {
-	width: 340px;
-	height: 340px;
+	width: 380px;
+	height: 220px;
 	position: absolute;
-	top: 140px;
+	top: 500px;
 	left: 20px;
-	/*overflow: scroll;*/
+	overflow: hidden;
     font-size: 12px;
 }
 
@@ -114,18 +146,13 @@ div.tooltip {
 	display: inline;
 }
 
-#list-input {
-	vertical-align: text-bottom;
-	display: inline;
-	float: right;
-	margin-top: 6px;
-}
+
 
 #list-nav {
 	width: 340px;
-	height: 300px;
+	height: 240px;
 	position: absolute;
-	top: 40px;
+	top: 0px;
 	overflow: scroll;
 }
 

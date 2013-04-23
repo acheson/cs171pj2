@@ -25,7 +25,7 @@ function initList() {
 
 	$( "#selectable" ).selectable({
  		stop: function() {
-    		$("#list-input").show(500);
+    		$("#title-selection-input").show(500);
     		$("#select-all").prop("checked", false);
     		
     		var filteredList = [];

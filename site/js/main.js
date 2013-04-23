@@ -74,6 +74,7 @@ function jsonComplete(d) {
 	dataSource = d;
 	parse(dataSource);
 	initList();
+	initTitleControls();
 }
 
 /* Parses a data object and updates all views - Pass a subset for filtering */
