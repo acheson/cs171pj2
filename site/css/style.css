@@ -94,6 +94,16 @@ div.tooltip {
 }
 /************************************/
 
+/************** STORY ***************/
+#section-controls {
+	width: 340px;
+	height: 300px;
+	position: absolute;
+	top: 120px;
+	left: 20px;
+	background: #F0F;
+}
+/************************************/
 
 /********** TITLE SELECTION *********/
 #title-selection {

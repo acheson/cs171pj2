@@ -74,6 +74,7 @@ function jsonComplete(d) {
 	dataSource = d;
 	parse(dataSource);
 	initList();
+	initSectionControls();
 	initTitleControls();
 }
 
