@@ -12,8 +12,10 @@
 	http://stackoverflow.com/questions/10261992/d3-js-add-a-circle-in-d3-geo-path
 	http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
 
-	// map zoom adapted from example
+	// map zoom adapted from examples
 	http://bl.ocks.org/d3noob/raw/5193723/
+	https://groups.google.com/forum/#!topic/d3-js/-qUd_jcyGTw
+	http://jqueryui.com/slider/#slider-vertical
 
 	// changed tooltip text to SVG based on this example
 	http://tributary.io/inlet/4132672/
@@ -37,8 +39,8 @@ var map = d3.select("div#map-chart")
 		.attr("height", mapHeight)
 	
 // create a container to zoom	 
-var g = map.append("g");
-var tt = map.append("g");
+var g = map.append("g").attr("class", "mapG");
+var tt = map.append("g").attr("class", "tooltipG");
 
 d3.json("../data/world-50m.json", function(error, world) {
 	g.insert("path", ".map-mark")
@@ -52,57 +54,6 @@ d3.json("../data/world-50m.json", function(error, world) {
 		.attr("d", path);
 });
 
-
-var zoom = d3.behavior.zoom()
-	.scaleExtent([1, 10])
-	.on("zoom", function() {
-		g.attr("transform", "translate(" + d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
-		tt.attr("transform", "translate(" + d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
-
-		// keep the text at same size and relative position regardless of scale
-		var ttName = tt.selectAll(".name")
-			.style("font-size", function() {
-				return 20 / d3.event.scale;
-			})
-			.attr("y", function() {
-				return -40 / d3.event.scale;
-			});
-
-		var ttViews = tt.selectAll(".views")
-			.style("font-size", function() {
-				return 16 / d3.event.scale;
-			})
-			.attr("y", function() {
-				return -16 / d3.event.scale;
-			});;
-					// tt.attr("transform", "translate(" + d3.event.translate.join(",") + ")");
-		// tt.attr("transform", "translate(" + d3.event.translate[0] + "," + d3.event.translate[1]+ ")");
-
-		// var tooltip = g.selectAll("g").select("g.name")
-		// 	.style("font-size", function() {
-		// 		return 20 / d3.event.scale;
-		// 	});
-
-		// var tooltip = g.selectAll("g").select("g.views")
-		// 	.style("font-size", function() {
-		// 		return 16 / d3.event.scale;
-		// 	});
-
-
-		// console.log(d3.event.scale);
-		// console.log(d3.event.translate[0]);
-
-		// TODO Keep this centering
-		// var centerX = d3.event.translate[0] + 0.5*mapWidth*d3.event.scale;
-		// var centerY = d3.event.translate[1] + 0.5*mapHeight*d3.event.scale;
-
-		// console.log(centerX + "," + centerY);
-		// TODO Add and update a zoom bar
-
-		// TODO Add a mini - map with rectangle?
-	});
-
-map.call(zoom);
 
 
 function updateMap() {
@@ -124,10 +75,6 @@ function updateMap() {
 
 	var selection = g.selectAll("circle")
 		.data(sortedSites);
-
-	// var div = d3.select("body").append("div")
- //    	.attr("class", "tooltip")               
- //   		.style("opacity", 0);
 
 	selection.enter().append("circle")
 			.attr("class", "map-mark")
@@ -155,36 +102,7 @@ function updateMap() {
 			.style("opacity", 0)
 			.remove();
 
-	// var tooltip = g.selectAll("text")
-	// 	.data(sortedSites);
-
-	// tooltip.enter().append("text")
-	// 	.attr("class", "name")
-	// 	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-	// 	.attr("display", function(d) { 
-	// 		if (d.lon == undefined) {return "none";}
-	// 	})
-	// 	.text(function(d) {return d.name;})
-	// 	.attr("alignment-baseline", "middle")
- //      	.attr("text-anchor", "middle")
- //      	.attr("pointer-events", "none")
- //      	.style("font-size", 20)
- //      	.style("opacity", 0.0);
-
- //    tooltip.enter().append("text")
-	// 	.attr("class", "views")
-	// 	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat	]) + ")";})
-	// 	.attr("display", function(d) { 
-	// 		if (d.lon == undefined) {return "none";}
-	// 	})
-	// 	.text(function(d) {return d.views;})
-	// 	.attr("alignment-baseline", "middle")
- //      	.attr("text-anchor", "middle")
- //      	.attr("pointer-events", "none")
- //      	.style("font-size", 16)
- //      	.style("opacity", 0.0);
-
-var tooltip = tt.selectAll("g")
+	var tooltip = tt.selectAll("text.name")
 		.data(sortedSites);
 
 	tooltip.enter().append("text")
@@ -193,53 +111,90 @@ var tooltip = tt.selectAll("g")
 		.attr("display", function(d) { 
 			if (d.lon == undefined) {return "none";}
 		})
-		
-			.text(function(d) {return d.name;})
+		.text(function(d) {return d.name;})
 			.attr("alignment-baseline", "middle")
 	      	.attr("text-anchor", "middle")
 	      	.attr("pointer-events", "none")
-	      	.attr("y", -40)
+	      	.attr("y", -50)
 	      	.style("font-size", 20)
-	      	.style("opacity", 1.0);
+	      	.style("opacity", 0.0);
 
+	    tooltip.transition()
+	    	.duration(500)
+	    		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+	    		.text(function(d) {return d.name;});
+
+	    tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+	tooltip = tt.selectAll("text.views")
+		.data(sortedSites);
+    
     tooltip.enter().append("text")
 		.attr("class", "views")
 		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
 		.attr("display", function(d) { 
 			if (d.lon == undefined) {return "none";}
 		})
-		
-			.text(function(d) {return d.views;})
+		.text(function(d) {
+				var formatViews = d3.format(",");
+				return formatViews(d.views) + " views";
+			})
+			.attr("alignment-baseline", "middle")
+	      	.attr("text-anchor", "middle")
+	      	.attr("pointer-events", "none")
+	      	.attr("y", -32)
+	      	.style("font-size", 16)
+	      	.style("opacity", 0.0);
+
+	tooltip.transition()
+	    .duration(500)
+	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+	    	.text(function(d) {
+	    		var formatViews = d3.format(",");
+				return formatViews(d.views) + " views";
+			});
+
+	tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+	tooltip = tt.selectAll("text.country")
+		.data(sortedSites);
+    
+    tooltip.enter().append("text")
+		.attr("class", "country")
+		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+		.attr("display", function(d) { 
+			if (d.lon == undefined) {return "none";}
+		})
+		.text(function(d) {
+				var formatViews = d3.format(",");
+				return countryNameForCode(d.country);
+			})
 			.attr("alignment-baseline", "middle")
 	      	.attr("text-anchor", "middle")
 	      	.attr("pointer-events", "none")
 	      	.attr("y", -16)
 	      	.style("font-size", 16)
-	      	.style("opacity", 1.0);
+	      	.style("opacity", 0.0);
 
+	tooltip.transition()
+	    .duration(500)
+	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+	    	.text(function(d) {return countryNameForCode(d.country);});
+
+	tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function handleMouseOverMap(e) {
 	var currentMapMark = d3.select(this);
@@ -257,7 +212,6 @@ function handleMouseOverMap(e) {
 	var currentTextMark = barChart.selectAll("text")
         .filter( function(d) { 
             if (d.name == e.name) {
-                // console.log("match")
                 return this;
             }
         });
@@ -265,9 +219,7 @@ function handleMouseOverMap(e) {
 
     var currentTooltip = tt.selectAll("text") 
     	.filter( function(d) {
-    		// d = d.select("text");
     		if (e.name == d.name) {
-    			console.log("match")
     			return this;
     		};
     	});
@@ -283,12 +235,6 @@ function handleMouseOut(e) {
 			.style("stroke", "red")
 			.style("stroke-opacity", 0.3);
 
-	// var div = d3.selectAll(".tooltip")   
-	// div.transition()        
- //        .duration(250)      
- //        .style("opacity", 0)
- //        .remove();
-
     var selection = barChart.selectAll("rect")
 		.transition()
 			.duration(250)
@@ -302,30 +248,17 @@ function handleMouseOut(e) {
 			.duration(250)
 			.style("fill", "black");
 
-	var tooltip = tt.selectAll("g")
+	var tooltip = tt.selectAll("text")
 		.transition()
 			.duration(250)
 			.style("opacity", 0.0);
 }
 
-
-// function highlightTooltip(e, obj) {
-// 	var tooltip = g.selectAll("text")
-// 		.transition()
-// 			.duration(250)
-// 			.style("opacity", 0.0);
-
-// 		obj.transition()
-// 			.duration(250)
-// 			.style("opacity", 1);			
-// }
 function highlightTooltip(e, obj) {
 	var tooltip = tt.selectAll("text")
 		.transition()
 			.duration(250)
 			.style("opacity", 0.0);
-
-			console.log(obj);
 
 		obj.transition()
 			.duration(250)
@@ -353,23 +286,122 @@ function highlightMap(e,obj) {
 		.style("stroke", "red")
 		.style("stroke-opacity", 1.0);
   
-	// var div = d3.select("div#map-chart").append("div")     
- //    	.attr("class", "tooltip")               
- //    	.style("opacity", 0);
-
- //    div.transition()        
- //        .duration(250)      
- //        .style("opacity", .9);
-
- //    var formatViews = d3.format(",");
-	// div.html("<h3>" + e.name + "</h3>" + formatViews(e.views) + " views</br>" + countryNameForCode(e.country))  
- //        .style("left", (currentProjection[0] - 130) + "px")   
- //        .style("top", (currentProjection[1] - 80) + "px");  
-
-    
+	var currentTooltip = tt.selectAll("text") 
+    	.filter( function(d) {
+    		if (e.name == d.name) {
+    			return this;
+    		};
+    	});
+    	highlightTooltip(e, currentTooltip);    
 }
 
+/* Zoom functionality */
 
+var zoom = null;
+function initZoom() {
+	zoom = d3.behavior.zoom()
+		// .translate(projection.translate())
+		// .scale(projection.scale())
+		.scaleExtent([1, 5])
+		.on("zoom", function() {
+			g.attr("transform", "translate(" + d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
+			tt.attr("transform", "translate(" + d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
+
+			// keep the text at same size and relative position regardless of scale
+			tt.selectAll(".name")
+				.style("font-size", function() {
+					return 20 / d3.event.scale;
+				})
+				.attr("y", function() {
+					return -50 / d3.event.scale;
+				});
+			tt.selectAll(".views")
+				.style("font-size", function() {
+					return 16 / d3.event.scale;
+				})
+				.attr("y", function() {
+					return -32 / d3.event.scale;
+				});
+			tt.selectAll(".country")
+				.style("font-size", function() {
+					return 16 / d3.event.scale;
+				})
+				.attr("y", function() {
+					return -16 / d3.event.scale;
+				});
+		
+
+			console.log("zoom scale" + d3.event.scale);
+			console.log(d3.event.translate[0]);
+		});
+}
+initZoom();
+map.call(zoom);
+
+d3.select("#map-reset").on("click", resetZoom);
+function resetZoom() {
+	zoom.translate([0,0]).scale(0);
+    map.selectAll("g") 
+    	.transition()
+    	.duration(500)
+    	.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale + ")");
+	
+    tt.selectAll(".name")
+				.style("font-size", function() {
+					return 20;
+				})
+				.attr("y", function() {
+					return -50;
+				});
+			tt.selectAll(".views")
+				.style("font-size", function() {
+					return 16;
+				})
+				.attr("y", function() {
+					return -32;
+				});
+			tt.selectAll(".country")
+				.style("font-size", function() {
+					return 16;
+				})
+				.attr("y", function() {
+					return -16;
+				});
+
+	initZoom();
+	map.call(zoom);
+};
+
+
+// function initSlider() {
+
+
+// 	$("#map-slider").slider({
+// 		orientation: "vertical",
+// 	    range: "min",
+// 	    min: 1,
+// 	    max: 5,
+// 	    value: 1,
+// 	    slide: function(event, ui) {
+	    	
+// 	    zoom.translate([0,0]).scale(ui.value);
+// 	    	map.selectAll("g") 
+// 	    		.transition()
+// 	    		.duration(500)
+// 	    		.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale + ")");
+// 	    	map.call(zoom);
+// 	    	// var g = map.select("g.mapG");
+	
+// 	    	// // g.transition()
+// 	    	// // 	.duration(500)
+// 	    	// 	g.attr("transform", "translate([0,0]) scale(" + ui.value + ")");
+// 	    	// console.log(ui.value);
+// 	    	}
+
+	    	
+
+// 	});
+// }
 
 
 

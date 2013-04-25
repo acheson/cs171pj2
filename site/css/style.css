@@ -254,6 +254,10 @@ circle#scatter-chart  {
   	stroke: #fff;
 	stroke-width: 0.5px;
 }
+
+#map-reset {
+	position: absolute;
+}
 /*********************************************/
 
 
