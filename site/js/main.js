@@ -2,6 +2,7 @@
 	main.js
 	03/25/13
 	author: Rob Acheson
+			Jeff Fontas
 
 */
 
@@ -76,6 +77,43 @@ function jsonComplete(d) {
 	initList();
 	initTitleControls();
 }
+
+
+// load sites reference data for site to country conversion
+var sitesCountryPct;
+d3.json("../data/sites.json", sitesComplete);
+function sitesComplete(d) {
+	sitesCountryPct = d;
+}
+
+
+
+
+/* calculates views by country, takes sites variable as input */
+var viewers = [];
+var tempCountries = {};
+function computeViews(object) {
+	//build a list of all countries in viewers list from alexa, calc number of views
+	tempCountries = {};
+
+	for (url in object) {
+	
+		for (country in sitesCountryPct[object[url].name]) {
+			alert(sitesCountryPct[object[url].name][country]);
+			if (!(country in tempCountries)) {
+				tempCountries[country] = 0;
+			}
+			
+			tempCountries[country] += (object[url].views * (sitesCountryPct[object[url].name][country])/100);
+		}
+	}
+	viewers = [];
+	for (ctry in tempCountries) {
+		viewers.push([ctry,tempCountries[ctry]])
+	}
+	return viewers;
+}
+
 
 /* Parses a data object and updates all views - Pass a subset for filtering */
 function parse(data) {
