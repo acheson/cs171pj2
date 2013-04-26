@@ -19,12 +19,17 @@ Once this is running, go to "http://localhost:8888/"
     <body>
         <div id="title"><h2>Streaming the</h2><br/><h1>IMDB TOP 250</h1></div>
         <div id="section-controls">
+            <h2>SHOW</h2>
             <div id="section-radio">
-                <input type="radio" id="section-radio1" name="radio" /><label for="section-radio1">1Channel</label> 
-                <input type="radio" id="section-radio2" name="radio" /><label for="section-radio2">Sites</label>
-                <input type="radio" id="section-radio3" name="radio" /><label for="section-radio3">Viewers</label>
+                <input type="radio" id="section-radio1" name="section" value="1"/><label for="section-radio1">1Channel</label> 
+                <input type="radio" id="section-radio2" name="section" value="2"/><label for="section-radio2">Sites</label>
+                <input type="radio" id="section-radio3" name="section" value="3"/><label for="section-radio3">Viewers</label>
             </div>
-            <div id="section-button">Animate</div>
+            <div id="section-checkbox">
+                <input type="checkbox" id="section-animate"/>
+                <label>Animate</label> 
+            </div>
+            <div id="story-text">1</div>
         </div>
         <div id="title-selection">
             <h2>TITLES</h2>

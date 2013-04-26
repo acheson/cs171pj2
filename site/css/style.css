@@ -101,7 +101,27 @@ div.tooltip {
 	position: absolute;
 	top: 120px;
 	left: 20px;
-	background: #F0F;
+	color: #AAA;
+}
+
+#section-radio {
+	font-size: 13px;
+	float:right;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+#section-checkbox {
+	/*display: none;*/
+	/*float:right;*/
+	/*position: absolute;
+	top:0;
+	right:0;*/
+}
+
+#story-text {
+	font-size:160px;
 }
 /************************************/
 
@@ -131,7 +151,7 @@ div.tooltip {
 	float:right;
 	position: absolute;
 	top: 0px;
-	left: 180px;
+	right:0px;
 }
 
 /************************************/

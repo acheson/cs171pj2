@@ -331,8 +331,8 @@ function initZoom() {
 				});
 		
 
-			console.log("zoom scale" + d3.event.scale);
-			console.log(d3.event.translate[0]);
+			// console.log("zoom scale" + d3.event.scale);
+			// console.log(d3.event.translate[0]);
 		});
 }
 initZoom();
