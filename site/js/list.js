@@ -41,7 +41,7 @@ function initList() {
 		}
 	});
 	highlightList(["all"]);
-
+    
 	// set initial checkbox to checked
 	$("#select-all").prop("checked", true);	
 }

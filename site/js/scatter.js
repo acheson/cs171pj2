@@ -19,13 +19,29 @@ var updateArray = 0;
 var scatter = d3.select("div#scatter-chart")
                 .append("svg")
                 .attr("width", width)
-                .attr("height", height);   
+                .attr("height", height); 
+var brushFn;
+var listUpdateFlag = 1;
 
 var axesDrawn = 0; //becomes 1 after drawing axes the first time
 
+/* contains function that evaluates to true if array contains test value.
+adapted from http://stackoverflow.com/questions/1181575/javascript-determine-whether-an-array-contains-a-value
+on 04/27/13 */
+function contains(val, array) {
+    for( p in array) {
+        if(array[p] == val){
+            return true;
+        }
+      
+    }
+    return false;
+}
 
-
-function updateScatter() {
+/* list update flag = 1 if list changed prior to updating the view, else
+just perform the regular update.  this flag enables preselection of values
+on scatterplot */
+function updateScatter(listUpdateFlag) {
     
     var scatterX = d3.scale
                     .linear()
@@ -94,10 +110,11 @@ function updateScatter() {
             .append("circle")
             .attr("cx", function(d) { return scatterX(d.views); })
             .attr("cy", function(d) { return scatterY(d.ratings); })
-            .attr("r", ptRadius);
+            .attr("r", ptRadius)
+            .attr("id", function(d) {return ("film"+d.rank);});
 
         //define brushing function, call it
-        var brushFn = d3.svg.brush()
+        brushFn = d3.svg.brush()
             .x(scatterX)
             .y(scatterY)
             .on("brushstart", brushstart)
@@ -109,13 +126,45 @@ function updateScatter() {
             .call(brushFn);
 
         axesDrawn = 1;
-    }
 
+
+        
+    }
+   // alert(test);
+    if (listUpdateFlag == 1) {
+        var filmsFiltered = [];
+        for (f in films) {
+            filmsFiltered.push("film"+films[f].rank);
+            
+            
+        }
+        // alert(filmsFiltered);
+
+        scatter.call(brushFn.clear());
+        scatter.selectAll("circle").classed("selected", false);
+        if (films.length == 250) {
+            scatter.classed("selecting",false);
+        } else {
+            scatter.classed("selecting", true);
+            scatter.selectAll("circle")
+                .each(function(d) {
+                //alert(contains((d3.select(this).attr("id")),filmsFiltered)+" "+d3.select(this).attr("id")+" "+dumpObject(filmsFiltered));
+
+                if (contains((d3.select(this).attr("id")),filmsFiltered)) { d3.select(this).classed("selected", true); } 
+
+                //else { d3.select(this).classed("selecting"); }
+            
+            });
+        }
+        
+
+    }
     // clear the brush extent and formatting if there's anything going on
     scatter.selectAll(".selected").classed("none",true);
     
     function brushstart() {
         scatter.classed("selecting", true);
+        listUpdateFlag = 0;
     }
 
     function brushmove() {
@@ -141,10 +190,10 @@ function updateScatter() {
             parse(updateArray);
 
             shouldParse = false;
-            highlightList(indicesArray);    
             
-            
-           
+            highlightList(indicesArray);       
+            listUpdateFlag = 1;
         }
     }
+   
 }

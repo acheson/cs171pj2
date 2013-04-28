@@ -225,6 +225,10 @@ circle#scatter-chart  {
     -webkit-transition: fill-opacity 250ms linear;
 }
 
+circle#scatter-chart .default {
+    fill: #000;
+    stroke: #000;
+}
 
 .scatterAxis text {
     font-size: 10px;
@@ -246,6 +250,8 @@ circle#scatter-chart  {
 
 .selecting circle.selected {
   stroke: #f00;
+  fill: #f00;
+  fill-opacity: 1;
 }
 
 .axis path, .axis line {

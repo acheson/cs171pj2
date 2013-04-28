@@ -6,6 +6,8 @@
 
 */
 
+
+
 /* love this! */
 function dumpObject(o) {
 	out = "";
@@ -44,7 +46,7 @@ var shouldParse = true;
 
 function updateViews() {
 	updateMap();
-	updateScatter();
+	updateScatter(listUpdateFlag);
 	updateBar();
 }
 
@@ -100,7 +102,7 @@ function computeViews(object) {
 	for (url in object) {
 	
 		for (country in sitesCountryPct[object[url].name]) {
-			alert(sitesCountryPct[object[url].name][country]);
+			//alert(sitesCountryPct[object[url].name][country]);
 			if (!(country in tempCountries)) {
 				tempCountries[country] = 0;
 			}
