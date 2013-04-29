@@ -66,7 +66,7 @@ function countryNameForCode(code) {
 }
 
 // load the actual data
-d3.json("../data/data.json", jsonComplete);
+// d3.json("../data/data.json", jsonComplete);
 
 /* Stores the JSON data */
 var dataSource;
@@ -85,6 +85,9 @@ var sitesCountryPct;
 d3.json("../data/sites.json", sitesComplete);
 function sitesComplete(d) {
 	sitesCountryPct = d;
+
+	d3.json("../data/data.json", jsonComplete);
+
 }
 
 
@@ -93,14 +96,18 @@ function sitesComplete(d) {
 /* calculates views by country, takes sites variable as input */
 var viewers = [];
 var tempCountries = {};
+var viewerCountries = {};
+
 function computeViews(object) {
 	//build a list of all countries in viewers list from alexa, calc number of views
 	tempCountries = {};
 
 	for (url in object) {
-	
+		console.log(object[url].name);
+		console.log(object[url].lat);
+		console.log(object[url].lon);
 		for (country in sitesCountryPct[object[url].name]) {
-			alert(sitesCountryPct[object[url].name][country]);
+			// alert(sitesCountryPct[object[url].name][country]);
 			if (!(country in tempCountries)) {
 				tempCountries[country] = 0;
 			}
@@ -114,6 +121,9 @@ function computeViews(object) {
 	}
 	return viewers;
 }
+
+
+
 
 
 /* Parses a data object and updates all views - Pass a subset for filtering */
@@ -191,6 +201,7 @@ function parse(data) {
 	};
 	sites = temp;
 	
+	computeViews(sites);
 	updateViews();
 }
 

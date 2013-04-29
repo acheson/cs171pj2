@@ -39,8 +39,10 @@ var map = d3.select("div#map-chart")
 		.attr("height", mapHeight)
 	
 // create a container to zoom	 
-var g = map.append("g").attr("class", "mapG");
-var tt = map.append("g").attr("class", "tooltipG");
+var g = map.append("g"); //.attr("class", "mapG");
+var tt = map.append("g"); //.attr("class", "tooltipG");
+
+var viewersG = map.append("g");
 
 d3.json("../data/world-50m.json", function(error, world) {
 	g.insert("path", ".map-mark")
@@ -190,6 +192,38 @@ function updateMap() {
 	    	.text(function(d) {return countryNameForCode(d.country);});
 
 	tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+
+
+	// Viewers By Country
+	var selection = viewersG.selectAll("circle")
+		.data(viewers);
+
+	selection.enter().append("circle")
+			.attr("class", "viewers-mark")
+			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+			.attr("display", function(d) { 
+				if (d.lon == undefined) {return "none";}
+			})
+			.attr("r", function(d) {return area(d.views);})
+			.style("fill", "red")
+			.style("fill-opacity", 0.2)
+			.style("stroke", "red")
+			.style("stroke-opacity", 0.3)
+			.style("stroke-width", 1.0)
+			.on("mouseover", handleMouseOverMap)
+			.on("mouseout", handleMouseOut);
+	
+	selection.transition()
+		.duration(500)
+			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+			.attr("r", function(d) {return area(d.views);});
+
+	selection.exit()
 		.transition()
 			.duration(500)
 			.style("opacity", 0)
