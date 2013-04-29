@@ -41,7 +41,7 @@ function contains(val, array) {
 /* list update flag = 1 if list changed prior to updating the view, else
 just perform the regular update.  this flag enables preselection of values
 on scatterplot */
-function updateScatter(listUpdateFlag) {
+function updateScatter() {
     
     var scatterX = d3.scale
                     .linear()
