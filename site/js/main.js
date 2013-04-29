@@ -65,6 +65,15 @@ function countryNameForCode(code) {
 	return "";
 }
 
+function countryCodeForName(name) {
+	for (var k in countryList) {
+		if  (countryList[k]["name"] == name) {
+			return countryList[k]["alpha-3"];
+		};
+	}
+	return "";
+}
+
 // load the actual data
 // d3.json("../data/data.json", jsonComplete);
 
@@ -90,8 +99,12 @@ function sitesComplete(d) {
 
 }
 
-
-
+//load country 3 letter code and coordinates data
+var countryCodeCoords;
+d3.json("../data/cntry_codes_coords.json", countriesComplete);
+function countriesComplete(d) {
+	countryCodeCoords = d;
+}
 
 /* calculates views by country, takes sites variable as input */
 var viewers = [];
@@ -117,7 +130,10 @@ function computeViews(object) {
 	}
 	viewers = [];
 	for (ctry in tempCountries) {
-		viewers.push([ctry,tempCountries[ctry]])
+		cCode = countryCodeForName(ctry); //country code
+		cLat = countryCodeCoords[cCode]["lat"]; // country latitude
+		cLon = countryCodeCoords[cCode]["lon"]; // country latitude
+		viewers.push([ctry,tempCountries[ctry],cCode,cLat,cLon]);
 	}
 	return viewers;
 }
