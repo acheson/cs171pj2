@@ -30,6 +30,8 @@ var projection = d3.geo.mercator()
 	.translate([mapWidth / 2, 300])
 	.precision(.1);
 
+var mapCenter = projection([0,45]);
+
 var path = d3.geo.path()
 	.projection(projection);
 
@@ -37,12 +39,20 @@ var map = d3.select("div#map-chart")
 	.append("svg")
 		.attr("width", mapWidth)
 		.attr("height", mapHeight)
+
+// linear scale  - input:domain as output:range
+// var area = d3.scale//.sqrt()
+// 		.pow().exponent(.750)
+// 		.domain([1, totalViews])
+// 		// .domain([1, maxViews])
+// 		.range([2,100]);
 	
 // create a container to zoom	 
 var g = map.append("g"); //.attr("class", "mapG");
 var tt = map.append("g"); //.attr("class", "tooltipG");
 
 var viewersG = map.append("g");
+var channelG = map.append("g");
 
 d3.json("../data/world-50m.json", function(error, world) {
 	g.insert("path", ".map-mark")
@@ -56,180 +66,6 @@ d3.json("../data/world-50m.json", function(error, world) {
 		.attr("d", path);
 });
 
-
-
-function updateMap() {
-	var mapMax = d3.max(sites, function(d) {return d.views;});	
-	
-	// linear scale  - input:domain as output:range
-	var area = d3.scale//.sqrt()
-		.pow().exponent(.750)
-		.domain([1, mapMax])
-		// .domain([1, maxViews])
-		.range([2,100]);
-
-	// Sort sites so that smaller ones always appear on top of larger
-	// create a copy of sites to sort
-	var sortedSites = sites.slice(0);
-	sortedSites.sort(function(a, b) {
-    	return d3.descending(a.views, b.views);
-    });
-
-	var selection = g.selectAll("circle")
-		.data(sortedSites);
-
-	selection.enter().append("circle")
-			.attr("class", "map-mark")
-			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-			.attr("display", function(d) { 
-				if (d.lon == undefined) {return "none";}
-			})
-			.attr("r", function(d) {return area(d.views);})
-			.style("fill", "red")
-			.style("fill-opacity", 0.2)
-			.style("stroke", "red")
-			.style("stroke-opacity", 0.3)
-			.style("stroke-width", 1.0)
-			.on("mouseover", handleMouseOverMap)
-			.on("mouseout", handleMouseOut);
-	
-	selection.transition()
-		.duration(500)
-			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-			.attr("r", function(d) {return area(d.views);});
-
-	selection.exit()
-		.transition()
-			.duration(500)
-			.style("opacity", 0)
-			.remove();
-
-	var tooltip = tt.selectAll("text.name")
-		.data(sortedSites);
-
-	tooltip.enter().append("text")
-		.attr("class", "name")
-		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-		.attr("display", function(d) { 
-			if (d.lon == undefined) {return "none";}
-		})
-		.text(function(d) {return d.name;})
-			.attr("alignment-baseline", "middle")
-	      	.attr("text-anchor", "middle")
-	      	.attr("pointer-events", "none")
-	      	.attr("y", -50)
-	      	.style("font-size", 20)
-	      	.style("opacity", 0.0);
-
-	    tooltip.transition()
-	    	.duration(500)
-	    		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-	    		.text(function(d) {return d.name;});
-
-	    tooltip.exit()
-		.transition()
-			.duration(500)
-			.style("opacity", 0)
-			.remove();
-
-	tooltip = tt.selectAll("text.views")
-		.data(sortedSites);
-    
-    tooltip.enter().append("text")
-		.attr("class", "views")
-		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-		.attr("display", function(d) { 
-			if (d.lon == undefined) {return "none";}
-		})
-		.text(function(d) {
-				var formatViews = d3.format(",");
-				return formatViews(d.views) + " views";
-			})
-			.attr("alignment-baseline", "middle")
-	      	.attr("text-anchor", "middle")
-	      	.attr("pointer-events", "none")
-	      	.attr("y", -32)
-	      	.style("font-size", 16)
-	      	.style("opacity", 0.0);
-
-	tooltip.transition()
-	    .duration(500)
-	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-	    	.text(function(d) {
-	    		var formatViews = d3.format(",");
-				return formatViews(d.views) + " views";
-			});
-
-	tooltip.exit()
-		.transition()
-			.duration(500)
-			.style("opacity", 0)
-			.remove();
-
-	tooltip = tt.selectAll("text.country")
-		.data(sortedSites);
-    
-    tooltip.enter().append("text")
-		.attr("class", "country")
-		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-		.attr("display", function(d) { 
-			if (d.lon == undefined) {return "none";}
-		})
-		.text(function(d) {
-				var formatViews = d3.format(",");
-				return countryNameForCode(d.country);
-			})
-			.attr("alignment-baseline", "middle")
-	      	.attr("text-anchor", "middle")
-	      	.attr("pointer-events", "none")
-	      	.attr("y", -16)
-	      	.style("font-size", 16)
-	      	.style("opacity", 0.0);
-
-	tooltip.transition()
-	    .duration(500)
-	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-	    	.text(function(d) {return countryNameForCode(d.country);});
-
-	tooltip.exit()
-		.transition()
-			.duration(500)
-			.style("opacity", 0)
-			.remove();
-
-
-
-	// // Viewers By Country
-	// var selection = viewersG.selectAll("circle")
-	// 	.data(viewers);
-
-	// selection.enter().append("circle")
-	// 		.attr("class", "viewers-mark")
-	// 		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-	// 		.attr("display", function(d) { 
-	// 			if (d.lon == undefined) {return "none";}
-	// 		})
-	// 		// TODO rescale size of circles
-	// 		.attr("r", function(d) {return area(d.viewers);})
-	// 		.style("fill", "blue")
-	// 		.style("fill-opacity", 0.2)
-	// 		.style("stroke", "blue")
-	// 		.style("stroke-opacity", 0.3)
-	// 		.style("stroke-width", 1.0);
-	// 		// .on("mouseover", handleMouseOverMap)
-	// 		// .on("mouseout", handleMouseOut);
-	
-	// selection.transition()
-	// 	.duration(500)
-	// 		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-	// 		.attr("r", function(d) {return area(d.viewers);});
-
-	// selection.exit()
-	// 	.transition()
-	// 		.duration(500)
-	// 		.style("opacity", 0)
-	// 		.remove();
-}
 
 function handleMouseOverMap(e) {
 	var currentMapMark = d3.select(this);
@@ -437,6 +273,275 @@ function resetZoom() {
 
 // 	});
 // }
+
+
+function drawOneChannelMap(data)
+{
+	// var mapMax = d3.max(sites, function(d) {return d.views;});
+
+	// linear scale  - input:domain as output:range
+	// var area = d3.scale//.sqrt()
+	// 	.pow().exponent(.750)
+	// 	.domain([1, totalViews)
+	// 	// .domain([1, maxViews])
+	// 	.range([2,100]);
+	
+
+	var area = d3.scale//.sqrt()
+		.pow().exponent(.750)
+		.domain([1, totalViews])
+		// .domain([1, maxViews])
+		.range([2,250]);
+	
+
+	// Viewers By Country
+	// var selection = g.selectAll("circle")
+	var selection = channelG.selectAll("circle")
+		.data(data);
+
+	selection.enter().append("circle")
+			.attr("class", "one-channel-mark")
+			.attr("transform", "translate(" + mapCenter + ")")
+			// .attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+			
+			// TODO rescale size of circles
+			.attr("r", function(d) {return area(d);})
+			.style("fill", "purple")
+			.style("fill-opacity", 0.2)
+			.style("stroke", "purple")
+			.style("stroke-opacity", 0.3)
+			.style("stroke-width", 1.0);
+			// .on("mouseover", handleMouseOverMap)
+			// .on("mouseout", handleMouseOut);
+	
+	selection.transition()
+		.duration(500)
+			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+			.attr("r", function(d) {return area(d);});
+
+	selection.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+}
+
+
+function drawSitesMap(sites) {
+	var mapMax = d3.max(sites, function(d) {return d.views;});
+
+	// linear scale  - input:domain as output:range
+	// var area = d3.scale//.sqrt()
+	// 	.pow().exponent(.750)
+	// 	.domain([1, mapMax])
+	// 	// .domain([1, maxViews])
+	// 	.range([2,100]);
+
+	var area = d3.scale//.sqrt()
+		.pow().exponent(.750)
+		.domain([1, totalViews])
+		// .domain([1, maxViews])
+		.range([2,250]);
+	
+
+	// Sort sites so that smaller ones always appear on top of larger
+	// create a copy of sites to sort
+	var sortedSites = sites.slice(0);
+	sortedSites.sort(function(a, b) {
+    	return d3.descending(a.views, b.views);
+    });
+
+	var selection = g.selectAll("circle")
+		.data(sortedSites);
+
+	selection.enter().append("circle")
+			
+			// .classed("map-site", true)
+			// .classed("map-site-default", true)
+			.style("fill", "red")
+			.style("fill-opacity", 0.2)
+			.style("stroke", "red")
+			.style("stroke-opacity", 0.3)
+			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+			// .attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+			.attr("display", function(d) { 
+				if (d.lon == undefined) {return "none";}
+			})
+			.attr("r", function(d) {return area(d.views);})
+			// .on("mouseover", handleMouseOverMap)
+			// .on("mouseout", handleMouseOut);
+	
+	selection.transition()
+		.duration(500)
+			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+			.attr("r", function(d) {return area(d.views);});
+
+	selection.exit()
+		.transition()
+			.duration(500)
+			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+			.style("opacity", 0)
+			.remove();
+
+	var tooltip = tt.selectAll("text.name")
+		.data(sortedSites);
+
+	tooltip.enter().append("text")
+		.attr("class", "name")
+		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+		.attr("display", function(d) { 
+			if (d.lon == undefined) {return "none";}
+		})
+		.text(function(d) {return d.name;})
+			.attr("alignment-baseline", "middle")
+	      	.attr("text-anchor", "middle")
+	      	.attr("pointer-events", "none")
+	      	.attr("y", -50)
+	      	.style("font-size", 20)
+	      	.style("opacity", 0.0);
+
+	    tooltip.transition()
+	    	.duration(500)
+	    		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+	    		.text(function(d) {return d.name;});
+
+	    tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+	tooltip = tt.selectAll("text.views")
+		.data(sortedSites);
+    
+    tooltip.enter().append("text")
+		.attr("class", "views")
+		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+		.attr("display", function(d) { 
+			if (d.lon == undefined) {return "none";}
+		})
+		.text(function(d) {
+				var formatViews = d3.format(",");
+				return formatViews(d.views) + " views";
+			})
+			.attr("alignment-baseline", "middle")
+	      	.attr("text-anchor", "middle")
+	      	.attr("pointer-events", "none")
+	      	.attr("y", -32)
+	      	.style("font-size", 16)
+	      	.style("opacity", 0.0);
+
+	tooltip.transition()
+	    .duration(500)
+	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+	    	.text(function(d) {
+	    		var formatViews = d3.format(",");
+				return formatViews(d.views) + " views";
+			});
+
+	tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+	tooltip = tt.selectAll("text.country")
+		.data(sortedSites);
+    
+    tooltip.enter().append("text")
+		.attr("class", "country")
+		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+		.attr("display", function(d) { 
+			if (d.lon == undefined) {return "none";}
+		})
+		.text(function(d) {
+				var formatViews = d3.format(",");
+				return countryNameForCode(d.country);
+			})
+			.attr("alignment-baseline", "middle")
+	      	.attr("text-anchor", "middle")
+	      	.attr("pointer-events", "none")
+	      	.attr("y", -16)
+	      	.style("font-size", 16)
+	      	.style("opacity", 0.0);
+
+	tooltip.transition()
+	    .duration(500)
+	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+	    	.text(function(d) {return countryNameForCode(d.country);});
+
+	tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+}
+
+
+function drawViewersMap(viewers)
+{
+	var mapMax = d3.max(sites, function(d) {return d.views;});
+
+	// linear scale  - input:domain as output:range
+	// var area = d3.scale//.sqrt()
+	// 	.pow().exponent(.750)
+	// 	.domain([1, mapMax])
+	// 	// .domain([1, maxViews])
+	// 	.range([2,100]);
+
+	var area = d3.scale//.sqrt()
+		.pow().exponent(.750)
+		.domain([1, totalViews])
+		// .domain([1, maxViews])
+		.range([2,250]);
+	
+
+	// Viewers By Country
+	var selection = viewersG.selectAll("circle")
+		.data(viewers);
+
+	selection.enter().append("circle")
+			.attr("class", "viewers-mark")
+			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+			.attr("display", function(d) { 
+				if (d.lon == undefined) {return "none";}
+			})
+			// TODO rescale size of circles
+			.attr("r", function(d) {return area(d.viewers);})
+			.style("fill", "blue")
+			.style("fill-opacity", 0.2)
+			.style("stroke", "blue")
+			.style("stroke-opacity", 0.3)
+			.style("stroke-width", 1.0);
+			// .on("mouseover", handleMouseOverMap)
+			// .on("mouseout", handleMouseOut);
+	
+	selection.transition()
+		
+		.duration(500)
+			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+			.attr("r", function(d) {return area(d.viewers);})
+		
+
+	selection.exit()
+		.transition()
+			.duration(500)
+			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+			.style("opacity", 0)
+			.remove();
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -17,7 +17,8 @@ var timer;
 // 1 - 1Channel.ch
 // 2 - Host Sites
 // 3 - Viewers
-var currentSection = 1;
+var currentSection = 2;
+var incrementing = true;
 
 function initSectionControls() {
 	console.log("init");
@@ -32,20 +33,32 @@ function initSectionControls() {
 	$("#section-radio2").click(sectionControlClick);
 	$("#section-radio3").click(sectionControlClick);
 
-	showSection(1);
+	showSection(2);
 }
 
 function sectionControlClick(e) {
 	showSection(e.target.value);
+
 	killSectionTimer();
 	$("#section-animate").removeAttr("checked");
 }
 
 function nextSection() {
-	currentSection ++;
-	if (currentSection > 3) {
-		currentSection = 1;
-	};
+	if (incrementing === true) {
+		currentSection ++;
+		if (currentSection > 3) {
+			currentSection = 2;
+			incrementing = false;
+		};	
+	}
+	else {
+		currentSection --;
+		if (currentSection < 1) {
+			currentSection = 2;
+			incrementing = true;
+		};	
+	}
+	
 	return currentSection;
 }
 
@@ -68,6 +81,9 @@ function timerComplete() {
 }
 
 function showSection(section) {
+	
+	transitionToSection(section);
+
 	$("section-radio input").each().removeAttr("checked");
 
 	// var sectionSelector = "#section-radio" + section;
@@ -78,6 +94,26 @@ function showSection(section) {
 	if ($("#section-animate").prop("checked")) {
 		startSectionTimer();
 	}
+}
+
+function transitionToSection(section) {
+	if (section == 1) {
+		drawOneChannelMap([]);
+		drawSitesMap(sites);
+		drawViewersMap([]);
+	}
+	else if (section == 2) {
+		drawOneChannelMap([totalViews]);
+		drawSitesMap([]);
+		drawViewersMap([]);
+	}
+	else if (section == 3) {
+		drawOneChannelMap([]);
+		drawSitesMap([]);
+		drawViewersMap(viewers);
+	};
+
+	currentSection = section;
 }
 
 // $("#section-animate").click(function() {

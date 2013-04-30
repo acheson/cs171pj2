@@ -195,7 +195,9 @@ function parse(data) {
 	sites = temp;
 	
 	computeViews(sites);
-	updateViews();
+	// updateViews();
+
+	console.log("totalViews" + totalViews);
 }
 
 
@@ -229,13 +231,19 @@ function computeViews(sites) {
 		// viewers.push([ctry, cCode, viewerCount[ctry], cLat, cLon]);
 	}
 	// return viewers;
+	updateViews();
 }
 
 /*  Used to update all linked views with new data */
 function updateViews() {
-	updateMap();
+	// updateMap();
 	updateScatter();
 	updateBar();
+
+	console.log("current" + currentSection);
+	transitionToSection(currentSection);
+
+	// drawSitesMap(sites);
 }
 
 

@@ -183,7 +183,7 @@ function updateScatter() {
         if (tempArray.length > 0) {
 
             for (f in tempArray) {  
-                updateArray.push(dataSource[(tempArray[f].rank-1)]);
+                updateArray.push(filmData[(tempArray[f].rank-1)]);
                 indicesArray.push(tempArray[f].rank-1);
             }
 
