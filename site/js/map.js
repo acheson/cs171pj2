@@ -199,35 +199,36 @@ function updateMap() {
 
 
 
-	// Viewers By Country
-	var selection = viewersG.selectAll("circle")
-		.data(viewers);
+	// // Viewers By Country
+	// var selection = viewersG.selectAll("circle")
+	// 	.data(viewers);
 
-	selection.enter().append("circle")
-			.attr("class", "viewers-mark")
-			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-			.attr("display", function(d) { 
-				if (d.lon == undefined) {return "none";}
-			})
-			.attr("r", function(d) {return area(d.views);})
-			.style("fill", "red")
-			.style("fill-opacity", 0.2)
-			.style("stroke", "red")
-			.style("stroke-opacity", 0.3)
-			.style("stroke-width", 1.0)
-			.on("mouseover", handleMouseOverMap)
-			.on("mouseout", handleMouseOut);
+	// selection.enter().append("circle")
+	// 		.attr("class", "viewers-mark")
+	// 		.attr("transform", function(d) {return "translate(" + projection([d[4],d[3]]) + ")";})
+	// 		.attr("display", function(d) { 
+	// 			if (d[4] == undefined) {return "none";}
+	// 		})
+	// 		// TODO rescale size of circles
+	// 		.attr("r", function(d) {return area(d[1]);})
+	// 		.style("fill", "blue")
+	// 		.style("fill-opacity", 0.2)
+	// 		.style("stroke", "blue")
+	// 		.style("stroke-opacity", 0.3)
+	// 		.style("stroke-width", 1.0);
+	// 		// .on("mouseover", handleMouseOverMap)
+	// 		// .on("mouseout", handleMouseOut);
 	
-	selection.transition()
-		.duration(500)
-			.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
-			.attr("r", function(d) {return area(d.views);});
+	// selection.transition()
+	// 	.duration(500)
+	// 		.attr("transform", function(d) {return "translate(" + projection([d[4],d[3]]) + ")";})
+	// 		.attr("r", function(d) {return area(d[1]);});
 
-	selection.exit()
-		.transition()
-			.duration(500)
-			.style("opacity", 0)
-			.remove();
+	// selection.exit()
+	// 	.transition()
+	// 		.duration(500)
+	// 		.style("opacity", 0)
+	// 		.remove();
 }
 
 function handleMouseOverMap(e) {

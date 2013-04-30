@@ -68,10 +68,10 @@ function timerComplete() {
 }
 
 function showSection(section) {
-	$("section-radio input").removeAttr("checked");
+	$("section-radio input").each().removeAttr("checked");
 
-	var sectionSelector = "#section-radio" + section;
-	$(sectionSelector).attr("checked", "checked").button("refresh");
+	// var sectionSelector = "#section-radio" + section;
+	$("#section-radio" + section).attr("checked", "checked").button("refresh");
 	
 	$("#story-text").text(section);
 
