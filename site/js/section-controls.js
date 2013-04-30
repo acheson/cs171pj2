@@ -14,10 +14,10 @@ var timeoutTime = 1500;
 var timer; 
 
 // keeps track of sections 
+// 0 - Host Sites
 // 1 - 1Channel.ch
-// 2 - Host Sites
-// 3 - Viewers
-var currentSection = 2;
+// 2 - Viewers
+var currentSection = 1;
 var incrementing = true;
 
 function initSectionControls() {
@@ -29,11 +29,11 @@ function initSectionControls() {
 	// $("#section-radio1").attr("checked", "checked").button("refresh");
 	
 	// add button listeners
+	$("#section-radio0").click(sectionControlClick);
 	$("#section-radio1").click(sectionControlClick);
 	$("#section-radio2").click(sectionControlClick);
-	$("#section-radio3").click(sectionControlClick);
 
-	showSection(2);
+	showSection(1);
 }
 
 function sectionControlClick(e) {
@@ -46,15 +46,15 @@ function sectionControlClick(e) {
 function nextSection() {
 	if (incrementing === true) {
 		currentSection ++;
-		if (currentSection > 3) {
-			currentSection = 2;
+		if (currentSection > 2) {
+			currentSection = 1;
 			incrementing = false;
 		};	
 	}
 	else {
 		currentSection --;
-		if (currentSection < 1) {
-			currentSection = 2;
+		if (currentSection < 0) {
+			currentSection = 1;
 			incrementing = true;
 		};	
 	}
@@ -97,17 +97,17 @@ function showSection(section) {
 }
 
 function transitionToSection(section) {
-	if (section == 1) {
+	if (section == 0) {
 		drawOneChannelMap([]);
 		drawSitesMap(sites);
 		drawViewersMap([]);
 	}
-	else if (section == 2) {
+	else if (section == 1) {
 		drawOneChannelMap([totalViews]);
 		drawSitesMap([]);
 		drawViewersMap([]);
 	}
-	else if (section == 3) {
+	else if (section == 2) {
 		drawOneChannelMap([]);
 		drawSitesMap([]);
 		drawViewersMap(viewers);

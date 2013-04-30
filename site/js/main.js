@@ -56,9 +56,12 @@ var countryCodesAndCoordinates;
 var viewers = []; 
 
 /* The following functions load JSON files in sequence to ensure that all data is loaded before action begins */
+/*  Waits for document ready state */
+$(document).ready(function() {
+ 	// Start the process - load and parse country code lookup JSON
+	d3.json("../data/slim-3.json", countryCodesAndNamesComplete); 
+});
 
-// Start the process - load and parse country code lookup JSON
-d3.json("../data/slim-3.json", countryCodesAndNamesComplete);
 
 function countryCodesAndNamesComplete(d) {
 	countryCodesAndNames = d;
