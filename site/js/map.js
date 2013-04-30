@@ -205,12 +205,12 @@ function updateMap() {
 
 	// selection.enter().append("circle")
 	// 		.attr("class", "viewers-mark")
-	// 		.attr("transform", function(d) {return "translate(" + projection([d[4],d[3]]) + ")";})
+	// 		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
 	// 		.attr("display", function(d) { 
-	// 			if (d[4] == undefined) {return "none";}
+	// 			if (d.lon == undefined) {return "none";}
 	// 		})
 	// 		// TODO rescale size of circles
-	// 		.attr("r", function(d) {return area(d[1]);})
+	// 		.attr("r", function(d) {return area(d.viewers);})
 	// 		.style("fill", "blue")
 	// 		.style("fill-opacity", 0.2)
 	// 		.style("stroke", "blue")
@@ -221,8 +221,8 @@ function updateMap() {
 	
 	// selection.transition()
 	// 	.duration(500)
-	// 		.attr("transform", function(d) {return "translate(" + projection([d[4],d[3]]) + ")";})
-	// 		.attr("r", function(d) {return area(d[1]);});
+	// 		.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
+	// 		.attr("r", function(d) {return area(d.viewers);});
 
 	// selection.exit()
 	// 	.transition()

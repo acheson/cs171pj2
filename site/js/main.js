@@ -1,7 +1,7 @@
 /*  
 	main.js
 	03/25/13
-	author: Rob Acheson
+	authors: Rob Acheson
 			Jeff Fontas
 
 
@@ -32,7 +32,7 @@ var totalViews = 0;
 var totalRatings = 0;
 var maxViews = 0;
 var	maxRatings = 0;
-var viewers = [];  
+ 
 
 /* Flag to suspend parsing on certain UI actions */
 var shouldParse = true;
@@ -52,6 +52,8 @@ var siteTrafficByCountryName;
 /* Populated by coordinatesByCountryCode.json, used as a lookup for lat/long coordinates by input country code */
 var countryCodesAndCoordinates;
 
+/* Populated by computeViews function, array of dictionaries, each holds "country_name", "country_code", "viewers", "lat", "lon" */
+var viewers = []; 
 
 /* The following functions load JSON files in sequence to ensure that all data is loaded before action begins */
 
@@ -199,28 +201,32 @@ function parse(data) {
 
 /* calculates views by country, takes sites variable as input */
 function computeViews(sites) {
-	//build a list of all countries in viewers list from alexa, calc number of views
-	var tempCountries = {};
+	
+	/* Dictionary storing number of views, accessed by country name key */
+	var viewerCount = {};
 
+	//build a list of all countries with data is siteTraffic from alexa, calc number of views
 	for (site in sites) {
 		// console.log(sites[site].name);
 		// console.log(sites[site].lat);
 		// console.log(sites[site].lon);
 		for (country in siteTrafficByCountryName[sites[site].name]) {
 			// alert(siteTrafficByCountryName[object[site].name][country]);
-			if (!(country in tempCountries)) {
-				tempCountries[country] = 0;
+			if (!(country in viewerCount)) {
+				viewerCount[country] = 0;
 			}
 			
-			tempCountries[country] += (sites[site].views * (siteTrafficByCountryName[sites[site].name][country])/100);
+			viewerCount[country] += (sites[site].views * (siteTrafficByCountryName[sites[site].name][country])/100);
 		}
 	}
 	viewers = [];
-	for (ctry in tempCountries) {
+	for (ctry in viewerCount) {
 		cCode = countryCodeForName(ctry); //country code
 		cLat = countryCodesAndCoordinates[cCode]["lat"]; // country latitude
 		cLon = countryCodesAndCoordinates[cCode]["lon"]; // country latitude
-		viewers.push([ctry,tempCountries[ctry],cCode,cLat,cLon]);
+		
+		viewers.push({"country_name":ctry, "country_code":cCode, "viewers":viewerCount[ctry], "lat":cLat, "lon":cLon});
+		// viewers.push([ctry, cCode, viewerCount[ctry], cLat, cLon]);
 	}
 	// return viewers;
 }
