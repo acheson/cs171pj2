@@ -20,8 +20,11 @@ var scatter = d3.select("div#scatter-chart")
                 .append("svg")
                 .attr("width", width)
                 .attr("height", height); 
+var scatterX, scatterY;
 var brushFn;
 var listUpdateFlag = 1;
+var ttScatter = scatter.append("g");
+var scatterMouseDownFlag = false;
 
 var axesDrawn = 0; //becomes 1 after drawing axes the first time
 
@@ -43,13 +46,13 @@ just perform the regular update.  this flag enables preselection of values
 on scatterplot */
 function updateScatter() {
     
-    var scatterX = d3.scale
+    scatterX = d3.scale
                     .linear()
                     // .pow().exponent(.50)
                     .domain([0, maxViews])
                     .range([ (0 + lmargin), (width - rmargin)]);
 
-    var scatterY = d3.scale
+    scatterY = d3.scale
                     .linear()
                     // .pow().exponent(.50)
                     .domain([0, maxRatings])
@@ -103,15 +106,6 @@ function updateScatter() {
             
             .text("Total ratings on IMDB");
 
-        //add scatterplot points
-        var circle = scatter.selectAll("circle")
-            .data(films)
-            .enter()
-            .append("circle")
-            .attr("cx", function(d) { return scatterX(d.views); })
-            .attr("cy", function(d) { return scatterY(d.ratings); })
-            .attr("r", ptRadius)
-            .attr("id", function(d) {return ("film"+d.rank);});
 
         //define brushing function, call it
         brushFn = d3.svg.brush()
@@ -124,6 +118,20 @@ function updateScatter() {
         scatter.append("g")
             .attr("class", "brush")
             .call(brushFn);
+
+        //add scatterplot points
+        var circle = scatter.selectAll("circle")
+            .data(films)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return scatterX(d.views); })
+            .attr("cy", function(d) { return scatterY(d.ratings); })
+            .attr("r", ptRadius)
+            .attr("id", function(d) {return ("film"+d.rank);})
+            .on("mouseover", scatterMouseOver)
+            .on("mouseout", scatterMouseOut);
+            // .on("mousedown", scatterMouseDown)
+            // .on("mouseup",scatterMouseUp);
 
         axesDrawn = 1;
 
@@ -165,6 +173,7 @@ function updateScatter() {
     function brushstart() {
         scatter.classed("selecting", true);
         listUpdateFlag = 0;
+        d3.selectAll("#scatterToolTip").remove();
     }
 
     function brushmove() {
@@ -173,6 +182,7 @@ function updateScatter() {
         return e[0][0] <= d.views && d.views <= e[1][0]
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
+      d3.selectAll("#scatterToolTip").remove();
     }
 
     function brushend() {    
@@ -197,3 +207,48 @@ function updateScatter() {
     }
    
 }
+
+function scatterMouseOver(e) {
+    if (scatterMouseDownFlag == false) {
+        ttScatter.append("text")
+            .attr("x", scatterX(e.views))
+            .attr("y", scatterY(e.ratings)-10)
+            .attr("id", "scatterToolTip")
+            .attr("font-size", 10)
+            .attr("style", function(d) {
+                if (scatterX(e.views) > (scatterX(maxViews)*2)/3) {
+                    return "text-anchor:middle";
+                } else if (scatterX(e.views) < (scatterX(maxViews)*3)/7) {
+                    return "text-anchor:right";
+                } else {
+                    return "text-anchor:middle";
+                }
+            })
+            .attr("transform", function(d) {
+                if (scatterX(e.views) > (scatterX(maxViews)*2)/3)  {
+                    return "translate(-"+(e.title.length*2.5+5)+",13.5)";
+                } else {
+                    return "translate(0,0)";
+                }
+            })
+            .text(e.title); 
+    }
+}
+
+function scatterMouseOut(e) {
+
+    d3.selectAll("#scatterToolTip").remove();
+}
+
+
+// function scatterMouseDown(e) {
+//     d3.selectAll("#scatterToolTip").remove();
+//     scatterMouseDownFlag = true;
+//     console.log("scatterMouseDown = " + scatterMouseDownFlag)
+// }
+
+// function scatterMouseUp(e) {
+//     // d3.selectAll("#scatterToolTip").remove();
+//     scatterMouseDownFlag = false;
+//     console.log("scatterMouseDown = " + scatterMouseDownFlag)
+// }
