@@ -250,7 +250,7 @@ circle#scatter-chart .default {
 
 .selecting circle.selected {
   stroke: #f00;
-  fill: #f00;
+  fill: #fecccc;
   fill-opacity: 1;
 }
 
