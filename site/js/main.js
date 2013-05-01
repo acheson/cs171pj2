@@ -196,11 +196,7 @@ function parse(data) {
 		temp[i] = sites[keys[i]]
 	};
 	sites = temp;
-	
 	computeViews(sites);
-	// updateViews();
-
-	console.log("totalViews" + totalViews);
 }
 
 
@@ -212,11 +208,7 @@ function computeViews(sites) {
 
 	//build a list of all countries with data is siteTraffic from alexa, calc number of views
 	for (site in sites) {
-		// console.log(sites[site].name);
-		// console.log(sites[site].lat);
-		// console.log(sites[site].lon);
 		for (country in siteTrafficByCountryName[sites[site].name]) {
-			// alert(siteTrafficByCountryName[object[site].name][country]);
 			if (!(country in viewerCount)) {
 				viewerCount[country] = 0;
 			}
@@ -231,9 +223,7 @@ function computeViews(sites) {
 		cLon = countryCodesAndCoordinates[cCode]["lon"]; // country latitude
 		
 		viewers.push({"name":ctry, "country_code":cCode, "viewers":viewerCount[ctry], "lat":cLat, "lon":cLon});
-		// viewers.push([ctry, cCode, viewerCount[ctry], cLat, cLon]);
 	}
-	// return viewers;
 	updateViews();
 }
 
@@ -243,7 +233,6 @@ function updateViews() {
 	updateScatter();
 	updateBar();
 
-	console.log("current" + currentSection);
 	transitionToSection(currentSection);
 
 	// drawSitesMap(sites);
