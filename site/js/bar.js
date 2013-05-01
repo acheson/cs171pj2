@@ -147,7 +147,7 @@ function handleMouseOverBar(e) {
     highlightBar(e, currentBarMark);
 
     // make selection and highlight the map
-    var mapCircle = d3.selectAll(".map-mark")
+    var mapCircle = d3.selectAll("circle." + mapClasses[currentSection])
         .filter( function(d) { 
             if (d.name == e.name) {
                 return this;
@@ -177,7 +177,7 @@ function handleMouseOverText(e) {
     highlightBar(e, currentBarMark);
 
     // make selection and highlight the map
-    var mapCircle = d3.selectAll(".map-mark")
+    var mapCircle = d3.selectAll("circle." + mapClasses[currentSection])
         .filter( function(d) { 
             if (d.name == e.name) {
                 return this;

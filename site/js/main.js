@@ -52,7 +52,7 @@ var siteTrafficByCountryName;
 /* Populated by coordinatesByCountryCode.json, used as a lookup for lat/long coordinates by input country code */
 var countryCodesAndCoordinates;
 
-/* Populated by computeViews function, array of dictionaries, each holds "country_name", "country_code", "viewers", "lat", "lon" */
+/* Populated by computeViews function, array of dictionaries, each holds "name", "country_code", "viewers", "lat", "lon" */
 var viewers = []; 
 
 /* The following functions load JSON files in sequence to ensure that all data is loaded before action begins */
@@ -230,7 +230,7 @@ function computeViews(sites) {
 		cLat = countryCodesAndCoordinates[cCode]["lat"]; // country latitude
 		cLon = countryCodesAndCoordinates[cCode]["lon"]; // country latitude
 		
-		viewers.push({"country_name":ctry, "country_code":cCode, "viewers":viewerCount[ctry], "lat":cLat, "lon":cLon});
+		viewers.push({"name":ctry, "country_code":cCode, "viewers":viewerCount[ctry], "lat":cLat, "lon":cLon});
 		// viewers.push([ctry, cCode, viewerCount[ctry], cLat, cLon]);
 	}
 	// return viewers;

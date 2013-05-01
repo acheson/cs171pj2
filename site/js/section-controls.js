@@ -10,7 +10,6 @@
 
 // timeout in ms
 var timeoutTime = 1500;
-
 var timer; 
 
 // keeps track of sections 
@@ -115,12 +114,6 @@ function transitionToSection(section) {
 
 	currentSection = section;
 }
-
-// $("#section-animate").click(function() {
-// 	if ($(this).prop("checked")) {
-		
-// 	}
-// });
 
 $("#section-animate").change(function() {
 	if ($(this).prop("checked")) {
