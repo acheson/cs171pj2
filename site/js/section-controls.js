@@ -14,10 +14,11 @@ var timeoutTime = 1500;
 var timer; 
 
 // keeps track of sections 
+// 0 - Host Sites
 // 1 - 1Channel.ch
-// 2 - Host Sites
-// 3 - Viewers
+// 2 - Viewers
 var currentSection = 1;
+var incrementing = true;
 
 function initSectionControls() {
 	console.log("init");
@@ -28,24 +29,36 @@ function initSectionControls() {
 	// $("#section-radio1").attr("checked", "checked").button("refresh");
 	
 	// add button listeners
+	$("#section-radio0").click(sectionControlClick);
 	$("#section-radio1").click(sectionControlClick);
 	$("#section-radio2").click(sectionControlClick);
-	$("#section-radio3").click(sectionControlClick);
 
 	showSection(1);
 }
 
 function sectionControlClick(e) {
 	showSection(e.target.value);
+
 	killSectionTimer();
 	$("#section-animate").removeAttr("checked");
 }
 
 function nextSection() {
-	currentSection ++;
-	if (currentSection > 3) {
-		currentSection = 1;
-	};
+	if (incrementing === true) {
+		currentSection ++;
+		if (currentSection > 2) {
+			currentSection = 1;
+			incrementing = false;
+		};	
+	}
+	else {
+		currentSection --;
+		if (currentSection < 0) {
+			currentSection = 1;
+			incrementing = true;
+		};	
+	}
+	
 	return currentSection;
 }
 
@@ -68,16 +81,39 @@ function timerComplete() {
 }
 
 function showSection(section) {
-	$("section-radio input").removeAttr("checked");
+	
+	transitionToSection(section);
 
-	var sectionSelector = "#section-radio" + section;
-	$(sectionSelector).attr("checked", "checked").button("refresh");
+	$("section-radio input").each().removeAttr("checked");
+
+	// var sectionSelector = "#section-radio" + section;
+	$("#section-radio" + section).attr("checked", "checked").button("refresh");
 	
 	$("#story-text").text(section);
 
 	if ($("#section-animate").prop("checked")) {
 		startSectionTimer();
 	}
+}
+
+function transitionToSection(section) {
+	if (section == 0) {
+		drawOneChannelMap([]);
+		drawSitesMap(sites);
+		drawViewersMap([]);
+	}
+	else if (section == 1) {
+		drawOneChannelMap([totalViews]);
+		drawSitesMap([]);
+		drawViewersMap([]);
+	}
+	else if (section == 2) {
+		drawOneChannelMap([]);
+		drawSitesMap([]);
+		drawViewersMap(viewers);
+	};
+
+	currentSection = section;
 }
 
 // $("#section-animate").click(function() {

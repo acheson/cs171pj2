@@ -31,7 +31,7 @@ function initList() {
     		var filteredList = [];
     		$( ".ui-selected", this ).each(function() {
       			var index = $( "#selectable li" ).index( this );
-      			filteredList.push(dataSource[index]);
+      			filteredList.push(filmData[index]);
     		});
          
     		if (shouldParse == true) {

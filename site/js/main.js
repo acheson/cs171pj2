@@ -1,19 +1,13 @@
 /*  
 	main.js
 	03/25/13
-	author: Rob Acheson
+	authors: Rob Acheson
 			Jeff Fontas
 
-*/
 
-/* love this! */
-function dumpObject(o) {
-	out = "";
-	for (i in o) {
-		out += i +":" + o[i] +"\n";
-	}
-	alert(out);
-}
+	"../data/slim-3.json" data courtesy of https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes
+
+*/
 
 /* default film object */
 function Film() {
@@ -33,116 +27,103 @@ function Site() {
 	this.views = 0;
 }
 
-/* dictionary of sites by name - Becomes an array sorted alphabetically after parse */
-var sites = {};
-
+/* Calculated Data */
 var totalViews = 0;
 var totalRatings = 0;
 var maxViews = 0;
 var	maxRatings = 0;
+ 
+
+/* Flag to suspend parsing on certain UI actions */
 var shouldParse = true;
 
-function updateViews() {
-	updateMap();
-	updateScatter();
-	updateBar();
+/* dictionary of sites by name - Becomes an array sorted alphabetically after parse */
+var sites = {};
+
+/* Populated by slim-3.json, used as a lookup for country name to country code and vice-versa */
+var countryCodesAndNames;
+
+/* Pouplated by filmHostsAndIMDB.json, stores the main JSON data collected from 1Channel.ch and IMDB */
+var filmData;
+
+/* Populated by siteTrafficByCountry.json, stores viewer breakdown by site by country as percentage */
+var siteTrafficByCountryName;
+
+/* Populated by coordinatesByCountryCode.json, used as a lookup for lat/long coordinates by input country code */
+var countryCodesAndCoordinates;
+
+/* Populated by computeViews function, array of dictionaries, each holds "country_name", "country_code", "viewers", "lat", "lon" */
+var viewers = []; 
+
+/* The following functions load JSON files in sequence to ensure that all data is loaded before action begins */
+/*  Waits for document ready state */
+$(document).ready(function() {
+ 	// Start the process - load and parse country code lookup JSON
+	d3.json("../data/slim-3.json", countryCodesAndNamesComplete); 
+});
+
+
+function countryCodesAndNamesComplete(d) {
+	countryCodesAndNames = d;
+	d3.json("../data/coordinatesByCountryCode.json", countryCodesAndCoordinatesComplete);
 }
 
-// load and parse country code lookup JSON
-// JSON data courtesy of https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes
-var countryList;
-d3.json("../data/slim-3.json", countryListComplete);
-function countryListComplete(d) {
-	countryList = d;
+function countryCodesAndCoordinatesComplete(d) {
+	countryCodesAndCoordinates = d;
+	d3.json("../data/siteTrafficByCountry.json", siteTrafficByCountryNameComplete);
 }
 
-function countryNameForCode(code) {
-	for (var k in countryList) {
-		if  (countryList[k]["alpha-3"] == code) {
-			return countryList[k]["name"];
-		};
-	}
-	return "";
+function siteTrafficByCountryNameComplete(d) {
+	siteTrafficByCountryName = d;
+	d3.json("../data/filmHostsAndIMDB.json", filmHostsAndIMDBComplete);
 }
 
-function countryCodeForName(name) {
-	for (var k in countryList) {
-		if  (countryList[k]["name"] == name) {
-			return countryList[k]["alpha-3"];
-		};
-	}
-	return "";
-}
-
-// load the actual data
-// d3.json("../data/data.json", jsonComplete);
-
-/* Stores the JSON data */
-var dataSource;
-
-function jsonComplete(d) {
-	dataSource = d;
-	parse(dataSource);
+function filmHostsAndIMDBComplete(d) {
+	filmData = d;
+	parse(filmData);
+	
+	/*  The following functions only need to be called once and are not data dependent
+		Functions based on data should be called at the end of parse()
+	*/
 	initList();
 	initSectionControls();
 	initTitleControls();
 }
 
 
-// load sites reference data for site to country conversion
-var sitesCountryPct;
-d3.json("../data/sites.json", sitesComplete);
-function sitesComplete(d) {
-	sitesCountryPct = d;
+/* Lookup functions */
 
-	d3.json("../data/data.json", jsonComplete);
-
-}
-
-//load country 3 letter code and coordinates data
-var countryCodeCoords;
-d3.json("../data/cntry_codes_coords.json", countriesComplete);
-function countriesComplete(d) {
-	countryCodeCoords = d;
-}
-
-/* calculates views by country, takes sites variable as input */
-var viewers = [];
-var tempCountries = {};
-var viewerCountries = {};
-
-function computeViews(object) {
-	//build a list of all countries in viewers list from alexa, calc number of views
-	tempCountries = {};
-
-	for (url in object) {
-		console.log(object[url].name);
-		console.log(object[url].lat);
-		console.log(object[url].lon);
-		for (country in sitesCountryPct[object[url].name]) {
-			// alert(sitesCountryPct[object[url].name][country]);
-			if (!(country in tempCountries)) {
-				tempCountries[country] = 0;
-			}
-			
-			tempCountries[country] += (object[url].views * (sitesCountryPct[object[url].name][country])/100);
-		}
+function countryNameForCode(code) {
+	for (var k in countryCodesAndNames) {
+		if  (countryCodesAndNames[k]["alpha-3"] == code) {
+			return countryCodesAndNames[k]["name"];
+		};
 	}
-	viewers = [];
-	for (ctry in tempCountries) {
-		cCode = countryCodeForName(ctry); //country code
-		cLat = countryCodeCoords[cCode]["lat"]; // country latitude
-		cLon = countryCodeCoords[cCode]["lon"]; // country latitude
-		viewers.push([ctry,tempCountries[ctry],cCode,cLat,cLon]);
+	return "";
+}
+
+function countryCodeForName(name) {
+	for (var k in countryCodesAndNames) {
+		if  (countryCodesAndNames[k]["name"] == name) {
+			return countryCodesAndNames[k]["alpha-3"];
+		};
 	}
-	return viewers;
+	return "";
 }
 
 
+/* love this! */
+
+function dumpObject(o) {
+	out = "";
+	for (i in o) {
+		out += i +":" + o[i] +"\n";
+	}
+	alert(out);
+}
 
 
-
-/* Parses a data object and updates all views - Pass a subset for filtering */
+/* Parses filmData object and updates all views - Pass a subset for filtering */
 function parse(data) {
 	totalViews = 0;
 	totalRatings = 0;
@@ -205,7 +186,6 @@ function parse(data) {
 		}	
 		// add the film to the array
 		films.push(film);	
-		
 	}
 	
 	// turn sites into an array so D3 can work with it easier
@@ -218,6 +198,55 @@ function parse(data) {
 	sites = temp;
 	
 	computeViews(sites);
+	// updateViews();
+
+	console.log("totalViews" + totalViews);
+}
+
+
+/* calculates views by country, takes sites variable as input */
+function computeViews(sites) {
+	
+	/* Dictionary storing number of views, accessed by country name key */
+	var viewerCount = {};
+
+	//build a list of all countries with data is siteTraffic from alexa, calc number of views
+	for (site in sites) {
+		// console.log(sites[site].name);
+		// console.log(sites[site].lat);
+		// console.log(sites[site].lon);
+		for (country in siteTrafficByCountryName[sites[site].name]) {
+			// alert(siteTrafficByCountryName[object[site].name][country]);
+			if (!(country in viewerCount)) {
+				viewerCount[country] = 0;
+			}
+			
+			viewerCount[country] += (sites[site].views * (siteTrafficByCountryName[sites[site].name][country])/100);
+		}
+	}
+	viewers = [];
+	for (ctry in viewerCount) {
+		cCode = countryCodeForName(ctry); //country code
+		cLat = countryCodesAndCoordinates[cCode]["lat"]; // country latitude
+		cLon = countryCodesAndCoordinates[cCode]["lon"]; // country latitude
+		
+		viewers.push({"country_name":ctry, "country_code":cCode, "viewers":viewerCount[ctry], "lat":cLat, "lon":cLon});
+		// viewers.push([ctry, cCode, viewerCount[ctry], cLat, cLon]);
+	}
+	// return viewers;
 	updateViews();
 }
+
+/*  Used to update all linked views with new data */
+function updateViews() {
+	// updateMap();
+	updateScatter();
+	updateBar();
+
+	console.log("current" + currentSection);
+	transitionToSection(currentSection);
+
+	// drawSitesMap(sites);
+}
+
 

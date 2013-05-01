@@ -294,6 +294,33 @@ circle#scatter-chart .default {
 #map-reset {
 	position: absolute;
 }
+
+/*.map-site-default {
+	fill: red;
+	fill-opacity: 0.2;
+	stroke: red;
+	stroke-opacity: 0.3;
+	stroke-width: 1.0;
+}
+
+.map-site-highlighted {
+	fill: red;
+	fill-opacity: 0.5;
+	stroke: red;
+	stroke-opacity: 1.0;
+	stroke-width: 1.0;
+}
+
+.map-site-deselected {
+	fill: #888;
+	fill-opacity: 0.2;
+	stroke: #888;
+	stroke-opacity: 1.0;
+	stroke-width: 1.0;
+}
+*/
+
+
 /*********************************************/
 
 
