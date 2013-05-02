@@ -86,7 +86,9 @@ function filmHostsAndIMDBComplete(d) {
 	/*  The following functions only need to be called once and are not data dependent
 		Functions based on data should be called at the end of parse()
 	*/
+	
 	initList();
+	initMapDescriptions();
 	initSectionControls();
 	initTitleControls();
 }
@@ -126,6 +128,9 @@ function dumpObject(o) {
 
 /* Parses filmData object and updates all views - Pass a subset for filtering */
 function parse(data) {
+	
+	console.log("parse");
+
 	totalViews = 0;
 	totalRatings = 0;
 
@@ -203,7 +208,7 @@ function parse(data) {
 
 /* calculates views by country, takes sites variable as input */
 function computeViews(sites) {
-	
+
 	/* Dictionary storing number of views, accessed by country name key */
 	var viewerCount = {};
 
@@ -227,18 +232,16 @@ function computeViews(sites) {
 		// keep running total of the the country with most users
 		maxViewers = viewerCount[ctry] > maxViewers ? viewerCount[ctry] : maxViewers;
 	}
+
 	updateViews();
+	
 }
 
 /*  Used to update all linked views with new data */
 function updateViews() {
-	// updateMap();
 	updateScatter();
-	// updateBar();
-
 	transitionToSection(currentSection);
 
-	// drawSitesMap(sites);
 }
 
 

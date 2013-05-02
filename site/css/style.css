@@ -305,7 +305,7 @@ circle#scatter-chart .default {
 /*********************************************/
 
 
-/* BAR CHART */
+/* BAR CHART AREA*/
 #bar-chart-viewers, #bar-chart-sites {
 	width: 880px;
 	height: 220px;
@@ -314,21 +314,25 @@ circle#scatter-chart .default {
 	left: 380px;
 }
 
-#bar-chart .barAxis {
-    /*font-family: "Helvetica Neue", Helvetica, sans-serif;*/
+.barAxisViewers, .barAxisSites {
     font-size: 10px;
-    /*font-style: normal;*/
-    fill: none;
+    fill: none	;
     stroke: gray;
     stroke-width: 1px;
     shape-rendering: crispEdges;
 }
 
-#bar-chart .barAxisLine {
+.barAxisLine {
     stroke: #eee;
 }
 
-
+#channel-img {
+	width: 880px;
+	height: 220px;
+	position: absolute;
+	top: 500px;
+	left: 380px;
+}
 
 /* Description */
 .description {

@@ -21,6 +21,7 @@
 
 */
 
+
 var mapWidth = 880;
 var mapHeight = 460;
 
@@ -35,13 +36,17 @@ var path = d3.geo.path()
 	.projection(projection);
 
 /* array of colors accessed by current section */
-var colors = ["red", "purple", "blue"];
-var mapClasses = ["map-mark-sites", "map-mark-channel", "map-mark-viewers"];	
+var colors = ["purple", "red", "blue"];
+var mapClasses = ["map-mark-channel", "map-mark-sites", "map-mark-viewers"];	
 
 var map = d3.select("div#map-chart")
 	.append("svg")
 		.attr("width", mapWidth)
 		.attr("height", mapHeight)
+		.on("mouseover", function() {
+			$("#sitesDescription").fadeOut();
+			$("#viewersDescription").fadeOut();
+		});
 
 // create a container for the map itself for zooming		 
 var g = map.append("g").classed("zoom", true);
@@ -58,9 +63,55 @@ d3.json("../data/world-50m.json", function(error, world) {
 		.attr("d", path);
 });
 
-function handleMouseOverMap(e) {
+var formatNumbers = d3.format(",");
+
+var sitesDescription;
+var viewersDescription;
+
+function initMapDescriptions() {
+	if (sitesDescription == null) {
+		sitesDescription = map.append("g").attr("class", "zoom")
+		.append("text")	
+			.attr("id", "sitesDescription")
+			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+			.attr("alignment-baseline", "middle")
+		    .attr("text-anchor", "middle")
+		  	.attr("pointer-events", "none")
+		  	.style("font-size", 48)
+		  	.text(sitesDesctiptionText(sites));
+	};
 	
-	if (currentSection == 1) { return ;};
+	if (viewersDescription == null) {
+		viewersDescription = map.append("g").attr("class", "zoom")
+		.append("text")	
+			.attr("id", "viewersDescription")
+			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+			.attr("alignment-baseline", "middle")
+		    .attr("text-anchor", "middle")
+		  	.attr("pointer-events", "none")
+		  	.style("font-size", 48)
+		  	.text(viewersDesctiptionText(viewers));
+	};
+	
+
+}
+
+/* Hide desctiptions when user hovers over map div */
+
+
+function sitesDesctiptionText(sites) {
+	return "Hosted by " + formatNumbers(sites.length) + " Websites";
+}
+
+function viewersDesctiptionText(viewers) {
+	return "Watched in " + formatNumbers(viewers.length) + " Countries";
+}
+
+function handleMouseOverMap(e) {
+	$("#sitesDescription").fadeOut();
+	$("#viewersDescription").fadeOut();
+
+	if (currentSection == 0) { return ;};
 
 	var currentMapMark = d3.select(this);
 	highlightMap(e, currentMapMark);
@@ -75,7 +126,7 @@ function handleMouseOverMap(e) {
 	highlightBar(e, barBar);
 
  	var currentTextMark;
- 	if (currentSection == 0) {
+ 	if (currentSection == 1) {
  		currentTextMark = barChartSites.selectAll("text")
  			.filter( function(d) { 
         if (d.name == e.name) {
@@ -104,10 +155,10 @@ function handleMouseOverMap(e) {
     // Coordinate tooltip
     var selection;
 	if (currentSection == 0) {
-		selection = sitesTooltip.selectAll("text");
+		selection = channelTooltip.selectAll("text");
 	}
 	else if (currentSection == 1) {
-		selection = channelTooltip.selectAll("text");
+		selection = sitesTooltip.selectAll("text");
 	}
 	else {
 		selection = viewersTooltip.selectAll("text");
@@ -121,9 +172,11 @@ function handleMouseOverMap(e) {
 }
 
 function highlightMap(e,obj) {
+	$("#sitesDescription").fadeOut();
+	$("#viewersDescription").fadeOut();
 
 	// deselect others
-	var selection = map.selectAll("circle." + mapClasses[currentSection])//.classed(mapClasses[currentSection], true)
+	var selection = map.selectAll("circle." + mapClasses[currentSection])
 		.transition()
 			.duration(250)
 			.style("fill", "#888")	
@@ -142,10 +195,10 @@ function highlightMap(e,obj) {
 	// Coordinate tooltip
 	var selection;
 	if (currentSection == 0) {
-		selection = sitesTooltip.selectAll("text");
+		selection = channelTooltip.selectAll("text");
 	}
 	else if (currentSection == 1) {
-		selection = channelTooltip.selectAll("text");
+		selection = sitesTooltip.selectAll("text");
 	}
 	else {
 		selection = viewersTooltip.selectAll("text");
@@ -162,10 +215,10 @@ function highlightTooltip(e, obj) {
 	
 	var tooltip;
 	if (currentSection == 0) {
-		tooltip = sitesTooltip.selectAll("text");
+		tooltip = channelTooltip.selectAll("text");
 	}
 	else if (currentSection == 1) {
-		tooltip = channelTooltip.selectAll("text");
+		tooltip = sitesTooltip.selectAll("text");
 	}
 	else {
 		tooltip = viewersTooltip.selectAll("text");
@@ -181,14 +234,14 @@ function highlightTooltip(e, obj) {
 
 
 function handleMouseOut(e) {
-	
-	if (currentSection == 1) { return ;};
+
+	if (currentSection == 0) { return ;};
 
 	var fillOpacity;
-	if (currentSection == 0) { fillOpacity = 0.1}
+	if (currentSection == 1) { fillOpacity = 0.1}
 	else if (currentSection == 2) { fillOpacity = 0.2};
 
-	var selection = map.selectAll("circle." + mapClasses[currentSection])//	.classed(mapClasses[currentSection], true)
+	var selection = map.selectAll("circle." + mapClasses[currentSection])
 		.transition()
 			.duration(250)
 			.style("fill", colors[currentSection])
@@ -197,7 +250,7 @@ function handleMouseOut(e) {
 			.style("stroke-opacity", 0.3);
 
     var selection;
-    if (currentSection == 0) {
+    if (currentSection == 1) {
     	selection = barChartSites.selectAll("rect")
     }
     else if (currentSection ==2) {
@@ -218,14 +271,9 @@ function handleMouseOut(e) {
 			.style("fill-opacity", 0.2)
 			.style("stroke", colors[currentSection])	
   			.style("stroke-opacity", 0.3);
-
-  // 	var selection = barChart.selectAll("text")
-		// .transition()
-		// 	.duration(250)
-		// 	.style("fill", "black");
 	
 	var selection;
-    if (currentSection == 0) {
+    if (currentSection == 1) {
     	selection = barChartSites.selectAll("text")
     }
     else if (currentSection == 2) {
@@ -237,10 +285,10 @@ function handleMouseOut(e) {
 
 	var tooltip;
 	if (currentSection == 0) {
-		tooltip = sitesTooltip.selectAll("text");
+		tooltip = channelTooltip.selectAll("text");
 	}
 	else if (currentSection == 1) {
-		tooltip = channelTooltip.selectAll("text");
+		tooltip = sitesTooltip.selectAll("text");
 	}
 	else {
 		tooltip = viewersTooltip.selectAll("text");
@@ -342,11 +390,11 @@ function drawOneChannelMap(data)
 
 	selection.enter().append("circle")
 			.attr("r", 0)	
-			.attr("class", mapClasses[1])
+			.attr("class", mapClasses[0])
 			.attr("transform", "translate(" + mapCenter + ")")
-			.style("fill", colors[1])
+			.style("fill", colors[0])
 			.style("fill-opacity", 0.5)
-			.style("stroke", colors[1])
+			.style("stroke", colors[0])
 			.style("stroke-opacity", 0.3)
 			.style("stroke-width", 1.0)
 			.on("mouseover", handleMouseOverMap)
@@ -367,11 +415,11 @@ function drawOneChannelMap(data)
 	var tooltip = channelTooltip.selectAll("text")
 		.data(data);
 
-	var formatViews = d3.format(",");
+	
 
 	tooltip.enter().append("text")
 		.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
-		.text(function(d) {return formatViews(d) + " Total Views";})
+		.text(function(d) {return formatNumbers(d) + " Total Views";})
 			.attr("alignment-baseline", "middle")
 	      	.attr("text-anchor", "middle")
 	      	.attr("pointer-events", "none")
@@ -381,16 +429,14 @@ function drawOneChannelMap(data)
 	tooltip.transition()
 	    .duration(500)
 	    	.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
-	    	.text(function(d) {return formatViews(d) + " Total Views";})
+	    	.text(function(d) {return formatNumbers(d) + " Total Views";})
 	    	.style("opacity", 1);
 
 	tooltip.exit()
 		.transition()
 			.duration(500)
 			.style("opacity", 0)
-			.remove();
-
-	      	
+			.remove();    
 }
 
 
@@ -400,7 +446,6 @@ function drawOneChannelMap(data)
 // create for zooming Sites data	 
 var sitesContainer = map.append("g").attr("class", "zoom");
 var sitesTooltip = map.append("g").attr("class", "zoom");
-
 
 function drawSitesMap(sites) {
 	var mapMax = d3.max(sites, function(d) {return d.views;});
@@ -421,10 +466,10 @@ function drawSitesMap(sites) {
 		.data(sortedSites);
 
 	selection.enter().append("circle")
-			.attr("class", mapClasses[0])
-			.style("fill", colors[0])
+			.attr("class", mapClasses[1])
+			.style("fill", colors[1])
 			.style("fill-opacity", 0.1)
-			.style("stroke", colors[0])
+			.style("stroke", colors[1])
 			.style("stroke-opacity", 0.3)
 			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
 			.attr("display", function(d) { 
@@ -484,8 +529,7 @@ function drawSitesMap(sites) {
 			if (d.lon == undefined) {return "none";}
 		})
 		.text(function(d) {
-				var formatViews = d3.format(",");
-				return formatViews(d.views) + " views";
+				return formatNumbers(d.views) + " views";
 			})
 			.attr("alignment-baseline", "middle")
 	      	.attr("text-anchor", "middle")
@@ -498,8 +542,7 @@ function drawSitesMap(sites) {
 	    .duration(500)
 	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
 	    	.text(function(d) {
-	    		var formatViews = d3.format(",");
-				return formatViews(d.views) + " views";
+				return formatNumbers(d.views) + " views";
 			});
 
 	tooltip.exit()
@@ -518,7 +561,6 @@ function drawSitesMap(sites) {
 			if (d.lon == undefined) {return "none";}
 		})
 		.text(function(d) {
-				var formatViews = d3.format(",");
 				return countryNameForCode(d.country);
 			})
 			.attr("alignment-baseline", "middle")
@@ -539,6 +581,10 @@ function drawSitesMap(sites) {
 			.style("opacity", 0)
 			.remove();
 
+	if (sitesDescription == null) {
+		initMapDescriptions();
+	};
+	sitesDescription.text(sitesDesctiptionText(sortedSites));
 }
 
 
@@ -636,8 +682,7 @@ function drawViewersMap(viewers)
 			if (d.lon == undefined) {return "none";}
 		})
 		.text(function(d) {
-				var formatViews = d3.format(",");
-				return formatViews(d.viewers) + " views";
+				return formatNumbers(d.viewers) + " views";
 			})
 			.attr("alignment-baseline", "middle")
 	      	.attr("text-anchor", "middle")
@@ -650,8 +695,7 @@ function drawViewersMap(viewers)
 	    .duration(500)
 	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
 	    	.text(function(d) {
-	    		var formatViews = d3.format(",");
-				return formatViews(Math.round(d.viewers)) + " views";
+				return formatNumbers(Math.round(d.viewers)) + " views";
 			});
 
 	tooltip.exit()
@@ -670,7 +714,6 @@ function drawViewersMap(viewers)
 			if (d.lon == undefined) {return "none";}
 		})
 		.text(function(d) {
-				var formatViews = d3.format(",");
 				return countryNameForCode(d.country);
 			})
 			.attr("alignment-baseline", "middle")
@@ -690,5 +733,10 @@ function drawViewersMap(viewers)
 			.duration(500)
 			.style("opacity", 0)
 			.remove();
+
+	if (viewersDescription == null) {
+		initMapDescriptions();
+	};
+	viewersDescription.text(viewersDesctiptionText(sortedViewers));
 }
 

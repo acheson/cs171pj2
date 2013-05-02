@@ -31,7 +31,7 @@ function handleMouseOverBar(e) {
         });
     highlightMap(e, mapCircle);
 
-    if (currentSection == 0) {
+    if (currentSection == 1) {
         console.log(0);
         var currentTextMark = barChartSites.selectAll("text")
         .filter( function(d) { 
@@ -87,7 +87,7 @@ function highlightBar(e, obj) {
     //           .style("stroke-opacity", 0.3);
 
     var selection;
-    if (currentSection == 0) {
+    if (currentSection == 1) {
         selection = barChartSites.selectAll("rect")
     }
     else if (currentSection == 2) {
@@ -119,7 +119,7 @@ function highlightText(e, obj) {
         //     .style("fill", "#888");
       
     var selection;
-    if (currentSection == 0) {
+    if (currentSection == 1) {
         selection = barChartSites.selectAll("text")
     }
     else if (currentSection == 2) {
@@ -150,7 +150,9 @@ var sitesAxisDrawn = 0;
 
 function drawSitesBar(sites) {
     
-    if (sites.length     == 0) { $("#bar-chart-sites").fadeOut();}
+    console.log("drawSites");
+
+    if (sites.length == 0) { $("#bar-chart-sites").fadeOut();}
     else { $("#bar-chart-sites").fadeIn();}
 
     var sortedSites = sites.slice(0);
@@ -194,9 +196,9 @@ function drawSitesBar(sites) {
         .attr("class", "bar-mark")
         .attr("x", barWidth)
         .attr("y", barHeight)
-        .style("fill", colors[0])
+        .style("fill", colors[1])
         .style("fill-opacity", 0.2)
-        .style("stroke", colors[0])            
+        .style("stroke", colors[1])            
         .style("stroke-opacity", 0.3)
         .style("stroke-width", 1.0)
             
@@ -224,7 +226,7 @@ function drawSitesBar(sites) {
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
         .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sortedSites.length)/2)  + "," + (barHeight + 10) + ") rotate(-65)";})
-        .text(function(d, i) { return d.name;})   
+        .text(function(d, i) {return d.name;})   
         .style("font-size", "13px")
         .style("opacity", 0);
     textSelection.on("mouseover", handleMouseOverText);
@@ -243,16 +245,15 @@ function drawSitesBar(sites) {
 
     //draw y axis -- draws first then transitions afterwards
     if (sitesAxisDrawn == 0) {
-   
-        barChartSites.append("g")
+       barChartSites.append("g")
             .attr("class", "barAxisSites")
-            .attr("transform", "translate(" + (x(0)-0.5) + "," + (y(0)- 1.5) + ")")
+            .attr("transform", "translate(36,-1.5)")
             .call(yAxis);
 
         sitesAxisDrawn = 1;
 
-    } else {
-        //transitions for axis
+    } 
+    else {
         barChartSites.select(".barAxisSites")
             .transition()
             .duration(0)
@@ -347,7 +348,10 @@ function drawViewersBar(viewers) {
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
         .attr("transform", function(d, i) {  return "translate(" + (x(i) + (barWidth/sortedViewers.length)/2)  + "," + (barHeight + 10) + ") rotate(-65)";})
-        .text(function(d, i) { return d.name;})   
+        .text(function(d, i) { 
+            var name = d.name.split(",")[0]
+            return name;
+        })   
         .style("font-size", "12px")
         .style("opacity", 0);
     textSelection.on("mouseover", handleMouseOverText);
@@ -369,7 +373,7 @@ function drawViewersBar(viewers) {
    
         barChartViewers.append("g")
             .attr("class", "barAxisViewers")
-            .attr("transform", "translate(" + (x(0)-0.5) + "," + (y(0)- 1.5) + ")")
+            .attr("transform", "translate(36,-1.5)")
             .call(yAxis);
 
         viewersAxisDrawn = 1;
@@ -381,6 +385,22 @@ function drawViewersBar(viewers) {
             .duration(0)
             .call(yAxis); 
     }
+    // //draw y axis -- draws first then transitions afterwards
+    // if (sitesAxisDrawn == 0) {
+    //    barChartSites.append("g")
+    //         .attr("class", "barAxisSites")
+    //         .attr("transform", "translate(36,-1.5)")
+    //         .call(yAxis);
+
+    //     sitesAxisDrawn = 1;
+
+    // } 
+    // else {
+    //     barChartSites.select(".barAxisSites")
+    //         .transition()
+    //         .duration(0)
+    //         .call(yAxis); 
+    // }
 }
 
 
