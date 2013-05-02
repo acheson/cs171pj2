@@ -4,8 +4,13 @@
     authors: Rob Acheson
              Jeff Fontas
 
-brush code was grabbed from 
+brush code was adapted from: http://static.cybercommons.org/js/d3/examples/brush/brush.html
 
+brush clear functionality was adapted from this google groups post:
+https://groups.google.com/forum/?fromgroups=#!topic/d3-js/FSsDuydkb5w
+
+selecting nodes within the scatter plot code adapted from:
+https://groups.google.com/forum/?fromgroups=#!topic/d3-js/iRrVcIDpodM
 */
 
 var width = 340;
