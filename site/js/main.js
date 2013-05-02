@@ -31,6 +31,7 @@ function Site() {
 var totalViews = 0;
 var totalRatings = 0;
 var maxViews = 0;
+var maxViewers = 0;
 var	maxRatings = 0;
  
 
@@ -221,8 +222,10 @@ function computeViews(sites) {
 		cCode = countryCodeForName(ctry); //country code
 		cLat = countryCodesAndCoordinates[cCode]["lat"]; // country latitude
 		cLon = countryCodesAndCoordinates[cCode]["lon"]; // country latitude
-		
 		viewers.push({"name":ctry, "country_code":cCode, "viewers":viewerCount[ctry], "lat":cLat, "lon":cLon});
+
+		// keep running total of the the country with most users
+		maxViewers = viewerCount[ctry] > maxViewers ? viewerCount[ctry] : maxViewers;
 	}
 	updateViews();
 }
@@ -231,7 +234,7 @@ function computeViews(sites) {
 function updateViews() {
 	// updateMap();
 	updateScatter();
-	updateBar();
+	// updateBar();
 
 	transitionToSection(currentSection);
 

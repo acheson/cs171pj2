@@ -29,7 +29,7 @@ var projection = d3.geo.mercator()
 	.translate([mapWidth / 2, 300])
 	.precision(.1);
 
-var mapCenter = projection([0,45]);
+var mapCenter = projection([0,30]);
 
 var path = d3.geo.path()
 	.projection(projection);
@@ -58,8 +58,10 @@ d3.json("../data/world-50m.json", function(error, world) {
 		.attr("d", path);
 });
 
-
 function handleMouseOverMap(e) {
+	
+	if (currentSection == 1) { return ;};
+
 	var currentMapMark = d3.select(this);
 	highlightMap(e, currentMapMark);
 
@@ -72,12 +74,31 @@ function handleMouseOverMap(e) {
 		});
 	highlightBar(e, barBar);
 
-	var currentTextMark = barChart.selectAll("text")
-        .filter( function(d) { 
-            if (d.name == e.name) {
-                return this;
-            }
-        });
+ 	var currentTextMark;
+ 	if (currentSection == 0) {
+ 		currentTextMark = barChartSites.selectAll("text")
+ 			.filter( function(d) { 
+        if (d.name == e.name) {
+            return this;
+        }
+    });
+    highlightText(e, currentTextMark);
+ 	}
+ 	else if (currentSection == 2) {
+ 		currentTextMark = barChartViewers.selectAll("text")
+ 		.filter( function(d) { 
+        if (d.name == e.name) {
+            return this;
+        }
+    });
+    highlightText(e, currentTextMark);
+ 	}
+ 	
+    currentTextMark.filter( function(d) { 
+        if (d.name == e.name) {
+            return this;
+        }
+    });
     highlightText(e, currentTextMark);
 
     // Coordinate tooltip
@@ -161,27 +182,59 @@ function highlightTooltip(e, obj) {
 
 function handleMouseOut(e) {
 	
+	if (currentSection == 1) { return ;};
+
+	var fillOpacity;
+	if (currentSection == 0) { fillOpacity = 0.1}
+	else if (currentSection == 2) { fillOpacity = 0.2};
+
 	var selection = map.selectAll("circle." + mapClasses[currentSection])//	.classed(mapClasses[currentSection], true)
 		.transition()
 			.duration(250)
 			.style("fill", colors[currentSection])
-			.style("fill-opacity", 0.2)
+			.style("fill-opacity", fillOpacity)
 			.style("stroke", colors[currentSection])
 			.style("stroke-opacity", 0.3);
 
-    var selection = barChart.selectAll("rect")
-		.transition()
+    var selection;
+    if (currentSection == 0) {
+    	selection = barChartSites.selectAll("rect")
+    }
+    else if (currentSection ==2) {
+    	selection = barChartViewers.selectAll("rect")
+    };	
+    selection.transition()
 			.duration(250)
-			.style("fill", "red")
+			.style("fill", colors[currentSection])
 			.style("fill-opacity", 0.2)
-			.style("stroke", "red")	
+			.style("stroke", colors[currentSection])	
   			.style("stroke-opacity", 0.3);
 
-  	var selection = barChart.selectAll("text")
-		.transition()
+
+    // var selection = barChart.selectAll("rect")
+	selection.transition()
 			.duration(250)
-			.style("fill", "black");
+			.style("fill", colors[currentSection])
+			.style("fill-opacity", 0.2)
+			.style("stroke", colors[currentSection])	
+  			.style("stroke-opacity", 0.3);
+
+  // 	var selection = barChart.selectAll("text")
+		// .transition()
+		// 	.duration(250)
+		// 	.style("fill", "black");
 	
+	var selection;
+    if (currentSection == 0) {
+    	selection = barChartSites.selectAll("text")
+    }
+    else if (currentSection == 2) {
+    	selection = barChartViewers.selectAll("text")
+    };
+    selection.transition()
+		.duration(250)
+		.style("fill", "black");	
+
 	var tooltip;
 	if (currentSection == 0) {
 		tooltip = sitesTooltip.selectAll("text");
@@ -281,8 +334,8 @@ function drawOneChannelMap(data)
 {
 	var area = d3.scale
 		.pow().exponent(.750)
-		.domain([1, totalViews])
-		.range([2,250]);
+		.domain([1, maxViews])
+		.range([2,50]);
 	
 	var selection = channelContainer.selectAll("circle")
 		.data(data);
@@ -292,7 +345,7 @@ function drawOneChannelMap(data)
 			.attr("class", mapClasses[1])
 			.attr("transform", "translate(" + mapCenter + ")")
 			.style("fill", colors[1])
-			.style("fill-opacity", 0.2)
+			.style("fill-opacity", 0.5)
 			.style("stroke", colors[1])
 			.style("stroke-opacity", 0.3)
 			.style("stroke-width", 1.0)
@@ -310,6 +363,34 @@ function drawOneChannelMap(data)
 			.attr("r", 0)
 			.style("opacity", 0)
 			.remove();
+
+	var tooltip = channelTooltip.selectAll("text")
+		.data(data);
+
+	var formatViews = d3.format(",");
+
+	tooltip.enter().append("text")
+		.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+		.text(function(d) {return formatViews(d) + " Total Views";})
+			.attr("alignment-baseline", "middle")
+	      	.attr("text-anchor", "middle")
+	      	.attr("pointer-events", "none")
+	      	.style("font-size", 48)
+	      	.style("opacity", 0);
+
+	tooltip.transition()
+	    .duration(500)
+	    	.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
+	    	.text(function(d) {return formatViews(d) + " Total Views";})
+	    	.style("opacity", 1);
+
+	tooltip.exit()
+		.transition()
+			.duration(500)
+			.style("opacity", 0)
+			.remove();
+
+	      	
 }
 
 
@@ -326,8 +407,8 @@ function drawSitesMap(sites) {
 
 	var area = d3.scale
 		.pow().exponent(.750)
-		.domain([1, totalViews])
-		.range([2,250]);
+		.domain([1, maxViews])
+		.range([2,50]);
 
 	// Sort sites so that smaller ones always appear on top of larger
 	// create a copy of sites to sort
@@ -342,7 +423,7 @@ function drawSitesMap(sites) {
 	selection.enter().append("circle")
 			.attr("class", mapClasses[0])
 			.style("fill", colors[0])
-			.style("fill-opacity", 0.2)
+			.style("fill-opacity", 0.1)
 			.style("stroke", colors[0])
 			.style("stroke-opacity", 0.3)
 			.attr("transform", function(d) {return "translate(" + mapCenter + ")";})
@@ -469,10 +550,12 @@ var viewersTooltip = map.append("g").attr("class", "zoom");
 
 function drawViewersMap(viewers)
 {
+	var mapMax = d3.max(viewers, function(d) {return d.viewers;});
+
 	var area = d3.scale
 		.pow().exponent(.750)
-		.domain([1, totalViews])
-		.range([2,250]);
+		.domain([1, maxViewers])
+		.range([2,50]);
 
 
 	// Sort viewers so that smaller ones always appear on top of larger
@@ -554,7 +637,7 @@ function drawViewersMap(viewers)
 		})
 		.text(function(d) {
 				var formatViews = d3.format(",");
-				return formatViews(d.viewers) + " viewers";
+				return formatViews(d.viewers) + " views";
 			})
 			.attr("alignment-baseline", "middle")
 	      	.attr("text-anchor", "middle")
@@ -568,7 +651,7 @@ function drawViewersMap(viewers)
 	    	.attr("transform", function(d) {return "translate(" + projection([d.lon,d.lat]) + ")";})
 	    	.text(function(d) {
 	    		var formatViews = d3.format(",");
-				return formatViews(Math.round(d.viewers)) + " viewers";
+				return formatViews(Math.round(d.viewers)) + " views";
 			});
 
 	tooltip.exit()

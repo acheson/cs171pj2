@@ -6,6 +6,9 @@
 
 brush code was grabbed from 
 
+// Scatterplot tooltip use of getBBox from example
+https://groups.google.com/forum/#!topic/d3-js/pTVgFuEgCfY
+
 */
 
 var width = 340;
@@ -23,7 +26,7 @@ var scatter = d3.select("div#scatter-chart")
 var scatterX, scatterY;
 var brushFn;
 var listUpdateFlag = 1;
-var ttScatter = scatter.append("g");
+// var ttScatter = scatter.append("g");
 var scatterMouseDownFlag = false;
 
 var axesDrawn = 0; //becomes 1 after drawing axes the first time
@@ -133,6 +136,9 @@ function updateScatter() {
             // .on("mousedown", scatterMouseDown)
             // .on("mouseup",scatterMouseUp);
 
+        // scatterplot is now drawn - append container for tooltip
+        scatter.append("g").attr("class", "scatter-tooltip-container");
+
         axesDrawn = 1;
 
 
@@ -173,7 +179,7 @@ function updateScatter() {
     function brushstart() {
         scatter.classed("selecting", true);
         listUpdateFlag = 0;
-        d3.selectAll("#scatterToolTip").remove();
+        d3.selectAll("#scatterTooltip").remove();
     }
 
     function brushmove() {
@@ -182,7 +188,7 @@ function updateScatter() {
         return e[0][0] <= d.views && d.views <= e[1][0]
             && e[0][1] <= d.ratings && d.ratings <= e[1][1];
       });
-      d3.selectAll("#scatterToolTip").remove();
+      d3.selectAll("#scatterTooltip").remove();
     }
 
     function brushend() {    
@@ -210,10 +216,14 @@ function updateScatter() {
 
 function scatterMouseOver(e) {
     if (scatterMouseDownFlag == false) {
+        
+        ttScatter = d3.select(".scatter-tooltip-container");
+
+        
         ttScatter.append("text")
             .attr("x", scatterX(e.views))
             .attr("y", scatterY(e.ratings)-10)
-            .attr("id", "scatterToolTip")
+            .attr("class", "scatterTooltip")
             .attr("font-size", 10)
             .attr("style", function(d) {
                 if (scatterX(e.views) > (scatterX(maxViews)*2)/3) {
@@ -231,13 +241,47 @@ function scatterMouseOver(e) {
                     return "translate(0,0)";
                 }
             })
+            .style("fill", "white")
             .text(e.title); 
+
+        var text = ttScatter.select("text");
+        var frame = text.node().getBBox();
+
+        ttScatter.insert("rect", ".scatterTooltip")
+            .attr("x", frame.x - 5)
+            .attr("y", frame.y - 5)
+            .attr("width", frame.width + 10)
+            .attr("height", frame.height + 10)
+            .attr("class", "scatterTooltip")
+        
+            .attr("style", function(d) {
+                if (scatterX(e.views) > (scatterX(maxViews)*2)/3) {
+                    
+                } 
+                else if (scatterX(e.views) < (scatterX(maxViews)*3)/7) {
+                    
+                } 
+                else {
+                    
+                }
+            })
+            .attr("transform", function(d) {
+                if (scatterX(e.views) > (scatterX(maxViews)*2)/3)  {
+                    return "translate(-"+(e.title.length*2.5+5)+",13.5)";
+                } else {
+                    return "translate(0,0)";
+                }
+            })
+            .style("fill", "purple");
+
+            
     }
 }
 
 function scatterMouseOut(e) {
 
-    d3.selectAll("#scatterToolTip").remove();
+    d3.selectAll(".scatterTooltip").remove();
+    // d3.selectAll(".scatterTTBg").remove();
 }
 
 

@@ -121,7 +121,8 @@ div.tooltip {
 }
 
 #story-text {
-	font-size:160px;
+	font-size:16px;
+	color: #000;
 }
 /************************************/
 
@@ -191,15 +192,21 @@ div.tooltip {
 }
 
 #selectable .ui-selecting {
-	background: #EEE;
-	color: red;
-	opacity: 1.0;
+	background: #FFF;
+	color: purple;
+	opacity: 0.8;
 }
 
 #selectable .ui-selected {
-	background: #EEE;
-	color: red;
+	background: #FFF;
+	color: purple;
 	opacity: 0.8;
+}
+
+#selectable li { 
+	background: #EEE;
+	color: #999;
+	opacity: 0.9;
 }
 
 #selectable { 
@@ -249,9 +256,9 @@ circle#scatter-chart .default {
 }
 
 .selecting circle.selected {
-  stroke: #f00;
-  fill: #fecccc;
-  fill-opacity: 1;
+  stroke: purple;
+  fill: purple;
+  fill-opacity: 0.2;
 }
 
 .axis path, .axis line {
@@ -295,44 +302,17 @@ circle#scatter-chart .default {
 	position: absolute;
 }
 
-/*.map-site-default {
-	fill: red;
-	fill-opacity: 0.2;
-	stroke: red;
-	stroke-opacity: 0.3;
-	stroke-width: 1.0;
-}
-
-.map-site-highlighted {
-	fill: red;
-	fill-opacity: 0.5;
-	stroke: red;
-	stroke-opacity: 1.0;
-	stroke-width: 1.0;
-}
-
-.map-site-deselected {
-	fill: #888;
-	fill-opacity: 0.2;
-	stroke: #888;
-	stroke-opacity: 1.0;
-	stroke-width: 1.0;
-}
-*/
-
-
 /*********************************************/
 
 
 /* BAR CHART */
-#bar-chart {
+#bar-chart-viewers, #bar-chart-sites {
 	width: 880px;
 	height: 220px;
 	position: absolute;
 	top: 500px;
 	left: 380px;
 }
-
 
 #bar-chart .barAxis {
     /*font-family: "Helvetica Neue", Helvetica, sans-serif;*/
