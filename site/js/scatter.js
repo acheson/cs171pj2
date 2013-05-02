@@ -7,7 +7,7 @@
 brush code was adapted from: http://static.cybercommons.org/js/d3/examples/brush/brush.html
 
 // Scatterplot tooltip use of getBBox from example
-https://groups.google.com/forum/#!topic/d3-js/pTVgFuEgCfY
+https://gist.github.com/mbostock/1160929
 
 brush clear functionality was adapted from this google groups post:
 https://groups.google.com/forum/?fromgroups=#!topic/d3-js/FSsDuydkb5w
