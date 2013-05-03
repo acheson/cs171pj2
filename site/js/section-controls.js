@@ -16,9 +16,9 @@ var timer;
 // 0 - Host Sites
 // 1 - 1Channel.ch
 // 2 - Viewers
-var text1Channel = "1channel.ch is one of the highest-ranked streaming sites on the Internet.  For just the top 250 movies on IMDB (the site links to tens of thousands), 1channel was responsible for over 18 million views across over 40 hosts. The map view provides a look at the total number of views in our dataset.";
-var textHosts = "The indexing model would not work without hosts to host content.  This view shows who the hosts are that served the content linked to on 1channel.ch.  We aggregated all of the views up to the site level, and geocoded the IP addresses for the hosts to be able to present their location on a map.  The needs of most viewers of this content are served by two main websites, putlocker.com and sockshare.com, and by a few countries in Europe.";
-var textViewers = "Alexa provides demographic data for web pages, including percentage of visitors by country.  Using this data, we calculated the number of views by country and aggregated them for all the hosts in our dataset.  Viewers, unlike hosts, are distributed all over the world.  The United States, which has some of the strictest copyright laws, also has the most views.";
+var text1Channel = "1channel.ch is one of the highest-ranked sites on the Internet, streaming thousands of titles to millions of viewers. Considering only the top 250 movies by IMDb rank, 1channel was responsible for over 30 million views across over 40 hosts. The map view provides a look at the total number of views in our dataset. Titles can be filtered with the list and scatter plot below.";
+var textHosts = "The indexing model would not work without hosts to serve content.  This view shows who served the titles shown 1channel.ch.  We aggregated all of the views by host site, geocoded their IP addresses and present their approximate locations on a map.  The needs of most viewers of this content are served by two main websites, putlocker.com and sockshare.com. European hosts deliver the majority of content.";
+var textViewers = "Alexa provides demographic data for web pages, including percentage of visitors by country.  Using this data, we calculated the number of views by country based on the titles in the data set.  Viewers, unlike hosts, are distributed all over the world.  The United States, which has some of the strictest copyright laws ironically has the most views.";
 var currentSection = 0;
 // var incrementing = true;
 var animating = false;
