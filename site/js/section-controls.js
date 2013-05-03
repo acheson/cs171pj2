@@ -3,13 +3,13 @@
 	04/25/13
 	author: Rob Acheson
 
-	Timer adapted from example
-	http://www.w3schools.com/js/js_timing.asp
+		Timer adapted from example
+		http://www.w3schools.com/js/js_timing.asp
 
 */
 
 // timeout in ms
-var timeoutTime = 2000;
+var timeoutTime = 3000;
 var timer; 
 
 // keeps track of sections 

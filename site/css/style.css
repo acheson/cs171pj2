@@ -377,12 +377,21 @@ circle#scatter-chart .default {
 	left: 1020px;
 }
 
+#description-references {
+	border-top: 1px solid #CCC;
+	width: 620px;
+	height: 220px;
+	position: absolute;
+	top: 1040px;
+	left: 380px;
+}
+
 /* FOOTER */
 
 footer {
 	position: absolute;
-	top: 1020px;
-	left: 550px;
+	top: 1520px;
+	left: 450px;
 	width: 500px;
 	height: 50px;
 
